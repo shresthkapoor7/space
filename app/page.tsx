@@ -60,9 +60,9 @@ print("hello world")
 
 you can make tables in the blog posts.
 
-| Name | Age | City |
+| name | age | city |
 |------|-----|------|
-| shresth | 23  | delisted |
+| shresth | 23  | delulu |
 
 
 
@@ -76,7 +76,7 @@ export default function Home() {
       <TableOfContents posts={dummyPosts} currentPage="home" />
       <div className="main-content">
         <br />
-        <h1 className="page-title">welcome to Σpace</h1>
+        <h1 className="page-title">home</h1>
         {dummyPosts.map((post) => (
           <BlogPost key={`home-${post.id}`} post={post} currentPage="home" />
         ))}

@@ -5,7 +5,7 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: 'Σpace',
-  description: 'Personal blog and portfolio',
+  description: 'notes dump',
   icons: {
     icon: '/icon.jpg',
     apple: '/icon.jpg',
