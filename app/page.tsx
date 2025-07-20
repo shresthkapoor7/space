@@ -1,103 +1,86 @@
-import Image from "next/image";
+import React from 'react'
+import BlogPost from './components/BlogPost'
+import TableOfContents from './components/TableOfContents'
+
+const dummyPosts = [
+  {
+    id: 1,
+    date: '19 Jul, 2025',
+    title: "Σpace - notepad on steroids",
+    content: `not sure why i started this, the idea was to clear out some concepts that i am weak at.
+with this project i can basically sharpen 3 things, python, maths and next.js.
+
+
+here is my reason to do it exactly – i cannot write python, people say it has the easiest syntax,
+i beg to differ c++ has the easiest one, python is so confusing to me, brackets are the most perfectly designed things after cars and video games. the whole idea to ditch that concept to have spaces is revolting to me. think about it i can barely see a computer screen how do i notice this    i put 4 spaces ~ 1 tab. it might be visible here but in code it is sort of hard. and there is no restrictions on things you can do on list like have atleast some basic ones right?!
+
+anyway i figured i should atleast be able to write basic code in python. and should be able to manipulate data and visualize it with pandas and numpy and matplotlib that feels sorta basic.
+
+<div style="display: flex; justify-content: center; margin-top: 1rem;">
+  <img
+    src="/images/1.jpg"
+    alt="nerd"
+    style="width: 400px;"
+  />
+</div>
+
+**maths** – i am not bad at math but i did see a lot of limitations/knowledge gaps when i was studying ai, so i figured why not now.
+\n
+**next.js** – not gonna lie i do not like it that much especially with tailwind looks yuck, like when angela yu said spaghetti code i am sure she was talking about next with tailwind but industry is moving towards it so why not. next feels like a failed attempt on creating a flutter copy. no matter how many stacks i switch flutter would always be <3
+
+also a little break once in a while from [strands](https://www.strandschat.com/) can be important for my hair routine
+
+i also like documenting stuff and am a nerd (ps this my 3rd attempt at doing this).
+
+<div style="display: flex; justify-content: center; margin-top: 1rem;">
+  <img
+    src="https://i.pinimg.com/originals/51/0b/c9/510bc947c8b18d99f0409270c7f535b0.gif"
+    alt="nerd"
+    style="width: 400px;"
+  />
+</div>
+
+> *anyway lets start music + math is fire*
+
+`
+  },
+  {
+    id: 2,
+    date: '19 Jul, 2025',
+    title: "interesting features of the website",
+    content: ` you can write markdown in the blog posts and it will be rendered as html. you can write tooltips <mark data-tooltip="I am a tooltip">tooltip</mark>.
+
+you can write code in the blog posts and it will be rendered as well you can run it in the browser.
+
+\`\`\`python
+print("hello world")
+\`\`\`
+
+
+
+you can make tables in the blog posts.
+
+| Name | Age | City |
+|------|-----|------|
+| shresth | 23  | delisted |
+
+
+
+`
+  }
+]
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+    <div className="page-with-toc">
+      <TableOfContents posts={dummyPosts} currentPage="home" />
+      <div className="main-content">
+        <br />
+        <h1 className="page-title">welcome to Σpace</h1>
+        {dummyPosts.map((post) => (
+          <BlogPost key={`home-${post.id}`} post={post} currentPage="home" />
+        ))}
+      </div>
     </div>
-  );
+  )
 }
