@@ -6,8 +6,8 @@ const projectPosts = [
   {
     id: 1,
     date: '19 Jul, 2025',
-    title: "building a personal finance tracker",
-    content: `nocap`
+    title: "",
+    content: ``
   }
 ]
 
