@@ -12,6 +12,7 @@ export default function Navigation() {
     { href: '/finance', label: 'finance' },
     { href: '/ml', label: 'ml' },
     { href: '/project', label: 'project' },
+    { href: '/strands', label: 'strands' },
   ]
 
   return (

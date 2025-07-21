@@ -4,7 +4,7 @@ import TableOfContents from './components/TableOfContents'
 
 const dummyPosts = [
   {
-    id: 1,
+    id: 0,
     date: '19 Jul, 2025',
     title: "Σpace - notepad on steroids",
     content: `not sure why i started this, the idea was to clear out some concepts that i am weak at.
