@@ -26,7 +26,7 @@ anyway i figured i should atleast be able to write basic code in python. and sho
 
 **maths** – i am not bad at math but i did see a lot of limitations/knowledge gaps when i was studying ai, so i figured why not now.
 \n
-**next.js** – not gonna lie i do not like it that much especially with tailwind looks yuck, like when angela yu said spaghetti code i am sure she was talking about next with tailwind but industry is moving towards it so why not. next feels like a failed attempt on creating a flutter copy. no matter how many stacks i switch flutter would always be <3
+**next.js** – not gonna lie i do not like it that much especially with tailwind looks yuck, like when <mark data-tooltip="ngmi if you don't know who she is">angela yu</mark> said spaghetti code i am sure she was talking about next with tailwind but industry is moving towards it so why not. next feels like a failed attempt on creating a flutter copy. no matter how many stacks i switch flutter would always be <3
 
 also a little break once in a while from [strands](https://www.strandschat.com/) can be important for my hair routine
 
@@ -40,7 +40,7 @@ i also like documenting stuff and am a nerd (ps this my 3rd attempt at doing thi
   />
 </div>
 
-> *anyway lets start music + math is fire*
+> *a developer who hasn't made his own blogging website is not a developer*
 
 `
   },
