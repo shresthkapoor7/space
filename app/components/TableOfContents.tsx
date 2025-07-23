@@ -7,14 +7,16 @@ interface Post {
   id: number
   title: string
   date: string
+  pinned?: boolean
 }
 
 interface TableOfContentsProps {
   posts: Post[]
   currentPage: string
+  currentPostId?: number
 }
 
-export default function TableOfContents({ posts, currentPage }: TableOfContentsProps) {
+export default function TableOfContents({ posts, currentPage, currentPostId }: TableOfContentsProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [activePost, setActivePost] = useState<string>('')
 
@@ -45,12 +47,22 @@ export default function TableOfContents({ posts, currentPage }: TableOfContentsP
     return () => window.removeEventListener('scroll', handleScroll)
   }, [posts, currentPage])
 
-  const scrollToPost = (postId: number) => {
-    const element = document.getElementById(`post-${currentPage}-${postId}`)
-    if (element) {
-      const yOffset = -80; // Offset for header
-      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
+  const navigateToPost = (postId: number) => {
+    if (currentPostId !== undefined) {
+      // We're on an individual post page, navigate to different post
+      const baseUrl = currentPage === 'home' ? '' : `/${currentPage}`
+      window.location.href = `${baseUrl}/${postId}`
+    } else {
+      // We're on the main page, scroll and update URL
+      const element = document.getElementById(`post-${currentPage}-${postId}`)
+      if (element) {
+        const yOffset = -80; // Offset for header
+        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+        // Update URL without page reload
+        const baseUrl = currentPage === 'home' ? '' : `/${currentPage}`
+        window.history.pushState({}, '', `${baseUrl}/${postId}`)
+      }
     }
     setIsOpen(false) // Close mobile drawer
   }
@@ -125,12 +137,16 @@ export default function TableOfContents({ posts, currentPage }: TableOfContentsP
           {posts.map((post) => (
             <button
               key={post.id}
-              onClick={() => scrollToPost(post.id)}
-              className={`toc-link ${
-                activePost === `post-${currentPage}-${post.id}` ? 'active' : ''
-              }`}
+              onClick={() => navigateToPost(post.id)}
+                              className={`toc-link ${
+                  currentPostId !== undefined
+                    ? currentPostId === post.id ? 'active' : ''
+                    : activePost === `post-${currentPage}-${post.id}` ? 'active' : ''
+                }`}
             >
-              <div className="toc-post-date">{post.date}</div>
+              <div className="toc-post-date">
+                {post.date} {post.pinned && <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>📌</span>}
+              </div>
               <div className="toc-post-title">{post.title}</div>
             </button>
           ))}

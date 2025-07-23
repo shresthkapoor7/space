@@ -11,7 +11,7 @@ export default function Navigation() {
     { href: '/maths', label: 'maths' },
     { href: '/finance', label: 'finance' },
     { href: '/ml', label: 'ml' },
-    { href: '/project', label: 'project' },
+    // { href: '/project', label: 'project' },
     { href: '/strands', label: 'strands' },
   ]
 
