@@ -17,8 +17,12 @@ i can also share links to individual posts
 
 
 
-and lastly i can make tables in the blog posts.
+i can make tables in the blog posts.
 
 | name | age | city |
 |------|-----|------|
 | shresth | 23  | delulu |
+
+i can also embed tweets <mark data-tooltip="image/video quality wouldn't be upto the mark">caveat</mark>
+
+<Tweet id="1945713783562711165" />

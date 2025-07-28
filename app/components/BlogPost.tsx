@@ -6,6 +6,7 @@ import rehypeRaw from 'rehype-raw'
 import rehypeKatex from 'rehype-katex'
 import RunnableCodeBlock from './RunnableCodeBlock'
 import Highlight from './Highlight'
+import TweetComponent from './Tweet'
 import 'katex/dist/katex.min.css'
 
 interface Post {
@@ -42,8 +43,31 @@ function preprocessMath(content: string): string {
   return processed
 }
 
+// Function to process tweets and create React elements
+function processTweets(content: string): { processedContent: string; tweetElements: { [key: string]: JSX.Element } } {
+  const tweetElements: { [key: string]: JSX.Element } = {}
+  let processedContent = content
+
+  // Find all Tweet components and replace with placeholders
+  const tweetRegex = /<Tweet id="([^"]+)"\s*\/>/g
+  let match
+  let index = 0
+
+  while ((match = tweetRegex.exec(content)) !== null) {
+    const tweetId = match[1]
+    const placeholder = `TWEET_PLACEHOLDER_${index}`
+
+    processedContent = processedContent.replace(match[0], `<div data-tweet-placeholder="${placeholder}"></div>`)
+    tweetElements[placeholder] = <TweetComponent key={tweetId} id={tweetId} />
+    index++
+  }
+
+  return { processedContent, tweetElements }
+}
+
 export default function BlogPost({ post, currentPage = 'home' }: BlogPostProps) {
-  const processedContent = preprocessMath(post.content)
+  const mathProcessedContent = preprocessMath(post.content)
+  const { processedContent, tweetElements } = processTweets(mathProcessedContent)
 
   return (
     <article className="post" id={`post-${currentPage}-${post.id}`}>
@@ -81,8 +105,14 @@ export default function BlogPost({ post, currentPage = 'home' }: BlogPostProps) 
                   {children}
                 </Highlight>
               )
+            },
+            div({ 'data-tweet-placeholder': placeholder, ...props }: any) {
+              if (placeholder && tweetElements[placeholder]) {
+                return tweetElements[placeholder]
+              }
+              return <div {...props} />
             }
-          }}
+          } as any}
         >
           {processedContent}
         </ReactMarkdown>
