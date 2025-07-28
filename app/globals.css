@@ -737,7 +737,7 @@ nav a.active {
   background-color: #1a1a1a;
   border: 1px solid #333;
   border-radius: 12px;
-  padding: 16px;
+  padding: 0 16px 16px 16px;
   color: #fff;
   font-family: system-ui, -apple-system, sans-serif;
 }
@@ -746,7 +746,6 @@ nav a.active {
   background-color: #1a1a1a;
   border: 1px solid #333;
   border-radius: 12px;
-  padding: 16px;
   color: #71767b;
   text-align: center;
 }
