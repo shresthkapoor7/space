@@ -23,6 +23,6 @@ i can make tables in the blog posts.
 |------|-----|------|
 | shresth | 23  | delulu |
 
-i can also embed tweets <mark data-tooltip="image/video quality wouldn't be upto the mark">caveat</mark>
+i can also embed tweets <mark data-tooltip="image/video quality won't be perfect">but with a caveat</mark>
 
 <Tweet id="1945713783562711165" />
