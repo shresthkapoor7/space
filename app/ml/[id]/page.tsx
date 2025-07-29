@@ -28,7 +28,6 @@ export default function MLPost({ params }: PageProps) {
             ← Back to all ML posts
           </a>
         </div>
-        <h1 className="page-title">machine learning</h1>
         <BlogPost post={post} currentPage="ml" />
       </div>
     </div>

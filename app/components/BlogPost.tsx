@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -69,11 +71,17 @@ export default function BlogPost({ post, currentPage = 'home' }: BlogPostProps) 
   const mathProcessedContent = preprocessMath(post.content)
   const { processedContent, tweetElements } = processTweets(mathProcessedContent)
 
+  const navigateToPost = () => {
+    // We're on the main page, navigate to individual post
+    const baseUrl = currentPage === 'home' ? '' : `/${currentPage}`
+    window.location.href = `${baseUrl}/${post.id}`
+  }
+
   return (
     <article className="post" id={`post-${currentPage}-${post.id}`}>
       <div className="post-header">
         <div className="post-date">{post.date} {post.pinned && <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>📌</span>}</div>
-        <h2 className="post-title">{post.title}</h2>
+        <h2 className="post-title" onClick={navigateToPost} style={{ cursor: 'pointer' }}>{post.title}</h2>
       </div>
       <div className="post-content">
         <ReactMarkdown

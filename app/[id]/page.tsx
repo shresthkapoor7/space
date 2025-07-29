@@ -28,7 +28,6 @@ export default function HomePost({ params }: PageProps) {
             ← Back to all posts
           </a>
         </div>
-        <h1 className="page-title">home</h1>
         <BlogPost post={post} currentPage="home" />
       </div>
     </div>

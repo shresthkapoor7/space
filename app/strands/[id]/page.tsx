@@ -28,7 +28,6 @@ export default function StrandsPost({ params }: PageProps) {
             ← Back to all strands posts
           </a>
         </div>
-        <h1 className="page-title">another chatgpt wrapper</h1>
         <BlogPost post={post} currentPage="strands" />
       </div>
     </div>

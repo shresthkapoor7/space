@@ -28,7 +28,6 @@ export default function MathPost({ params }: PageProps) {
             ← Back to all maths posts
           </a>
         </div>
-        <h1 className="page-title">mathematical chaos</h1>
         <BlogPost post={post} currentPage="maths" />
       </div>
     </div>
