@@ -1,6 +1,7 @@
 import React from 'react'
 import BlogPost from '../components/BlogPost'
 import TableOfContents from '../components/TableOfContents'
+import DynamicTitle from '../components/DynamicTitle'
 import { getFinancePosts } from '../../lib/markdown'
 
 export default function Finance() {
@@ -8,6 +9,7 @@ export default function Finance() {
 
   return (
     <div className="page-with-toc">
+      <DynamicTitle section="finance" />
       <TableOfContents posts={financePosts} currentPage="finance" />
       <div className="main-content">
         <br />

@@ -103,7 +103,6 @@ export default function Tweet({ id }: TweetProps) {
     <div className="tweet-component">
       <div className="tweet-wrapper">
         <div className="tweet-card">
-          {/* Custom header with profile picture */}
           <div className="tweet-header">
             <div className="user-section">
               <div className="profile-picture">

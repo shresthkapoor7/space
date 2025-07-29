@@ -1,6 +1,7 @@
 import React from 'react'
 import BlogPost from '../components/BlogPost'
 import TableOfContents from '../components/TableOfContents'
+import DynamicTitle from '../components/DynamicTitle'
 import { getMathsPosts } from '../../lib/markdown'
 
 export default function Maths() {
@@ -8,6 +9,7 @@ export default function Maths() {
 
   return (
     <div className="page-with-toc">
+      <DynamicTitle section="maths" />
       <TableOfContents posts={mathsPosts} currentPage="maths" />
       <div className="main-content">
         <br />

@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import BlogPost from '../../components/BlogPost'
 import TableOfContents from '../../components/TableOfContents'
+import DynamicTitle from '../../components/DynamicTitle'
 import { getFinancePosts } from '../../../lib/markdown'
 
 interface PageProps {
@@ -20,6 +21,7 @@ export default function FinancePost({ params }: PageProps) {
 
   return (
     <div className="page-with-toc">
+      <DynamicTitle title={post.title} />
       <TableOfContents posts={allPosts} currentPage="finance" currentPostId={postId} />
       <div className="main-content">
         <br />
@@ -28,7 +30,6 @@ export default function FinancePost({ params }: PageProps) {
             ← Back to all finance posts
           </a>
         </div>
-        <h1 className="page-title">finance brain dump</h1>
         <BlogPost post={post} currentPage="finance" />
       </div>
     </div>

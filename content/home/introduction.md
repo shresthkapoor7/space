@@ -1,7 +1,7 @@
 ---
 id: 1
 date: '2025-07-19'
-title: "Σpace - notepad on steroids"
+title: "notepad on steroids"
 pinned: true
 ---
 

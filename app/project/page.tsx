@@ -1,6 +1,7 @@
 import React from 'react'
 import BlogPost from '../components/BlogPost'
 import TableOfContents from '../components/TableOfContents'
+import DynamicTitle from '../components/DynamicTitle'
 import { getProjectPosts } from '../../lib/markdown'
 
 export default function Project() {
@@ -8,6 +9,7 @@ export default function Project() {
 
   return (
     <div className="page-with-toc">
+      <DynamicTitle section="project" />
       <TableOfContents posts={projectPosts} currentPage="project" />
       <div className="main-content">
         <br />

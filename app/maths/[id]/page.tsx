@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import BlogPost from '../../components/BlogPost'
 import TableOfContents from '../../components/TableOfContents'
+import DynamicTitle from '../../components/DynamicTitle'
 import { getMathsPosts } from '../../../lib/markdown'
 
 interface PageProps {
@@ -20,6 +21,7 @@ export default function MathPost({ params }: PageProps) {
 
   return (
     <div className="page-with-toc">
+      <DynamicTitle title={post.title} />
       <TableOfContents posts={allPosts} currentPage="maths" currentPostId={postId} />
       <div className="main-content">
         <br />
