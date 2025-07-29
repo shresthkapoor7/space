@@ -178,12 +178,13 @@ body {
   .main-content {
     margin: 0 auto;
     max-width: 800px;
-    transition: margin-left 0.3s ease, margin-right 0.3s ease;
+    transition: none; /* Remove transition to prevent shifting */
   }
 
+  /* Remove the margin-left shift when sidebar is open */
   body.toc-is-open .main-content {
-    margin-left: 280px;
-    margin-right: 0;
+    margin: 0 auto;
+    max-width: 800px;
   }
 }
 
@@ -251,13 +252,13 @@ body {
   .main-header {
     margin: 0 auto;
     max-width: 800px;
-    transition: margin-left 0.3s ease, margin-right 0.3s ease;
+    transition: none; /* Remove transition to prevent shifting */
   }
 
+  /* Remove the margin-left shift when sidebar is open */
   body.toc-is-open .main-header {
-    margin-left: 300px;
-    margin-right: 0;
-    max-width: none;
+    margin: 0 auto;
+    max-width: 800px;
   }
 }
 
@@ -712,13 +713,14 @@ nav a.active {
     max-width: 800px;
     margin: 60px auto 0;
     padding: 40px 20px;
-    transition: margin-left 0.3s ease, margin-right 0.3s ease;
+    transition: none; /* Remove transition to prevent shifting */
   }
 
+  /* Remove the margin-left shift when sidebar is open */
   body.toc-is-open .site-footer {
-    margin-left: 300px;
-    margin-right: 0;
-    max-width: none;
+    max-width: 800px;
+    margin: 60px auto 0;
+    padding: 40px 20px;
   }
 }
 
