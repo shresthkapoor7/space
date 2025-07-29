@@ -33,7 +33,15 @@ body {
   transition: margin-left 0.3s ease;
 }
 
-/* Table of Contents Styles */
+.toc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #333;
+}
+
 .toc-sidebar {
   position: fixed;
   left: 0;
@@ -52,22 +60,6 @@ body {
 
 .toc-sidebar.toc-open {
   transform: translateX(0);
-}
-
-.toc-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #333;
-}
-
-.toc-header h3 {
-  color: #ffffff;
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin: 0;
 }
 
 .toc-close-button {
@@ -154,6 +146,37 @@ body {
   color: #4a9eff;
 }
 
+.toc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #333;
+}
+
+.desktop-toc-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1001;
+  background-color: #333;
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 12px;
+  color: #cccccc;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.desktop-toc-button:hover {
+  background-color: #444;
+  color: #4a9eff;
+}
+
 .mobile-toc-overlay {
   position: fixed;
   top: 0;
@@ -164,34 +187,34 @@ body {
   z-index: 999;
 }
 
-/* Desktop styles - TOC hidden by default */
 @media (min-width: 1024px) {
   .toc-sidebar {
-    transform: translateX(-100%);
+    transform: translateX(0);
     position: fixed;
   }
 
-  .toc-sidebar.toc-open {
-    transform: translateX(0);
+  .toc-sidebar.toc-closed {
+    transform: translateX(-100%);
   }
 
   .main-content {
     margin: 0 auto;
     max-width: 800px;
-    transition: none; /* Remove transition to prevent shifting */
   }
 
-  /* Remove the margin-left shift when sidebar is open */
-  body.toc-is-open .main-content {
+  body.toc-is-closed .main-content {
     margin: 0 auto;
     max-width: 800px;
   }
 }
 
-/* Mobile styles */
 @media (max-width: 1023px) {
   .toc-close-button {
     display: flex !important;
+  }
+
+  .desktop-toc-button {
+    display: none !important;
   }
 
   .main-content {
@@ -206,7 +229,7 @@ body {
 
   .main-header {
     text-align: center;
-    padding-left: 60px; /* Account for TOC button */
+    padding-left: 60px;
     padding-right: 20px;
   }
 
@@ -222,10 +245,13 @@ body {
   }
 }
 
-/* Desktop TOC close button */
 @media (min-width: 1024px) {
-  .toc-sidebar.toc-open .toc-close-button {
+  .toc-sidebar .toc-close-button {
     display: flex !important;
+  }
+
+  .mobile-toc-button {
+    display: none !important;
   }
 }
 
@@ -247,16 +273,13 @@ body {
   position: relative;
 }
 
-/* Desktop header adjustment */
 @media (min-width: 1024px) {
   .main-header {
     margin: 0 auto;
     max-width: 800px;
-    transition: none; /* Remove transition to prevent shifting */
   }
 
-  /* Remove the margin-left shift when sidebar is open */
-  body.toc-is-open .main-header {
+  body.toc-is-closed .main-header {
     margin: 0 auto;
     max-width: 800px;
   }
@@ -381,7 +404,6 @@ nav a.active {
   padding: 0;
 }
 
-/* Runnable Code Block Styles */
 .runnable-code-block {
   margin: 20px 0;
   border: 1px solid #444;
@@ -496,7 +518,6 @@ nav a.active {
   font-size: 1.2rem;
 }
 
-/* Syntax Highlighter Overrides */
 .post-content pre[class*="language-"] {
   margin: 20px 0 !important;
   border-radius: 8px !important;
@@ -567,7 +588,6 @@ nav a.active {
   padding-right: 20px;
 }
 
-/* Responsive table */
 @media (max-width: 768px) {
   .post-content table {
     font-size: 0.9rem;
@@ -715,17 +735,16 @@ nav a.active {
 /* Footer responsive adjustments */
 @media (min-width: 1024px) {
   .site-footer {
+    margin: 0 auto;
     max-width: 800px;
-    margin: 60px auto 0;
+    margin-top: 60px;
     padding: 40px 20px;
-    transition: none; /* Remove transition to prevent shifting */
   }
 
-  /* Remove the margin-left shift when sidebar is open */
-  body.toc-is-open .site-footer {
+  /* Keep footer centered regardless of sidebar state */
+  body.toc-is-closed .site-footer {
+    margin: 0 auto;
     max-width: 800px;
-    margin: 60px auto 0;
-    padding: 40px 20px;
   }
 }
 
@@ -910,7 +929,6 @@ nav a.active {
   display: block;
 }
 
-/* Special case for single image/video - make it larger */
 .tweet-component .tweet-media.grid-1 .tweet-media-item {
   aspect-ratio: 16/9;
 }
@@ -920,7 +938,6 @@ nav a.active {
   height: 100%;
 }
 
-/* Media Modal Styles */
 .media-modal-overlay {
   position: fixed;
   top: 0;
@@ -981,7 +998,6 @@ nav a.active {
   background-color: #000;
 }
 
-/* Make media items clickable */
 .tweet-component .tweet-media-item {
   cursor: pointer;
   transition: opacity 0.2s ease;

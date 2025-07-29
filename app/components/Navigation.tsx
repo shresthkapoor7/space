@@ -15,13 +15,21 @@ export default function Navigation() {
     { href: '/strands', label: 'strands' },
   ]
 
+  const isActive = (href: string) => {
+    if (href === '/') {
+      return pathname === '/' || (pathname.startsWith('/') && pathname.split('/').length === 2 && !pathname.startsWith('/maths') && !pathname.startsWith('/finance') && !pathname.startsWith('/ml') && !pathname.startsWith('/strands'))
+    } else {
+      return pathname.startsWith(href)
+    }
+  }
+
   return (
     <nav>
       {navItems.map((item) => (
         <Link
           key={item.href}
           href={item.href}
-          className={pathname === item.href ? 'active' : ''}
+          className={isActive(item.href) ? 'active' : ''}
         >
           {item.label}
         </Link>

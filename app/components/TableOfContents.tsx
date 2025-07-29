@@ -19,6 +19,24 @@ interface TableOfContentsProps {
 export default function TableOfContents({ posts, currentPage, currentPostId }: TableOfContentsProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [activePost, setActivePost] = useState<string>('')
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      const mobile = window.innerWidth < 1024
+      setIsMobile(mobile)
+      if (!mobile && !isOpen) {
+        setIsOpen(true)
+      } else if (mobile && isOpen) {
+        setIsOpen(false)
+      }
+    }
+
+    checkScreenSize()
+    window.addEventListener('resize', checkScreenSize)
+
+    return () => window.removeEventListener('resize', checkScreenSize)
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -42,29 +60,28 @@ export default function TableOfContents({ posts, currentPage, currentPostId }: T
     }
 
     window.addEventListener('scroll', handleScroll)
-    handleScroll() // Initial check
+    handleScroll()
 
     return () => window.removeEventListener('scroll', handleScroll)
   }, [posts, currentPage])
 
   const navigateToPost = (postId: number) => {
     if (currentPostId !== undefined) {
-      // We're on an individual post page, navigate to different post
       const baseUrl = currentPage === 'home' ? '' : `/${currentPage}`
       window.location.href = `${baseUrl}/${postId}`
     } else {
-      // We're on the main page, scroll and update URL
       const element = document.getElementById(`post-${currentPage}-${postId}`)
       if (element) {
-        const yOffset = -80; // Offset for header
+        const yOffset = -80;
         const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
         window.scrollTo({ top: y, behavior: 'smooth' });
-        // Update URL without page reload
         const baseUrl = currentPage === 'home' ? '' : `/${currentPage}`
         window.history.pushState({}, '', `${baseUrl}/${postId}`)
       }
     }
-    setIsOpen(false) // Close mobile drawer
+    if (isMobile) {
+      setIsOpen(false)
+    }
   }
 
   const toggleDrawer = () => {
@@ -72,27 +89,38 @@ export default function TableOfContents({ posts, currentPage, currentPostId }: T
   }
 
   useEffect(() => {
-    // Add/remove class to body for styling adjustments
-    if (isOpen) {
-      document.body.classList.add('toc-is-open')
+    if (isMobile) {
+      if (isOpen) {
+        document.body.classList.add('toc-is-open')
+        document.body.classList.remove('toc-is-closed')
+      } else {
+        document.body.classList.remove('toc-is-open')
+        document.body.classList.add('toc-is-closed')
+      }
     } else {
-      document.body.classList.remove('toc-is-open')
+      if (isOpen) {
+        document.body.classList.remove('toc-is-closed')
+        document.body.classList.remove('toc-is-open')
+      } else {
+        document.body.classList.add('toc-is-closed')
+        document.body.classList.remove('toc-is-open')
+      }
     }
 
     return () => {
       document.body.classList.remove('toc-is-open')
+      document.body.classList.remove('toc-is-closed')
     }
-  }, [isOpen])
+  }, [isOpen, isMobile])
 
   return (
     <>
-      {/* Mobile Menu Button */}
-      {!isOpen && (
+      {isMobile && !isOpen && (
         <button
           onClick={toggleDrawer}
           className="mobile-toc-button"
           aria-label="Open table of contents"
-                >
+        >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
             <path
               d="M3 6h18M3 12h18M3 18h18"
@@ -105,25 +133,42 @@ export default function TableOfContents({ posts, currentPage, currentPostId }: T
         </button>
       )}
 
-      {/* Mobile Overlay */}
-      {isOpen && (
+      {!isMobile && !isOpen && (
+        <button
+          onClick={toggleDrawer}
+          className="desktop-toc-button"
+          aria-label="Open table of contents"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M3 6h18M3 12h18M3 18h18"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </button>
+      )}
+
+      {isMobile && isOpen && (
         <div
           className="mobile-toc-overlay"
           onClick={() => setIsOpen(false)}
         />
       )}
 
-      {/* Table of Contents */}
-      <aside className={`toc-sidebar ${isOpen ? 'toc-open' : ''}`}>
+      <aside className={`toc-sidebar ${isOpen ? 'toc-open' : ''} ${!isOpen ? 'toc-closed' : ''}`}>
         <div className="toc-header">
-          <h3>Contents</h3>
+          <h3>&nbsp;&nbsp;Contents</h3>
           <button
-            onClick={() => setIsOpen(false)}
+            onClick={() => setIsOpen(!isOpen)}
             className="toc-close-button"
+            aria-label={isOpen ? "Close table of contents" : "Open table of contents"}
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
               <path
-                d="M3 6h18M3 12h18M3 18h18"
+                d="M6 18L18 6M6 6l12 12"
                 stroke="currentColor"
                 strokeWidth="2"
                 strokeLinecap="round"
@@ -138,11 +183,11 @@ export default function TableOfContents({ posts, currentPage, currentPostId }: T
             <button
               key={post.id}
               onClick={() => navigateToPost(post.id)}
-                              className={`toc-link ${
-                  currentPostId !== undefined
-                    ? currentPostId === post.id ? 'active' : ''
-                    : activePost === `post-${currentPage}-${post.id}` ? 'active' : ''
-                }`}
+              className={`toc-link ${
+                currentPostId !== undefined
+                  ? currentPostId === post.id ? 'active' : ''
+                  : activePost === `post-${currentPage}-${post.id}` ? 'active' : ''
+              }`}
             >
               <div className="toc-post-date">
                 {post.date} {post.pinned && <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>📌</span>}
