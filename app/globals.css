@@ -1007,3 +1007,25 @@ a:hover {
 .tweet-component .tweet-media-item:hover {
   opacity: 0.8;
 }
+
+/* Flag/Wave Animation */
+@keyframes flag-wave {
+  0%, 100% {
+    transform: skewX(0deg);
+  }
+  25% {
+    transform: skewX(2deg);
+  }
+  50% {
+    transform: skewX(-1deg);
+  }
+  75% {
+    transform: skewX(1.5deg);
+  }
+}
+
+.squiggly-text {
+  display: inline-block;
+  animation: flag-wave 3s ease-in-out infinite;
+  transform-origin: center;
+}

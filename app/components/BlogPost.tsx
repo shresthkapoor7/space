@@ -9,6 +9,7 @@ import rehypeKatex from 'rehype-katex'
 import RunnableCodeBlock from './RunnableCodeBlock'
 import Highlight from './Highlight'
 import TweetComponent from './Tweet'
+import SquigglyText from './SquigglyText'
 import 'katex/dist/katex.min.css'
 
 interface Post {
@@ -113,6 +114,23 @@ export default function BlogPost({ post, currentPage = 'home' }: BlogPostProps) 
                   {children}
                 </Highlight>
               )
+            },
+                        span({ className, children, ...props }: any) {
+              // Handle squiggly text with custom attributes
+              if (className && className.includes('squiggly')) {
+                const fontSize = props['data-font-size'] || '1rem'
+                const fontWeight = props['data-font-weight'] || 'normal'
+
+                return (
+                  <SquigglyText
+                    fontSize={fontSize}
+                    fontWeight={fontWeight}
+                  >
+                    {children}
+                  </SquigglyText>
+                )
+              }
+              return <span className={className} {...props}>{children}</span>
             },
             div({ 'data-tweet-placeholder': placeholder, ...props }: any) {
               if (placeholder && tweetElements[placeholder]) {
