@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation'
 import BlogPost from '../../components/BlogPost'
-import TableOfContents from '../../components/TableOfContents'
 import DynamicTitle from '../../components/DynamicTitle'
 import { getMLPosts } from '../../../lib/markdown'
 
@@ -20,18 +19,15 @@ export default function MLPost({ params }: PageProps) {
   }
 
   return (
-    <div className="page-with-toc">
+    <div className="container">
       <DynamicTitle title={post.title} />
-      <TableOfContents posts={allPosts} currentPage="ml" currentPostId={postId} />
-      <div className="main-content">
-        <br />
-        <div style={{ marginBottom: '1rem' }}>
-          <a href="/ml" style={{ color: 'var(--accent-color)', textDecoration: 'none' }}>
-            ← Back to all ML posts
-          </a>
-        </div>
-        <BlogPost post={post} currentPage="ml" />
+      <br />
+      <div style={{ marginBottom: '1rem' }}>
+        <a href="/ml" style={{ color: 'var(--accent-color)', textDecoration: 'none' }}>
+          ← Back to all ML posts
+        </a>
       </div>
+      <BlogPost post={post} currentPage="ml" />
     </div>
   )
 }

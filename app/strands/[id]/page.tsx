@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation'
 import BlogPost from '../../components/BlogPost'
-import TableOfContents from '../../components/TableOfContents'
 import DynamicTitle from '../../components/DynamicTitle'
 import { getStrandsPosts } from '../../../lib/markdown'
 
@@ -20,18 +19,15 @@ export default function StrandsPost({ params }: PageProps) {
   }
 
   return (
-    <div className="page-with-toc">
+    <div className="container">
       <DynamicTitle title={post.title} />
-      <TableOfContents posts={allPosts} currentPage="strands" currentPostId={postId} />
-      <div className="main-content">
-        <br />
-        <div style={{ marginBottom: '1rem' }}>
-          <a href="/strands" style={{ color: 'var(--accent-color)', textDecoration: 'none' }}>
-            ← Back to all strands posts
-          </a>
-        </div>
-        <BlogPost post={post} currentPage="strands" />
+      <br />
+      <div style={{ marginBottom: '1rem' }}>
+        <a href="/strands" style={{ color: 'var(--accent-color)', textDecoration: 'none' }}>
+          ← Back to all strands posts
+        </a>
       </div>
+      <BlogPost post={post} currentPage="strands" />
     </div>
   )
 }
