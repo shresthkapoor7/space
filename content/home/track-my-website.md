@@ -20,6 +20,7 @@ the idea is simple: add your favorite site links, and if anything changes on tha
 
 maybe in the future (or if cursor spits out some magic), i’ll add something like “x users are keeping up with your site” would be a cool touch. and obviously, if this isn’t your thing, you can always go the normie route with substack, medium, dev.to, or whatever. but if you’re reading this, you’re probably a nerd so hang on while i vibe code this listening to the weekend.
 
+gonna call this one caterpillar
 <Tweet id="1951440189349568611" />
 
 
