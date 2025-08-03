@@ -24,7 +24,6 @@ export default function ProjectPost({ params }: PageProps) {
       <DynamicTitle title={post.title} />
       <TableOfContents posts={allPosts} currentPage="project" currentPostId={postId} />
       <div className="main-content">
-        <br />
         <div style={{ marginBottom: '1rem' }}>
           <a href="/project" style={{ color: 'var(--accent-color)', textDecoration: 'none' }}>
             ← Back to all project posts

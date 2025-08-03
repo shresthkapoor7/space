@@ -21,7 +21,6 @@ export default function MathPost({ params }: PageProps) {
   return (
     <div className="container">
       <DynamicTitle title={post.title} />
-      <br />
       <div style={{ marginBottom: '1rem' }}>
         <a href="/maths" style={{ color: 'var(--accent-color)', textDecoration: 'none' }}>
           ← Back to all maths posts

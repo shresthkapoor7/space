@@ -21,7 +21,6 @@ export default function FinancePost({ params }: PageProps) {
   return (
     <div className="container">
       <DynamicTitle title={post.title} />
-      <br />
       <div style={{ marginBottom: '1rem' }}>
         <a href="/finance" style={{ color: 'var(--accent-color)', textDecoration: 'none' }}>
           ← Back to all finance posts
