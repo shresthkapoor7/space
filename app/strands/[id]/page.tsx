@@ -19,7 +19,7 @@ export default function StrandsPost({ params }: PageProps) {
   }
 
   return (
-    <div className="container">
+    <div className="post-container">
       <DynamicTitle title={post.title} />
       <div style={{ marginBottom: '1rem' }}>
         <a href="/strands" style={{ color: 'var(--accent-color)', textDecoration: 'none' }}>
