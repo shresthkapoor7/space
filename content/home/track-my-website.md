@@ -20,12 +20,8 @@ the idea is simple: add your favorite site links, and if anything changes on tha
 
 maybe in the future (or if cursor spits out some magic), i’ll add something like “x users are keeping up with your site” would be a cool touch. and obviously, if this isn’t your thing, you can always go the normie route with substack, medium, dev.to, or whatever. but if you’re reading this, you’re probably a nerd so hang on while i vibe code this listening to the weekend.
 
-gonna call this one caterpillar 🐛 - no idea why but sounds cool
-
-almost done also I am using this website to test that out, one more time
 <Tweet id="1951440189349568611" />
 
+gonna call this one caterpillar 🐛 - no idea why but sounds cool
 
-<div style="text-align: center;">
-  <span class="squiggly" data-font-size="1.2rem">not to brag (but totally to brag), the supabase cto follows me. proceed with caution, peasant.</span>
-</div>
+> 🐛 https://github.com/shresthkapoor7/caterpillar
