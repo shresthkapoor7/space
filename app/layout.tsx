@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Navigation from './components/Navigation'
+import GlobalConsoleLog from './components/GlobalConsoleLog'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -20,7 +21,8 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-            <body>
+            <body suppressHydrationWarning={true}>
+                <GlobalConsoleLog />
                 <div className="app-layout">
                     <header className="main-header">
                         <Link href="/" className="logo">

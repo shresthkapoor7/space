@@ -37,6 +37,7 @@ for some weird reason i applied to yc because why not. here’s what i sent out.
         border-radius: 12px;
         max-width: 100%;
       "
+      aria-label="look i am so smart i found a loop hole to download the video get your 🤓 🍑 away"
     >
       Your browser does not support the video tag.
     </video>
