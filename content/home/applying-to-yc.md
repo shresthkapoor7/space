@@ -60,7 +60,7 @@ for some weird reason i applied to yc because why not. here’s what i sent out.
   </div>
 </div>
 
-also, i respect tiktokers a lot more now. this video sucks tbh and it took me more than 5 takes. the hardest part was constantly looking at the camera while speaking no clue how people manage that. i have this thing where i look sideways when i’m 100% focused, so locking eyes with the lens felt like i was lying. wrote a script, but if you looked into my eyes you’d know—this guy’s definitely reading off something.
+also, i respect tiktokers a lot more now. this video sucks tbh and it took me more than 5 takes. the hardest part was constantly looking at the camera while speaking no clue how people manage that. i have this thing where i look sideways when i’m 100% focused, so locking eyes with the lens felt like i was lying. wrote a script, but if you looked into my eyes you’d know this guy’s definitely reading off something.
 
 <Tweet id="1952344740164243745" />
 
