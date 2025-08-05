@@ -1007,20 +1007,28 @@ a:hover {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   background-color: rgba(0, 0, 0, 0.9);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 10000;
   backdrop-filter: blur(5px);
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  -webkit-overflow-scrolling: none;
+  overscroll-behavior: none;
 }
 
 .media-modal-content {
   position: relative;
-  max-width: 90vw;
-  max-height: 90vh;
+  max-width: 95vw;
+  max-height: 95vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1028,37 +1036,105 @@ a:hover {
 
 .media-modal-close {
   position: absolute;
-  top: -40px;
-  right: 0;
-  background: none;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.7);
   border: none;
   color: #fff;
-  font-size: 2rem;
+  font-size: 1.5rem;
   cursor: pointer;
   padding: 8px;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: background-color 0.2s ease;
+  z-index: 10001;
+  backdrop-filter: blur(5px);
 }
 
 .media-modal-close:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.media-modal-close:active {
+  background-color: rgba(255, 255, 255, 0.4);
+  transform: scale(0.95);
+}
+
+/* Larger touch target for mobile */
+.media-modal-close::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  background: transparent;
+}
+
+/* Navigation arrows */
+.media-modal-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.2);
+  border: none;
+  color: #fff;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 12px 16px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  z-index: 10001;
+  backdrop-filter: blur(5px);
+  user-select: none;
+}
+
+.media-modal-prev {
+  left: 20px;
+}
+
+.media-modal-next {
+  right: 20px;
+}
+
+.media-modal-nav:hover {
+  background: rgba(0, 0, 0, 0.9);
+  transform: translateY(-50%) scale(1.05);
+}
+
+.media-modal-nav:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+/* Counter */
+.media-modal-counter {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  backdrop-filter: blur(5px);
+  z-index: 10001;
 }
 
 .media-modal-image {
   max-width: 100%;
-  max-height: 90vh;
+  max-height: 95vh;
   object-fit: contain;
   border-radius: 8px;
 }
 
 .media-modal-video {
   max-width: 100%;
-  max-height: 90vh;
+  max-height: 95vh;
   border-radius: 8px;
   background-color: #000;
 }
@@ -1070,6 +1146,65 @@ a:hover {
 
 .tweet-component .tweet-media-item:hover {
   opacity: 0.8;
+}
+
+/* Mobile-specific modal improvements */
+@media (max-width: 768px) {
+  .media-modal-content {
+    max-width: 100vw;
+    max-height: 100vh;
+    padding: 0;
+  }
+
+  .media-modal-close {
+    top: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    font-size: 1.8rem;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .media-modal-image {
+    max-width: 100vw;
+    max-height: 100vh;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  .media-modal-video {
+    max-width: 100vw;
+    max-height: 100vh;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  /* Mobile navigation arrows */
+  .media-modal-nav {
+    font-size: 1.8rem;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .media-modal-prev {
+    left: 15px;
+  }
+
+  .media-modal-next {
+    right: 15px;
+  }
+
+  .media-modal-counter {
+    bottom: 15px;
+    padding: 10px 20px;
+    font-size: 1rem;
+  }
 }
 
 /* Flag/Wave Animation */
