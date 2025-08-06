@@ -24,4 +24,4 @@ maybe in the future (or if cursor spits out some magic), i’ll add something li
 
 gonna call this one caterpillar 🐛 - no idea why but sounds cool
 
-> 🐛 https://github.com/shresthkapoor7/caterpillar
+> 🐛 [caterpillar](https://github.com/shresthkapoor7/caterpillar)
