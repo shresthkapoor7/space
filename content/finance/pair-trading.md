@@ -23,7 +23,7 @@ pinned: false
 <details><summary>Hedge ratio</summary>multiplier to balance stock A against B (from linear regression or ML)</details>
 </div>
 
-> ↓ these are the ones i am still have trouble with especially `lookahead bias`
+> ↓ these are the ones i still have trouble with especially `lookahead bias`
 
 <div class="glossary-group">
 <details><summary>Entry signal</summary>the condition that tells you when to enter a trade (e.g., z-score > +1)</details>
