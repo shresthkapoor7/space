@@ -10,6 +10,7 @@ import RunnableCodeBlock from './RunnableCodeBlock'
 import Highlight from './Highlight'
 import TweetComponent from './Tweet'
 import SquigglyText from './SquigglyText'
+import FlashcardGrid from './FlashcardGrid'
 import 'katex/dist/katex.min.css'
 
 interface Post {
@@ -68,9 +69,32 @@ function processTweets(content: string): { processedContent: string; tweetElemen
   return { processedContent, tweetElements }
 }
 
+// Function to process glossary content and wrap in FlashcardGrid
+function processGlossary(content: string): { processedContent: string; glossaryElements: { [key: string]: JSX.Element } } {
+  const glossaryElements: { [key: string]: JSX.Element } = {}
+  let processedContent = content
+
+  // Find glossary-group divs and replace them with FlashcardGrid components
+  const glossaryGroupRegex = /<div class="glossary-group">([\s\S]*?)<\/div>/g
+  let match
+  let index = 0
+
+  while ((match = glossaryGroupRegex.exec(content)) !== null) {
+    const glossaryContent = match[1]
+    const placeholder = `GLOSSARY_PLACEHOLDER_${index}`
+
+    processedContent = processedContent.replace(match[0], `<div data-glossary-placeholder="${placeholder}"></div>`)
+    glossaryElements[placeholder] = <FlashcardGrid key={placeholder} dangerouslySetInnerHTML={{ __html: glossaryContent }} />
+    index++
+  }
+
+  return { processedContent, glossaryElements }
+}
+
 export default function BlogPost({ post, currentPage = 'home' }: BlogPostProps) {
   const mathProcessedContent = preprocessMath(post.content)
-  const { processedContent, tweetElements } = processTweets(mathProcessedContent)
+  const { processedContent: tweetProcessedContent, tweetElements } = processTweets(mathProcessedContent)
+  const { processedContent, glossaryElements } = processGlossary(tweetProcessedContent)
 
   const navigateToPost = () => {
     // We're on the main page, navigate to individual post
@@ -132,9 +156,12 @@ export default function BlogPost({ post, currentPage = 'home' }: BlogPostProps) 
               }
               return <span className={className} {...props}>{children}</span>
             },
-            div({ 'data-tweet-placeholder': placeholder, ...props }: any) {
+            div({ 'data-tweet-placeholder': placeholder, 'data-glossary-placeholder': glossaryPlaceholder, ...props }: any) {
               if (placeholder && tweetElements[placeholder]) {
                 return tweetElements[placeholder]
+              }
+              if (glossaryPlaceholder && glossaryElements[glossaryPlaceholder]) {
+                return glossaryElements[glossaryPlaceholder]
               }
               return <div {...props} />
             }
