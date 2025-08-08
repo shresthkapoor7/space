@@ -6,7 +6,7 @@ import QuantNavigation from '../components/QuantNavigation'
 import { getFinancePosts } from '../../lib/markdown'
 
 export default function Finance() {
-  const financePosts = getFinancePosts()
+  const financePosts = getFinancePosts().reverse()
 
   return (
       <div className="page-with-toc">

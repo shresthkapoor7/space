@@ -29,6 +29,7 @@ i can also embed tweets <mark data-tooltip="image/video quality won't be perfect
 added a new one - flashcards
 
 <div class="glossary-group">
-<details><summary>shresth</summary>is better than you</details>
-<details><summary>kapoor</summary>still better than you</details>
+<details><summary>don't click</summary>don't look at the next one</details>
+<details><summary>don't click me</summary>don't click on the next one</details>
+<details><summary>please not me</summary>go away nerd</details>
 </div>

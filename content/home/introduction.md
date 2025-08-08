@@ -37,4 +37,4 @@ i also like documenting stuff and am a nerd (ps this my 3rd attempt at doing thi
   />
 </div>
 
-> *a developer who hasn't made his own blogging website is not a developer*
+> *a developer who hasn't made his own blogging website is not a developer* ~ shresth

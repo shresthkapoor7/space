@@ -26,9 +26,21 @@ export default function RunnableCodeBlock({ children, className }: RunnableCodeB
   const [pyodideReady, setPyodideReady] = useState(false)
   const [error, setError] = useState<string>('')
   const [componentId] = useState(() => Math.random().toString(36).substr(2, 9))
+  const [copied, setCopied] = useState(false)
 
   // Check if this is a Python code block
   const isPython = className?.includes('language-python') || className?.includes('python')
+
+  // Copy to clipboard function
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(children)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch (err) {
+      console.error('Failed to copy code:', err)
+    }
+  }
 
       useEffect(() => {
     if (isPython) {
@@ -139,6 +151,9 @@ export default function RunnableCodeBlock({ children, className }: RunnableCodeB
       if (codeText.includes('pandas') || codeText.includes('pd.')) {
         packagesToInstall.push('pandas')
       }
+      if (codeText.includes('yfinance') || codeText.includes('yf.')) {
+        packagesToInstall.push('yfinance')
+      }
 
       // Install packages if needed
       if (packagesToInstall.length > 0) {
@@ -148,10 +163,20 @@ export default function RunnableCodeBlock({ children, className }: RunnableCodeB
             await window.pyodide.loadPackage(pkg)
           } catch (e) {
             // If loadPackage fails, try micropip
-            await window.pyodide.runPython(`
+            try {
+              await window.pyodide.loadPackage('micropip')
+            } catch (micropipError) {
+              // micropip should be available by default, but just in case
+            }
+            try {
+              await window.pyodide.runPythonAsync(`
 import micropip
-await micropip.install('${pkg}')
-            `)
+await micropip.install('${pkg}', keep_going=True)
+              `)
+            } catch (installError) {
+              console.warn(`Failed to install ${pkg}:`, installError)
+              setOutput(prev => prev + `\nWarning: Could not install ${pkg}. Some packages with compiled dependencies are not available in Pyodide.\nTry using alternative packages or mock data for demonstration.`)
+            }
           }
         }
         setOutput('Packages installed. Running code...')
@@ -262,17 +287,29 @@ except:
     // Regular code block for non-Python code with syntax highlighting
     const language = className?.replace('language-', '') || 'text'
     return (
-      <SyntaxHighlighter
-        language={language}
-        style={vscDarkPlus}
-        customStyle={{
-          margin: '20px 0',
-          borderRadius: '8px',
-          fontSize: '0.9rem'
-        }}
-      >
-        {children}
-      </SyntaxHighlighter>
+      <div className="code-block-container">
+        <div className="code-header">
+          <span className="language-label">{language}</span>
+          <button
+            onClick={copyToClipboard}
+            className="copy-button"
+            title="Copy code"
+          >
+            {copied ? '✓ copied' : '⧉'}
+          </button>
+        </div>
+        <SyntaxHighlighter
+          language={language}
+          style={vscDarkPlus}
+          customStyle={{
+            margin: 0,
+            borderRadius: '0 0 8px 8px',
+            fontSize: '0.9rem'
+          }}
+        >
+          {children}
+        </SyntaxHighlighter>
+      </div>
     )
   }
 
@@ -280,13 +317,22 @@ except:
     <div className="runnable-code-block">
       <div className="code-header">
         <span className="language-label">Python</span>
-        <button
-          onClick={runCode}
-          disabled={!pyodideReady || isRunning}
-          className="run-button"
-        >
-          {isRunning ? 'Running...' : 'Run'}
-        </button>
+        <div className="button-group">
+          <button
+            onClick={copyToClipboard}
+            className="copy-button"
+            title="Copy code"
+          >
+            {copied ? '✓ copied' : '⧉'}
+          </button>
+          <button
+            onClick={runCode}
+            disabled={!pyodideReady || isRunning}
+            className="run-button"
+          >
+            {isRunning ? 'Running...' : 'Run'}
+          </button>
+        </div>
       </div>
       <SyntaxHighlighter
         language="python"

@@ -580,6 +580,44 @@ nav a.active {
   border-top: 1px solid #444;
 }
 
+.button-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.copy-button {
+  background-color: transparent;
+  color: #888;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.copy-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ccc;
+}
+
+.copy-button:active {
+  background-color: rgba(255, 255, 255, 0.05);
+  transform: scale(0.95);
+}
+
+.code-block-container {
+  margin: 20px 0;
+  border: 1px solid #444;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
 .post-content {
   font-size: 1.2rem;
 }
