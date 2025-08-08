@@ -1,7 +1,7 @@
 ---
 id: 2
 date: '2025-07-19'
-title: "interesting features of the website"
+title: "why Σpace and not substack"
 pinned: false
 ---
 
@@ -15,8 +15,6 @@ print("hello world")
 
 i can also share links to individual posts
 
-
-
 i can make tables in the blog posts.
 
 | name | age | city |
@@ -26,3 +24,11 @@ i can make tables in the blog posts.
 i can also embed tweets <mark data-tooltip="image/video quality won't be perfect and no this is not iframe">but with a caveat</mark>
 
 <Tweet id="1945713783562711165" />
+
+
+added a new one - flashcards
+
+<div class="glossary-group">
+<details><summary>shresth</summary>is better than you</details>
+<details><summary>kapoor</summary>still better than you</details>
+</div>
