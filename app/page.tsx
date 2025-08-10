@@ -11,7 +11,7 @@ export default function Home() {
       <TableOfContents posts={homePosts} currentPage="home" />
       <div className="main-content">
         <br />
-        <h1 className="page-title">code, memes and maths</h1>
+        <h1 className="page-title">math, finance and what i'm building</h1>
         {homePosts.map((post) => (
           <BlogPost
             key={`home-${post.id}`}

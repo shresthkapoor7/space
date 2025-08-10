@@ -2,7 +2,7 @@
 id: 1
 date: '2025-07-19'
 title: "notepad on steroids"
-pinned: true
+pinned: false
 ---
 
 not sure why i started this, the idea was to clear out some concepts that i am weak at.

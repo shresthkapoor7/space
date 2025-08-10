@@ -86,9 +86,23 @@ body .post-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
-  padding-bottom: 20px;
+  padding: 20px 16px 16px;
   border-bottom: 1px solid #333;
+  position: sticky;
+  top: 0;
+  background-color: rgba(26, 26, 26, 0.95);
+  backdrop-filter: blur(10px);
+}
+
+.toc-header h3 {
+  color: #cccccc;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.toc-content {
+  padding: 20px 0;
 }
 
 .toc-sidebar {
@@ -107,6 +121,20 @@ body .post-container {
   transition: transform 0.3s ease;
 }
 
+.toc-sidebar.right-positioned {
+  border-right: none;
+  border-left: 1px solid #333;
+  transform: translateX(100%);
+}
+
+.toc-sidebar.right-positioned.toc-open {
+  transform: translateX(0);
+}
+
+.toc-sidebar.right-positioned.toc-closed {
+  transform: translateX(100%);
+}
+
 .toc-sidebar.toc-open {
   transform: translateX(0);
 }
@@ -118,14 +146,13 @@ body .post-container {
   color: #cccccc;
   font-size: 1.5rem;
   cursor: pointer;
-  padding: 0;
-  width: 30px;
-  height: 30px;
-  align-items: center;
-  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
 }
 
 .toc-close-button:hover {
+  background-color: #2a2a2a;
   color: #4a9eff;
 }
 
@@ -146,6 +173,13 @@ body .post-container {
   cursor: pointer;
   transition: all 0.2s ease;
   border-left: 3px solid transparent;
+}
+
+.toc-link.full-width {
+  width: 100%;
+  padding-right: 16px;
+  margin: 0;
+  border-radius: 0;
 }
 
 .toc-link:hover {
@@ -175,6 +209,31 @@ body .post-container {
   color: #4a9eff;
 }
 
+.toc-link.playing {
+  background-color: rgba(255, 107, 107, 0.1);
+  border-left-color: #ff6b6b;
+}
+
+.toc-link.playing .toc-post-title {
+  color: #ff6b6b;
+}
+
+.toc-link:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.toc-link:disabled:hover {
+  background-color: transparent;
+  border-left-color: transparent;
+}
+
+.pin-icon {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-left: 4px;
+}
+
 .mobile-toc-button {
   display: flex;
   align-items: center;
@@ -183,49 +242,66 @@ body .post-container {
   top: 20px;
   left: 20px;
   z-index: 1001;
-  background-color: #333;
-  border: 1px solid #444;
-  border-radius: 8px;
-  padding: 12px;
-  color: #cccccc;
+  background-color: rgba(26, 26, 26, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 8px;
+  color: rgba(255, 255, 255, 0.5);
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(12px);
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .mobile-toc-button:hover {
-  background-color: #444;
-  color: #4a9eff;
-}
-
-.toc-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #333;
-}
-
-.desktop-toc-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  z-index: 1001;
-  background-color: #333;
-  border: 1px solid #444;
-  border-radius: 8px;
-  padding: 12px;
-  color: #cccccc;
-  cursor: pointer;
+  background-color: rgba(42, 42, 42, 0.9);
+  border-color: rgba(74, 158, 255, 0.2);
+  color: rgba(74, 158, 255, 0.8);
+  transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
+.toc-content {
+  padding: 20px 0;
+}
+
+.desktop-toc-button {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
+  z-index: 1001;
+  background-color: rgba(26, 26, 26, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 8px;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
 .desktop-toc-button:hover {
-  background-color: #444;
-  color: #4a9eff;
+  background-color: rgba(42, 42, 42, 0.9);
+  border-color: rgba(74, 158, 255, 0.2);
+  color: rgba(74, 158, 255, 0.8);
+  transform: translateY(-50%) translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Right sidebar toggle buttons */
+.mobile-toc-button.right-positioned {
+  left: auto;
+  right: 20px;
+}
+
+.desktop-toc-button.right-positioned {
+  left: auto;
+  right: 20px;
 }
 
 .mobile-toc-overlay {
@@ -266,6 +342,15 @@ body .post-container {
 
   .desktop-toc-button {
     display: none !important;
+  }
+
+  /* Full width sidebars on mobile */
+  .toc-sidebar {
+    width: 100vw !important;
+  }
+
+  .toc-sidebar.right-positioned {
+    width: 100vw !important;
   }
 
   .main-content {
@@ -311,6 +396,10 @@ body .post-container {
   .mobile-toc-button {
     display: none !important;
   }
+
+  .desktop-toc-button {
+    display: flex !important;
+  }
 }
 
 .app-layout {
@@ -320,8 +409,8 @@ body .post-container {
 .main-header {
   position: relative;
   z-index: 100;
-  margin-bottom: 30px;
-  padding: 30px 20px 0;
+  margin-bottom: 15px;
+  padding: 20px 20px 0;
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
@@ -333,13 +422,13 @@ body .post-container {
 
 @media (min-width: 1024px) {
   .main-header {
-    margin: 0 auto 30px auto;
+    margin: 0 auto 15px auto;
     max-width: 800px;
-    padding: 30px 20px 0;
+    padding: 20px 20px 0;
   }
 
   body.toc-is-closed .main-header {
-    margin: 0 auto 30px auto;
+    margin: 0 auto 15px auto;
     max-width: 800px;
   }
 }
@@ -1521,5 +1610,464 @@ a:hover {
 @media (max-width: 768px) {
   .quant-ticker-container {
     padding: 8px 20px;
+  }
+}
+
+/* Right Sidebar Styles */
+.right-sidebar {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 270px;
+  height: 100vh;
+  background-color: rgba(26, 26, 26, 0.95);
+  backdrop-filter: blur(10px);
+  border-left: 1px solid #333;
+  overflow-y: auto;
+  z-index: 1000;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+}
+
+.right-sidebar.right-sidebar-open {
+  transform: translateX(0);
+}
+
+
+
+
+
+.right-sidebar-content {
+  padding: 20px 0;
+}
+
+.right-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.nav-section {
+  margin-bottom: 40px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px 12px;
+  border-bottom: 1px solid #333;
+  margin-bottom: 16px;
+}
+
+.section-header h4 {
+  color: #cccccc;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Music List Styles */
+.music-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 16px;
+}
+
+.music-link {
+  background: none;
+  border: none;
+  text-align: left;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+}
+
+.music-link:hover {
+  background-color: #2a2a2a;
+  border-left-color: #4a9eff;
+}
+
+.music-link.active {
+  background-color: #2a2a2a;
+  border-left-color: #4a9eff;
+}
+
+.music-track-artist {
+  color: #888;
+  font-size: 0.75rem;
+  margin-bottom: 2px;
+  font-weight: 500;
+}
+
+.music-track-title {
+  color: #cccccc;
+  font-size: 0.85rem;
+  line-height: 1.3;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.music-track-album {
+  color: #666;
+  font-size: 0.7rem;
+  margin-bottom: 2px;
+}
+
+.music-track-duration {
+  color: #888;
+  font-size: 0.7rem;
+  text-align: right;
+}
+
+.music-link.active .music-track-title {
+  color: #4a9eff;
+}
+
+/* GitHub Activity Styles */
+.github-profile-link {
+  color: #888;
+  text-decoration: none;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+
+.github-profile-link:hover {
+  color: #4a9eff;
+  background-color: #2a2a2a;
+}
+
+/* GitHub Commit Map Styles */
+.github-commit-map {
+  padding: 0 16px;
+  position: relative;
+}
+
+.commit-map-months {
+  position: relative;
+  height: 16px;
+  margin-bottom: 4px;
+}
+
+.month-label {
+  font-size: 0.65rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.commit-map-container {
+  margin-bottom: 12px;
+}
+
+.commit-map-grid {
+  display: flex;
+  gap: 4px;
+  width: 100%;
+}
+
+.day-labels-column {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 20px;
+  margin-right: 4px;
+}
+
+.day-label {
+  height: 10px;
+  font-size: 0.6rem;
+  color: #666;
+  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.weeks-container {
+  display: flex;
+  gap: 3px;
+  flex: 1;
+  justify-content: space-between;
+}
+
+.week-column {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+}
+
+.commit-day {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  border: 1px solid #1a1a1a;
+}
+
+.commit-level-0 {
+  background-color: #161b22;
+}
+
+.commit-level-1 {
+  background-color: #0e4429;
+}
+
+.commit-level-2 {
+  background-color: #006d32;
+}
+
+.commit-level-3 {
+  background-color: #26a641;
+}
+
+.commit-level-4 {
+  background-color: #39d353;
+}
+
+.commit-map-legend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.legend-squares {
+  display: flex;
+  gap: 2px;
+}
+
+/* Commit Map Tooltip Area */
+.commit-tooltip-area {
+  margin-top: 12px;
+  padding: 8px 12px;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(42, 42, 42, 0.3);
+  border-radius: 6px;
+  border: 1px solid #333;
+}
+
+.tooltip-info {
+  text-align: center;
+}
+
+.tooltip-contributions {
+  font-weight: 600;
+  color: #cccccc;
+  font-size: 0.75rem;
+  margin-bottom: 2px;
+}
+
+.tooltip-date {
+  color: #888;
+  font-size: 0.7rem;
+}
+
+.tooltip-placeholder {
+  color: #666;
+  font-size: 0.7rem;
+  font-style: italic;
+}
+
+/* Add subtle hover effect to commit days */
+.commit-day {
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.commit-day:hover {
+  outline: 1px solid rgba(255, 255, 255, 0.3);
+  outline-offset: 1px;
+}
+
+
+
+.github-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 16px;
+}
+
+.github-activity-item {
+  padding: 12px;
+  border-radius: 8px;
+  background-color: rgba(42, 42, 42, 0.3);
+  border-left: 3px solid #333;
+  transition: all 0.2s ease;
+}
+
+.github-activity-item:hover {
+  background-color: rgba(42, 42, 42, 0.6);
+  border-left-color: #4a9eff;
+}
+
+.github-activity-type {
+  color: #4a9eff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.github-activity-repo {
+  color: #cccccc;
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.github-activity-details {
+  color: #888;
+  font-size: 0.75rem;
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+.github-activity-date {
+  color: #666;
+  font-size: 0.7rem;
+}
+
+.github-loading,
+.github-error,
+.github-no-activity {
+  text-align: center;
+  color: #888;
+  font-size: 0.8rem;
+  padding: 20px;
+}
+
+.github-error {
+  color: #ff6b6b;
+}
+
+/* Mobile buttons for right sidebar */
+.mobile-right-sidebar-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1001;
+  background-color: #333;
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 12px;
+  color: #cccccc;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mobile-right-sidebar-button:hover {
+  background-color: #444;
+  border-color: #4a9eff;
+  color: #4a9eff;
+}
+
+.desktop-right-sidebar-button {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  z-index: 1001;
+  background-color: #333;
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 12px;
+  color: #cccccc;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.desktop-right-sidebar-button:hover {
+  background-color: #444;
+  border-color: #4a9eff;
+  color: #4a9eff;
+}
+
+.mobile-right-sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 999;
+}
+
+/* Responsive adjustments for main content with right sidebar */
+@media (min-width: 1024px) {
+  .right-sidebar {
+    transform: translateX(0);
+    position: fixed;
+  }
+
+  .right-sidebar.right-sidebar-closed {
+    transform: translateX(100%);
+  }
+
+  .main-content {
+    margin: 0 auto;
+    max-width: 800px;
+  }
+
+  body.right-sidebar-is-closed .main-content {
+    margin: 0 auto;
+    max-width: 800px;
+  }
+
+  .right-sidebar .toc-close-button {
+    display: flex !important;
+  }
+
+  .mobile-right-sidebar-button {
+    display: none !important;
+  }
+
+  .desktop-right-sidebar-button {
+    display: flex !important;
+  }
+}
+
+@media (max-width: 1023px) {
+  .right-sidebar .toc-close-button {
+    display: flex !important;
+  }
+
+  /* Ensure right sidebar is also full width on mobile */
+  .right-sidebar {
+    width: 100vw !important;
+  }
+
+  .main-content {
+    margin: 0 auto;
+    max-width: 800px;
+  }
+
+  .page-with-toc {
+    display: block;
+    padding: 0 20px;
+  }
+
+  .main-header {
+    text-align: center;
+    padding-left: 20px;
+    padding-right: 60px;
   }
 }

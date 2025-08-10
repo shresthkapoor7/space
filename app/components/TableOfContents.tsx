@@ -122,7 +122,7 @@ export default function TableOfContents({ posts, currentPage, currentPostId }: T
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
             <path
-              d="M3 6h18M3 12h18M3 18h18"
+              d="M21 12H3m18 0l-9-9m9 9l-9 9"
               stroke="currentColor"
               strokeWidth="2"
               strokeLinecap="round"
@@ -140,7 +140,7 @@ export default function TableOfContents({ posts, currentPage, currentPostId }: T
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
             <path
-              d="M3 6h18M3 12h18M3 18h18"
+              d="M21 12H3m18 0l-9-9m9 9l-9 9"
               stroke="currentColor"
               strokeWidth="2"
               strokeLinecap="round"
@@ -177,24 +177,26 @@ export default function TableOfContents({ posts, currentPage, currentPostId }: T
           </button>
         </div>
 
-        <nav className="toc-nav">
-          {posts.map((post) => (
-            <button
-              key={post.id}
-              onClick={() => navigateToPost(post.id)}
-              className={`toc-link ${
-                currentPostId !== undefined
-                  ? currentPostId === post.id ? 'active' : ''
-                  : activePost === `post-${currentPage}-${post.id}` ? 'active' : ''
-              }`}
-            >
-              <div className="toc-post-date">
-                {post.date} {post.pinned && <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>📌</span>}
-              </div>
-              <div className="toc-post-title">{post.title}</div>
-            </button>
-          ))}
-        </nav>
+        <div className="toc-content">
+          <nav className="toc-nav">
+            {posts.map((post) => (
+              <button
+                key={post.id}
+                onClick={() => navigateToPost(post.id)}
+                className={`toc-link ${
+                  currentPostId !== undefined
+                    ? currentPostId === post.id ? 'active' : ''
+                    : activePost === `post-${currentPage}-${post.id}` ? 'active' : ''
+                }`}
+              >
+                <div className="toc-post-date">
+                  {post.date} {post.pinned && <span className="pin-icon">📌</span>}
+                </div>
+                <div className="toc-post-title">{post.title}</div>
+              </button>
+            ))}
+          </nav>
+        </div>
       </aside>
     </>
   )
