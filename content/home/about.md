@@ -107,7 +107,7 @@ cs at [@nyu](https://www.nyu.edu/), ex-swe [@talenttitan](https://talenttitan.co
       src="/images/shresth.JPG"
       alt="nerd"
     />
-    <p class="photo-caption">10/08/2025</p>
+    <p class="photo-caption">10/09/2025</p>
   </div>
   <div class="about-content">
 
