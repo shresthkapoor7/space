@@ -46,7 +46,6 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
         cachedData.username === username &&
         (now - cachedData.timestamp) < CACHE_DURATION
       ) {
-        console.log(`Using cached GitHub data for ${username} (${Math.round((now - cachedData.timestamp) / 1000 / 60)} minutes old)`)
         return cachedData.data
       }
 
@@ -66,13 +65,12 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
         username
       }
       localStorage.setItem(getCacheKey(username), JSON.stringify(cacheData))
-      console.log(`Cached GitHub data for ${username}`)
     } catch (error) {
       console.error('Error caching GitHub data:', error)
     }
   }
 
-      const fetchCommitData = async () => {
+  const fetchCommitData = async () => {
     setIsLoading(true)
     setError(null)
 
@@ -84,7 +82,6 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
     }
 
     try {
-      console.log(`Fetching fresh GitHub data for ${username}`)
       const commitMap = await fetchGitHubContributions(username)
 
       setCachedData(username, commitMap)
@@ -93,15 +90,13 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
       console.error('GitHub contributions fetch failed:', err)
       setError(err instanceof Error ? err.message : 'Failed to load contributions')
 
-              const oldCachedData = getExpiredCachedData(username)
-        if (oldCachedData) {
-          console.log('Using expired cached data as fallback')
-          setCommitData(oldCachedData)
-          setError(null) // Clear error if we have cached data
-        } else {
-          // Don't generate sample data, just keep the error state
-          setCommitData([])
-        }
+      const oldCachedData = getExpiredCachedData(username)
+      if (oldCachedData) {
+        setCommitData(oldCachedData)
+        setError(null)
+      } else {
+        setCommitData([])
+      }
     } finally {
       setIsLoading(false)
     }
@@ -131,8 +126,6 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
     const toDate = endDate.toISOString().split('T')[0]
 
     const contributionsUrl = `https://github.com/users/${username}/contributions?from=${fromDate}&to=${toDate}`
-
-    console.log(`Fetching contributions from: ${contributionsUrl}`)
 
     try {
       const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(contributionsUrl)}`
@@ -174,8 +167,6 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
       contributionMap[dateStr] = 0
     }
 
-    console.log('Parsed contribution data:', Object.keys(contributionMap).length, 'days')
-
     while (currentDate <= endDate) {
       const dateStr = currentDate.toISOString().split('T')[0]
       const monthName = currentDate.toLocaleDateString('en-US', { month: 'long' })
@@ -215,38 +206,33 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
     }
   }
 
-    const processEventsToCommitMap = (events: any[]) => {
+  const processEventsToCommitMap = (events: any[]) => {
     const activityCounts: { [date: string]: number } = {}
     const commitCounts: { [date: string]: number } = {}
-
-    console.log('Processing events:', events.length)
 
     events.forEach(event => {
       const date = new Date(event.created_at).toISOString().split('T')[0]
 
-    switch (event.type) {
-      case 'PushEvent':
+      switch (event.type) {
+        case 'PushEvent':
           if (event.payload.commits) {
             const commits = event.payload.commits.length
             commitCounts[date] = (commitCounts[date] || 0) + commits
             activityCounts[date] = (activityCounts[date] || 0) + commits
           }
           break
-      case 'PullRequestEvent':
-      case 'IssuesEvent':
+        case 'PullRequestEvent':
+        case 'IssuesEvent':
         case 'CreateEvent':
         case 'ReleaseEvent':
         case 'ForkEvent':
           activityCounts[date] = (activityCounts[date] || 0) + 1
           break
-      default:
+        default:
           activityCounts[date] = (activityCounts[date] || 0) + 0.5
           break
       }
     })
-
-    console.log('Activity counts:', Object.keys(activityCounts).length, 'days with activity')
-    console.log('Commit counts:', Object.keys(commitCounts).length, 'days with commits')
 
     const maxDays = 90
     const today = new Date()
@@ -265,7 +251,7 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
 
       if (count > 0) {
         if (commitCount > 0) {
-            level = Math.min(4, Math.max(1, Math.ceil(commitCount / 2) + 1))
+          level = Math.min(4, Math.max(1, Math.ceil(commitCount / 2) + 1))
         } else {
           level = Math.min(3, Math.ceil(activityCount))
         }
@@ -318,7 +304,7 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
 
       // Add label if it's the first week or month changed
       if (weekIndex === 0 || (weekIndex > 0 &&
-          new Date(weeks[weekIndex - 1][0].date).getMonth() !== firstDay.getMonth())) {
+        new Date(weeks[weekIndex - 1][0].date).getMonth() !== firstDay.getMonth())) {
         labels.push({ month: monthName, weekIndex })
       }
     })
@@ -366,7 +352,7 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
     return `${count} contributions`
   }
 
-    if (isLoading) {
+  if (isLoading) {
     return (
       <>
         <div className="section-header">
@@ -389,7 +375,7 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
             </svg>
           </a>
         </div>
-        <div style={{padding: '20px 16px', color: '#666', textAlign: 'center'}}>
+        <div style={{ padding: '20px 16px', color: '#666', textAlign: 'center' }}>
           Loading commit data...
         </div>
       </>
@@ -419,9 +405,9 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
         </a>
       </div>
 
-            <div className="github-commit-map">
+      <div className="github-commit-map">
         {error && commitData.length === 0 && (
-          <div style={{padding: '16px', textAlign: 'center'}}>
+          <div style={{ padding: '16px', textAlign: 'center' }}>
             <img
               src="https://media1.tenor.com/m/rec5dlPBK2cAAAAd/mr-bean-waiting.gif"
               alt="Mr. Bean waiting"
@@ -432,10 +418,10 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
                 marginBottom: '12px'
               }}
             />
-            <div style={{color: '#888', fontSize: '0.75rem', marginBottom: '8px'}}>
+            <div style={{ color: '#888', fontSize: '0.75rem', marginBottom: '8px' }}>
               Still waiting for GitHub...
             </div>
-            <div style={{color: '#666', fontSize: '0.7rem'}}>
+            <div style={{ color: '#666', fontSize: '0.7rem' }}>
               Unable to load contribution data
             </div>
           </div>
@@ -446,63 +432,63 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
           <>
             {/* Month labels */}
             <div className="commit-map-months">
-          {getMonthLabels().map((label, index) => (
-            <div
-              key={index}
-              className="month-label"
-              style={{
-                position: 'absolute',
-                left: `${label.weekIndex * 15 + 20}px`,
-                fontSize: '0.65rem',
-                color: '#666'
-              }}
-            >
-              {label.month}
-            </div>
-          ))}
-        </div>
-
-        {/* Day labels and grid */}
-        <div className="commit-map-container">
-          <div className="commit-map-grid">
-            {/* Day labels column */}
-            <div className="day-labels-column">
-              {['', 'Mon', '', 'Wed', '', 'Fri', ''].map((label, index) => (
-                <div key={index} className="day-label">
-                  {label}
+              {getMonthLabels().map((label, index) => (
+                <div
+                  key={index}
+                  className="month-label"
+                  style={{
+                    position: 'absolute',
+                    left: `${label.weekIndex * 15 + 20}px`,
+                    fontSize: '0.65rem',
+                    color: '#666'
+                  }}
+                >
+                  {label.month}
                 </div>
               ))}
             </div>
 
-            {/* Weeks columns */}
-            <div className="weeks-container">
-              {getCommitMapData().map((week, weekIndex) => (
-                <div key={weekIndex} className="week-column">
-                  {week.map((day, dayIndex) => (
-                    <div
-                      key={`${day.date}-${dayIndex}`}
-                      className={`commit-day ${getCommitLevelClass(day.level)}`}
-                      onMouseEnter={() => handleDayHover(day)}
-                      onMouseLeave={handleDayLeave}
-                    />
+            {/* Day labels and grid */}
+            <div className="commit-map-container">
+              <div className="commit-map-grid">
+                {/* Day labels column */}
+                <div className="day-labels-column">
+                  {['', 'Mon', '', 'Wed', '', 'Fri', ''].map((label, index) => (
+                    <div key={index} className="day-label">
+                      {label}
+                    </div>
                   ))}
                 </div>
-              ))}
-            </div>
-          </div>
-        </div>
 
-                <div className="commit-map-legend">
-          <span style={{fontSize: '0.7rem', color: '#666'}}>Less</span>
-          <div className="legend-squares">
-            <div className="commit-day commit-level-0" />
-            <div className="commit-day commit-level-1" />
-            <div className="commit-day commit-level-2" />
-            <div className="commit-day commit-level-3" />
-            <div className="commit-day commit-level-4" />
-          </div>
-          <span style={{fontSize: '0.7rem', color: '#666'}}>More</span>
-        </div>
+                {/* Weeks columns */}
+                <div className="weeks-container">
+                  {getCommitMapData().map((week, weekIndex) => (
+                    <div key={weekIndex} className="week-column">
+                      {week.map((day, dayIndex) => (
+                        <div
+                          key={`${day.date}-${dayIndex}`}
+                          className={`commit-day ${getCommitLevelClass(day.level)}`}
+                          onMouseEnter={() => handleDayHover(day)}
+                          onMouseLeave={handleDayLeave}
+                        />
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="commit-map-legend">
+              <span style={{ fontSize: '0.7rem', color: '#666' }}>Less</span>
+              <div className="legend-squares">
+                <div className="commit-day commit-level-0" />
+                <div className="commit-day commit-level-1" />
+                <div className="commit-day commit-level-2" />
+                <div className="commit-day commit-level-3" />
+                <div className="commit-day commit-level-4" />
+              </div>
+              <span style={{ fontSize: '0.7rem', color: '#666' }}>More</span>
+            </div>
 
             {/* Tooltip area below legend */}
             <div className="commit-tooltip-area">

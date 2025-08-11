@@ -227,11 +227,9 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
         },
         events: {
           onReady: (event: any) => {
-            console.log('YouTube player ready')
             setYoutubePlayer(event.target)
           },
           onStateChange: (event: any) => {
-            // Track state changes to keep our state in sync
             const playerState = event.data
             if (playerState === window.YT.PlayerState.PLAYING) {
               setIsPaused(false)
@@ -243,14 +241,6 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
       })
     }
   }
-
-  // Prevent component cleanup during navigation
-  useEffect(() => {
-    return () => {
-      // Don't destroy the player on unmount - let it persist
-      console.log('RightSidebar cleanup prevented')
-    }
-  }, [])
 
   const toggleDrawer = () => {
     setIsOpen(!isOpen)
@@ -266,7 +256,6 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
     if (!track.youtubeUrl || !youtubePlayer) return
 
     if (currentlyPlaying === track.id) {
-      // Toggle pause/play
       if (isPaused) {
         youtubePlayer.playVideo()
         setIsPaused(false)
@@ -275,7 +264,6 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
         setIsPaused(true)
       }
     } else {
-      // Start playing new track
       const videoId = extractYouTubeId(track.youtubeUrl)
       if (videoId) {
         youtubePlayer.loadVideoById(videoId)

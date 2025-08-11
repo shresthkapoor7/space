@@ -3,7 +3,6 @@ import Link from 'next/link'
 import Navigation from './components/Navigation'
 import GlobalConsoleLog from './components/GlobalConsoleLog'
 import BodyWrapper from './components/BodyWrapper'
-import RightSidebar from './components/RightSidebar'
 import ConditionalSidebar from './components/ConditionalSidebar'
 import './globals.css'
 
