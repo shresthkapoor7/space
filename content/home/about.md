@@ -7,9 +7,24 @@ pinned: true
 
 <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Caveat:wght@400;500;600;700&family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-cs at [@nyu](https://www.nyu.edu/), ex-swe [@talenttitan](https://talenttitan.com/)
+cs at [<span class="nyu-link">@nyu</span>](https://www.nyu.edu/), ex-swe [@talenttitan](https://talenttitan.com/)
 
 <style>
+  .nyu-link {
+    color: #8b5cf6 !important;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    transition: all 0.2s ease;
+  }
+
+  .nyu-link:hover {
+    color: #a78bfa !important;
+    text-decoration-style: solid;
+    text-decoration-thickness: 2px;
+  }
+
   .about-container {
     display: flex;
     align-items: flex-start;
