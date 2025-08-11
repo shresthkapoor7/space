@@ -2,7 +2,7 @@
 id: 2
 date: '2025-07-19'
 title: "why Σpace and not substack"
-pinned: false
+pinned: true
 ---
 
 i can write markdown in the blog posts and it will be rendered as html. i can write tooltips <mark data-tooltip="i am a tooltip">tooltip</mark>.
