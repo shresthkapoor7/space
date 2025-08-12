@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import MusicList from './MusicList'
 import GitHubActivity from './GitHubActivity'
 
-// Extend Window interface for YouTube API
 declare global {
   interface Window {
     YT: any
@@ -26,7 +25,6 @@ interface RightSidebarProps {
   githubUsername?: string
 }
 
-// Sample music data - you can replace this with real data
 const sampleTracks: Track[] = [
   {
     id: 1,
@@ -63,25 +61,22 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
   const [isMobile, setIsMobile] = useState(false)
   const [activeSection, setActiveSection] = useState('activity')
   const [currentlyPlaying, setCurrentlyPlaying] = useState<number | null>(() => {
-    // Try to restore from sessionStorage
     if (typeof window !== 'undefined') {
       const saved = sessionStorage.getItem('music-current-track')
       return saved ? parseInt(saved) : null
     }
     return null
   })
-  const [showPlayer, setShowPlayer] = useState(true) // Show player by default
+  const [showPlayer, setShowPlayer] = useState(true)
   const [isPaused, setIsPaused] = useState(() => {
-    // Try to restore from sessionStorage
     if (typeof window !== 'undefined') {
       const saved = sessionStorage.getItem('music-is-paused')
       return saved === 'true'
     }
     return false
   })
-  const [youtubePlayer, setYoutubePlayer] = useState<any>(null) // YouTube player instance
+  const [youtubePlayer, setYoutubePlayer] = useState<any>(null)
 
-  // Save state to sessionStorage when it changes
   useEffect(() => {
     if (typeof window !== 'undefined') {
       if (currentlyPlaying !== null) {
@@ -156,7 +151,6 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
       const musicRect = musicSection.getBoundingClientRect()
       const githubRect = githubSection.getBoundingClientRect()
 
-      // Check which section is more visible
       const musicVisibility = Math.max(0, Math.min(musicRect.bottom, sidebarRect.bottom) - Math.max(musicRect.top, sidebarRect.top))
       const githubVisibility = Math.max(0, Math.min(githubRect.bottom, sidebarRect.bottom) - Math.max(githubRect.top, sidebarRect.top))
 
@@ -170,7 +164,7 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
     const sidebar = document.querySelector('.right-positioned .toc-content')
     if (sidebar) {
       sidebar.addEventListener('scroll', handleScroll)
-      handleScroll() // Check initial state
+      handleScroll()
     }
 
     return () => {
@@ -180,9 +174,7 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
     }
   }, [isOpen])
 
-  // Load YouTube IFrame API
   useEffect(() => {
-    // Prevent multiple API loads
     if (window.YT && window.YT.Player && !youtubePlayer) {
       createYouTubePlayer()
       return
@@ -204,10 +196,8 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
 
   const createYouTubePlayer = () => {
     if (window.YT && window.YT.Player && !youtubePlayer) {
-      // Make sure the element exists before creating player
       const playerElement = document.getElementById('youtube-player')
       if (!playerElement) {
-        // Try again after a short delay
         setTimeout(createYouTubePlayer, 100)
         return
       }
@@ -427,7 +417,6 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
             </nav>
           </div>
 
-                {/* Compact Audio Player */}
         {showPlayer && (
           <div style={{
             position: 'sticky',
@@ -437,7 +426,6 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
             borderTop: '1px solid #333',
             padding: '8px 12px'
           }}>
-            {/* Track Info & Close */}
             <div style={{
               display: 'flex',
               justifyContent: 'space-between',
@@ -492,7 +480,6 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
               </button>
             </div>
 
-                        {/* Controls */}
             <div style={{
               display: 'flex',
               justifyContent: 'center',
@@ -530,7 +517,6 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
                         setIsPaused(true)
                       }
                     } else {
-                      // Start playing first track if none is playing
                       const firstTrackWithUrl = tracks.find(track => track.youtubeUrl)
                       if (firstTrackWithUrl && firstTrackWithUrl.youtubeUrl) {
                         const videoId = extractYouTubeId(firstTrackWithUrl.youtubeUrl)
@@ -583,7 +569,6 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
               </button>
             </div>
 
-            {/* Hidden YouTube Player */}
             <div
               id="youtube-player"
               style={{
