@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import MusicList from './MusicList'
 import GitHubActivity from './GitHubActivity'
 
@@ -15,7 +15,6 @@ interface Track {
   id: number
   title: string
   artist: string
-  duration?: string
   isPlaying?: boolean
   youtubeUrl?: string
 }
@@ -30,29 +29,31 @@ const sampleTracks: Track[] = [
     id: 1,
     title: "Thru the night",
     artist: "Jack Harlow",
-    duration: "3:20",
     youtubeUrl: "https://www.youtube.com/watch?v=wPrEkA_gQp4"
   },
   {
     id: 2,
     title: "No Pole",
     artist: "Don Toliver",
-    duration: "2:54",
     youtubeUrl: "https://www.youtube.com/watch?v=A5mURRozXtg"
   },
   {
     id: 3,
-    title: "Dumbo",
+    title: "DUMBO",
     artist: "Travis Scott",
-    duration: "2:58",
     youtubeUrl: "https://www.youtube.com/watch?v=pyLs2dk9aVU"
   },
   {
     id: 4,
     title: "Freak",
     artist: "Doja Cat",
-    duration: "3:23",
     youtubeUrl: "https://www.youtube.com/watch?v=Wc9_dsv5YYA"
+  },
+  {
+    id: 5,
+    title: "Double Take",
+    artist: "Dhruv",
+    youtubeUrl: "https://youtu.be/R8FHtIhWqNo"
   }
 ]
 
@@ -76,6 +77,7 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
     return false
   })
   const [youtubePlayer, setYoutubePlayer] = useState<any>(null)
+  const playNextTrackRef = useRef<() => void>()
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -192,9 +194,9 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
     } else if (!youtubePlayer) {
       createYouTubePlayer()
     }
-  }, [])
+  }, [youtubePlayer])
 
-  const createYouTubePlayer = () => {
+  const createYouTubePlayer = useCallback(() => {
     if (window.YT && window.YT.Player && !youtubePlayer) {
       const playerElement = document.getElementById('youtube-player')
       if (!playerElement) {
@@ -213,24 +215,42 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
           fs: 0,
           cc_load_policy: 0,
           iv_load_policy: 3,
-          autohide: 1
+          autohide: 1,
+          disablekb: 1,
+          playsinline: 1
         },
-        events: {
+                events: {
           onReady: (event: any) => {
             setYoutubePlayer(event.target)
           },
           onStateChange: (event: any) => {
             const playerState = event.data
+
             if (playerState === window.YT.PlayerState.PLAYING) {
               setIsPaused(false)
             } else if (playerState === window.YT.PlayerState.PAUSED) {
               setIsPaused(true)
+            } else if (playerState === window.YT.PlayerState.ENDED) {
+              // Auto-play next track when current song ends
+              setTimeout(() => {
+                if (playNextTrackRef.current) {
+                  playNextTrackRef.current()
+                }
+              }, 100) // Small delay to ensure state is updated
+            }
+          },
+          onError: (event: any) => {
+            // Handle common errors
+            if (event.data === 2) {
+            } else if (event.data === 5) {
+            } else if (event.data === 100) {
+            } else if (event.data === 101 || event.data === 150) {
             }
           }
         }
       })
     }
-  }
+  }, [youtubePlayer])
 
   const toggleDrawer = () => {
     setIsOpen(!isOpen)
@@ -268,22 +288,60 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
     return tracks.find(track => track.id === currentlyPlaying)
   }
 
-  const playNextTrack = () => {
-    if (!youtubePlayer) return
+    const playNextTrack = useCallback(() => {
+
+
+    // Try to get the player if it's null but should exist
+    let player = youtubePlayer
+    if (!player) {
+      const playerElement = document.getElementById('youtube-player')
+      if (playerElement && window.YT && window.YT.get) {
+        player = window.YT.get('youtube-player')
+        if (player) {
+          setYoutubePlayer(player)
+        }
+      }
+    }
+
+    if (!player) {
+      return
+    }
 
     const currentIndex = tracks.findIndex(track => track.id === currentlyPlaying)
+
+    if (currentIndex === -1) {
+      return
+    }
+
     const nextIndex = (currentIndex + 1) % tracks.length
     const nextTrack = tracks[nextIndex]
 
-    if (nextTrack.youtubeUrl) {
+    if (nextTrack?.youtubeUrl) {
       const videoId = extractYouTubeId(nextTrack.youtubeUrl)
+
       if (videoId) {
-        youtubePlayer.loadVideoById(videoId)
-        setCurrentlyPlaying(nextTrack.id)
-        setIsPaused(false)
+        try {
+          if (player.loadVideoById && typeof player.loadVideoById === 'function') {
+            player.loadVideoById(videoId)
+            setCurrentlyPlaying(nextTrack.id)
+            setIsPaused(false)
+          } else {
+          }
+        } catch (error) {
+          if (error instanceof Error && error.message && error.message.includes('destroyed')) {
+            setYoutubePlayer(null)
+            setTimeout(() => createYouTubePlayer(), 500)
+          }
+        }
+      } else {
       }
+    } else {
     }
-  }
+  }, [youtubePlayer, currentlyPlaying, tracks])
+
+  useEffect(() => {
+    playNextTrackRef.current = playNextTrack
+  }, [playNextTrack])
 
   const playPreviousTrack = () => {
     if (!youtubePlayer) return
@@ -431,7 +489,7 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
                     overflow: 'hidden',
                     textOverflow: 'ellipsis'
                   }}>
-                    {getCurrentTrack()?.artist || 'Choose from your favorites'}
+                    {getCurrentTrack()?.artist || 'Choose from my favorites'}
                   </div>
                 </div>
                 <button
@@ -489,7 +547,6 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
                     if (!youtubePlayer) return
 
                     if (currentlyPlaying) {
-                      // Toggle pause/play
                       if (isPaused) {
                         youtubePlayer.playVideo()
                         setIsPaused(false)
@@ -567,3 +624,4 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
     </>
   )
 }
+
