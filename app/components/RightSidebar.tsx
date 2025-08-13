@@ -242,7 +242,7 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
     return (match && match[7].length === 11) ? match[7] : null
   }
 
-      const handleTrackPlay = (track: Track) => {
+  const handleTrackPlay = (track: Track) => {
     if (!track.youtubeUrl || !youtubePlayer) return
 
     if (currentlyPlaying === track.id) {
@@ -268,7 +268,7 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
     return tracks.find(track => track.id === currentlyPlaying)
   }
 
-      const playNextTrack = () => {
+  const playNextTrack = () => {
     if (!youtubePlayer) return
 
     const currentIndex = tracks.findIndex(track => track.id === currentlyPlaying)
@@ -304,23 +304,6 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
 
   return (
     <>
-      {isMobile && !isOpen && (
-        <button
-          onClick={toggleDrawer}
-          className="mobile-toc-button right-positioned"
-          aria-label="Open activity sidebar"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M21 12H3m9-9l-9 9 9 9"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </button>
-      )}
 
       {!isMobile && !isOpen && (
         <button
@@ -340,14 +323,8 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
         </button>
       )}
 
-      {isMobile && isOpen && (
-        <div
-          className="mobile-toc-overlay"
-          onClick={() => setIsOpen(false)}
-        />
-      )}
-
-      <aside className={`toc-sidebar right-positioned ${isOpen ? 'toc-open' : ''} ${!isOpen ? 'toc-closed' : ''}`} style={{right: 0, left: 'auto'}}>
+      {!isMobile && (
+        <aside className={`toc-sidebar right-positioned ${isOpen ? 'toc-open' : ''} ${!isOpen ? 'toc-closed' : ''}`} style={{ right: 0, left: 'auto' }}>
         <div className="toc-header">
           <h3>&nbsp;&nbsp;Current Favorites</h3>
           <button
@@ -367,9 +344,9 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
           </button>
         </div>
 
-        <div className="toc-content">
+        <div className="toc-content" style={{ paddingBottom: showPlayer ? '100px' : '20px' }}>
           <nav className="toc-nav">
-            <div data-section="music" style={{marginBottom: '20px'}}>
+            <div data-section="music" style={{ marginBottom: '20px' }}>
               {tracks.map((track) => (
                 <button
                   key={track.id}
@@ -383,9 +360,9 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
                   onClick={() => handleTrackPlay(track)}
                   disabled={!track.youtubeUrl}
                 >
-                  <div style={{flex: 1, textAlign: 'left'}}>
+                  <div style={{ flex: 1, textAlign: 'left' }}>
                     <div className="toc-post-date">
-                    {track.artist}
+                      {track.artist}
                     </div>
                     <div className="toc-post-title">{track.title}</div>
                   </div>
@@ -398,11 +375,11 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
                     }}>
                       {currentlyPlaying === track.id && !isPaused ? (
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M6 4h4v16H6zM14 4h4v16h-4z"/>
+                          <path d="M6 4h4v16H6zM14 4h4v16h-4z" />
                         </svg>
                       ) : (
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M8 5v14l11-7z"/>
+                          <path d="M8 5v14l11-7z" />
                         </svg>
                       )}
                     </div>
@@ -414,96 +391,100 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
             <div data-section="github">
               <GitHubActivity username={githubUsername} />
             </div>
-            </nav>
-          </div>
+          </nav>
+        </div>
 
-        {showPlayer && (
-          <div style={{
-            position: 'sticky',
-            bottom: 0,
-            backgroundColor: 'rgba(26, 26, 26, 0.95)',
-            backdropFilter: 'blur(10px)',
-            borderTop: '1px solid #333',
-            padding: '8px 12px'
-          }}>
+                  {!isMobile && showPlayer && (
             <div style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: '6px'
+              position: 'fixed',
+              bottom: 0,
+              right: isOpen ? 0 : '-270px',
+              width: '270px',
+              backgroundColor: 'rgba(26, 26, 26, 0.95)',
+              backdropFilter: 'blur(10px)',
+              borderTop: '1px solid #333',
+              padding: '8px 20px 16px 20px',
+              zIndex: 1001,
+              transition: 'right 0.3s ease'
             }}>
-              <div style={{flex: 1, minWidth: 0}}>
-                <div style={{
-                  fontSize: '0.75rem',
-                  color: '#fff',
-                  fontWeight: '500',
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis'
-                }}>
-                  {getCurrentTrack()?.title || 'Select a track to play'}
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '6px'
+              }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{
+                    fontSize: '0.75rem',
+                    color: '#fff',
+                    fontWeight: '500',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis'
+                  }}>
+                    {getCurrentTrack()?.title || 'Select a track to play'}
+                  </div>
+                  <div style={{
+                    fontSize: '0.65rem',
+                    color: '#888',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis'
+                  }}>
+                    {getCurrentTrack()?.artist || 'Choose from your favorites'}
+                  </div>
                 </div>
-                <div style={{
-                  fontSize: '0.65rem',
-                  color: '#888',
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis'
-                }}>
-                  {getCurrentTrack()?.artist || 'Choose from your favorites'}
-                </div>
+                <button
+                  onClick={() => {
+                    setShowPlayer(false)
+                    setCurrentlyPlaying(null)
+                  }}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: '#666',
+                    cursor: 'pointer',
+                    padding: '2px',
+                    marginLeft: '8px',
+                    flexShrink: 0
+                  }}
+                >
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                    <path
+                      d="M6 18L18 6M6 6l12 12"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
               </div>
-              <button
-                onClick={() => {
-                  setShowPlayer(false)
-                  setCurrentlyPlaying(null)
-                }}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: '#666',
-                  cursor: 'pointer',
-                  padding: '2px',
-                  marginLeft: '8px',
-                  flexShrink: 0
-                }}
-              >
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                  <path
-                    d="M6 18L18 6M6 6l12 12"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-            </div>
 
-            <div style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              gap: '8px'
-            }}>
-              <button
-                onClick={playPreviousTrack}
-                disabled={!currentlyPlaying}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: currentlyPlaying ? '#666' : '#444',
-                  cursor: currentlyPlaying ? 'pointer' : 'not-allowed',
-                  padding: '2px',
-                  opacity: currentlyPlaying ? 1 : 0.5
-                }}
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
-                </svg>
-              </button>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '8px'
+              }}>
+                <button
+                  onClick={playPreviousTrack}
+                  disabled={!currentlyPlaying}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: currentlyPlaying ? '#666' : '#444',
+                    cursor: currentlyPlaying ? 'pointer' : 'not-allowed',
+                    padding: '2px',
+                    opacity: currentlyPlaying ? 1 : 0.5
+                  }}
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
+                  </svg>
+                </button>
 
-                             <button
+                <button
                   onClick={() => {
                     if (!youtubePlayer) return
 
@@ -528,60 +509,61 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
                       }
                     }
                   }}
-                style={{
-                  background: 'none',
-                  border: '1px solid #ff6b6b',
-                  borderRadius: '50%',
-                  color: '#ff6b6b',
-                  cursor: 'pointer',
-                  padding: '4px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-              >
-                {currentlyPlaying && !isPaused ? (
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M6 4h4v16H6zM14 4h4v16h-4z"/>
-                  </svg>
-                ) : (
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M8 5v14l11-7z"/>
-                  </svg>
-                )}
-              </button>
+                  style={{
+                    background: 'none',
+                    border: '1px solid #ff6b6b',
+                    borderRadius: '50%',
+                    color: '#ff6b6b',
+                    cursor: 'pointer',
+                    padding: '4px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  {currentlyPlaying && !isPaused ? (
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M6 4h4v16H6zM14 4h4v16h-4z" />
+                    </svg>
+                  ) : (
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  )}
+                </button>
 
-              <button
-                onClick={playNextTrack}
-                disabled={!currentlyPlaying}
+                <button
+                  onClick={playNextTrack}
+                  disabled={!currentlyPlaying}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: currentlyPlaying ? '#666' : '#444',
+                    cursor: currentlyPlaying ? 'pointer' : 'not-allowed',
+                    padding: '2px',
+                    opacity: currentlyPlaying ? 1 : 0.5
+                  }}
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M16 18h2V6h-2zM6 6v12l8.5-6z" />
+                  </svg>
+                </button>
+
+              </div>
+              <div
+                id="youtube-player"
                 style={{
-                  background: 'none',
-                  border: 'none',
-                  color: currentlyPlaying ? '#666' : '#444',
-                  cursor: currentlyPlaying ? 'pointer' : 'not-allowed',
-                  padding: '2px',
-                  opacity: currentlyPlaying ? 1 : 0.5
+                  position: 'absolute',
+                  left: '-9999px',
+                  width: '1px',
+                  height: '1px',
+                  overflow: 'hidden'
                 }}
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M16 18h2V6h-2zM6 6v12l8.5-6z"/>
-                </svg>
-              </button>
+              />
             </div>
-
-            <div
-              id="youtube-player"
-              style={{
-                position: 'absolute',
-                left: '-9999px',
-                width: '1px',
-                height: '1px',
-                overflow: 'hidden'
-              }}
-            />
-          </div>
-        )}
-      </aside>
+          )}
+        </aside>
+      )}
     </>
   )
 }
