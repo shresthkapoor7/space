@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
-import MusicList from './MusicList'
 import GitHubActivity from './GitHubActivity'
 
 declare global {

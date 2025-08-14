@@ -268,28 +268,54 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
   }
 
   const getCommitMapData = () => {
+    if (commitData.length === 0) return []
+
     const weeks: GitHubCommitDay[][] = []
-    const daysInWeek: GitHubCommitDay[] = []
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
 
-    commitData.forEach((day, index) => {
-      daysInWeek.push(day)
+    const commitMap: { [date: string]: GitHubCommitDay } = {}
+    commitData.forEach(day => {
+      commitMap[day.date] = day
+    })
 
-      // If we have 7 days or it's the last day, complete the week
-      if (daysInWeek.length === 7 || index === commitData.length - 1) {
-        // Fill incomplete week with empty days if needed
-        while (daysInWeek.length < 7) {
-          const lastDate = new Date(daysInWeek[daysInWeek.length - 1].date)
-          lastDate.setDate(lastDate.getDate() + 1)
-          daysInWeek.push({
-            date: lastDate.toISOString().split('T')[0],
+    const firstDate = new Date(commitData[0].date)
+    const firstSunday = new Date(firstDate)
+    firstSunday.setDate(firstDate.getDate() - firstDate.getDay())
+
+    const lastDate = new Date(Math.min(
+      new Date(commitData[commitData.length - 1].date).getTime(),
+      today.getTime()
+    ))
+    const lastSaturday = new Date(lastDate)
+    lastSaturday.setDate(lastDate.getDate() + (6 - lastDate.getDay()))
+
+    const currentDate = new Date(firstSunday)
+
+    while (currentDate <= lastSaturday) {
+      const week: GitHubCommitDay[] = []
+
+      for (let dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) {
+        const dateStr = currentDate.toISOString().split('T')[0]
+        const currentDateCopy = new Date(currentDate)
+
+        if (currentDateCopy <= today) {
+          const dayData = commitMap[dateStr] || {
+            date: dateStr,
             count: 0,
             level: 0
-          })
+          }
+
+          week.push(dayData)
         }
-        weeks.push([...daysInWeek])
-        daysInWeek.length = 0
+
+        currentDate.setDate(currentDate.getDate() + 1)
       }
-    })
+
+      if (week.length > 0) {
+        weeks.push(week)
+      }
+    }
 
     return weeks
   }
@@ -299,12 +325,18 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
     const weeks = getCommitMapData()
 
     weeks.forEach((week, weekIndex) => {
-      const firstDay = new Date(week[0].date)
+      const firstValidDay = week.find(day => {
+        const date = new Date(day.date)
+        return commitData.some(commit => commit.date === day.date)
+      }) || week[0]
+
+      const firstDay = new Date(firstValidDay.date)
       const monthName = firstDay.toLocaleDateString('en-US', { month: 'short' })
 
-      // Add label if it's the first week or month changed
       if (weekIndex === 0 || (weekIndex > 0 &&
-        new Date(weeks[weekIndex - 1][0].date).getMonth() !== firstDay.getMonth())) {
+        new Date(weeks[weekIndex - 1].find(day =>
+          commitData.some(commit => commit.date === day.date)
+        )?.date || weeks[weekIndex - 1][0].date).getMonth() !== firstDay.getMonth())) {
         labels.push({ month: monthName, weekIndex })
       }
     })
@@ -421,16 +453,11 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
             <div style={{ color: '#888', fontSize: '0.75rem', marginBottom: '8px' }}>
               Still waiting for GitHub...
             </div>
-            <div style={{ color: '#666', fontSize: '0.7rem' }}>
-              Unable to load contribution data
-            </div>
           </div>
         )}
 
-        {/* Only show the commit map if we have data */}
         {commitData.length > 0 && (
           <>
-            {/* Month labels */}
             <div className="commit-map-months">
               {getMonthLabels().map((label, index) => (
                 <div
@@ -448,10 +475,8 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
               ))}
             </div>
 
-            {/* Day labels and grid */}
             <div className="commit-map-container">
               <div className="commit-map-grid">
-                {/* Day labels column */}
                 <div className="day-labels-column">
                   {['', 'Mon', '', 'Wed', '', 'Fri', ''].map((label, index) => (
                     <div key={index} className="day-label">
@@ -460,7 +485,6 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
                   ))}
                 </div>
 
-                {/* Weeks columns */}
                 <div className="weeks-container">
                   {getCommitMapData().map((week, weekIndex) => (
                     <div key={weekIndex} className="week-column">
@@ -490,7 +514,6 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
               <span style={{ fontSize: '0.7rem', color: '#666' }}>More</span>
             </div>
 
-            {/* Tooltip area below legend */}
             <div className="commit-tooltip-area">
               <div className="tooltip-info">
                 {hoveredDay ? (
