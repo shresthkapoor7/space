@@ -120,7 +120,7 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
   const fetchGitHubContributions = async (username: string): Promise<GitHubCommitDay[]> => {
     const endDate = new Date()
     const startDate = new Date()
-    startDate.setDate(endDate.getDate() - 90)
+    startDate.setUTCDate(endDate.getUTCDate() - 90)
 
     const fromDate = startDate.toISOString().split('T')[0]
     const toDate = endDate.toISOString().split('T')[0]
@@ -169,8 +169,8 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
 
     while (currentDate <= endDate) {
       const dateStr = currentDate.toISOString().split('T')[0]
-      const monthName = currentDate.toLocaleDateString('en-US', { month: 'long' })
-      const day = currentDate.getDate()
+      const monthName = currentDate.toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' })
+      const day = currentDate.getUTCDate()
       const ordinal = getOrdinal(day)
       const lookupKey = `${monthName} ${day}${ordinal}`
 
@@ -190,7 +190,7 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
         level
       })
 
-      currentDate.setDate(currentDate.getDate() + 1)
+      currentDate.setUTCDate(currentDate.getUTCDate() + 1)
     }
 
     return data
@@ -240,7 +240,7 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
 
     for (let i = maxDays - 1; i >= 0; i--) {
       const date = new Date(today)
-      date.setDate(date.getDate() - i)
+      date.setUTCDate(date.getUTCDate() - i)
       const dateStr = date.toISOString().split('T')[0]
 
       const activityCount = activityCounts[dateStr] || 0
@@ -272,23 +272,23 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
 
     const weeks: GitHubCommitDay[][] = []
     const today = new Date()
-    today.setHours(0, 0, 0, 0)
+    today.setUTCHours(0, 0, 0, 0)
 
     const commitMap: { [date: string]: GitHubCommitDay } = {}
     commitData.forEach(day => {
       commitMap[day.date] = day
     })
 
-    const firstDate = new Date(commitData[0].date)
+    const firstDate = new Date(commitData[0].date + 'T00:00:00.000Z')
     const firstSunday = new Date(firstDate)
-    firstSunday.setDate(firstDate.getDate() - firstDate.getDay())
+    firstSunday.setUTCDate(firstDate.getUTCDate() - firstDate.getUTCDay())
 
     const lastDate = new Date(Math.min(
-      new Date(commitData[commitData.length - 1].date).getTime(),
+      new Date(commitData[commitData.length - 1].date + 'T00:00:00.000Z').getTime(),
       today.getTime()
     ))
     const lastSaturday = new Date(lastDate)
-    lastSaturday.setDate(lastDate.getDate() + (6 - lastDate.getDay()))
+    lastSaturday.setUTCDate(lastDate.getUTCDate() + (6 - lastDate.getUTCDay()))
 
     const currentDate = new Date(firstSunday)
 
@@ -309,7 +309,7 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
           week.push(dayData)
         }
 
-        currentDate.setDate(currentDate.getDate() + 1)
+        currentDate.setUTCDate(currentDate.getUTCDate() + 1)
       }
 
       if (week.length > 0) {
@@ -326,17 +326,17 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
 
     weeks.forEach((week, weekIndex) => {
       const firstValidDay = week.find(day => {
-        const date = new Date(day.date)
+        const date = new Date(day.date + 'T00:00:00.000Z')
         return commitData.some(commit => commit.date === day.date)
       }) || week[0]
 
-      const firstDay = new Date(firstValidDay.date)
-      const monthName = firstDay.toLocaleDateString('en-US', { month: 'short' })
+      const firstDay = new Date(firstValidDay.date + 'T00:00:00.000Z')
+      const monthName = firstDay.toLocaleDateString('en-US', { month: 'short', timeZone: 'UTC' })
 
       if (weekIndex === 0 || (weekIndex > 0 &&
-        new Date(weeks[weekIndex - 1].find(day =>
+        new Date((weeks[weekIndex - 1].find(day =>
           commitData.some(commit => commit.date === day.date)
-        )?.date || weeks[weekIndex - 1][0].date).getMonth() !== firstDay.getMonth())) {
+        )?.date || weeks[weekIndex - 1][0].date) + 'T00:00:00.000Z').getUTCMonth() !== firstDay.getUTCMonth())) {
         labels.push({ month: monthName, weekIndex })
       }
     })
@@ -369,12 +369,13 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
   }
 
   const formatTooltipDate = (dateStr: string) => {
-    const date = new Date(dateStr)
+    const date = new Date(dateStr + 'T00:00:00.000Z')
     return date.toLocaleDateString('en-US', {
       weekday: 'short',
       month: 'short',
       day: 'numeric',
-      year: 'numeric'
+      year: 'numeric',
+      timeZone: 'UTC'
     })
   }
 
