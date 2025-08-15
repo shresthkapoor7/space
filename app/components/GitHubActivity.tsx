@@ -24,7 +24,6 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
   const [error, setError] = useState<string | null>(null)
   const [hoveredDay, setHoveredDay] = useState<GitHubCommitDay | null>(null)
 
-  // Cache duration: 1 hour (3600000 ms)
   const CACHE_DURATION = 60 * 60 * 1000
 
   useEffect(() => {
@@ -206,67 +205,6 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
     }
   }
 
-  const processEventsToCommitMap = (events: any[]) => {
-    const activityCounts: { [date: string]: number } = {}
-    const commitCounts: { [date: string]: number } = {}
-
-    events.forEach(event => {
-      const date = new Date(event.created_at).toISOString().split('T')[0]
-
-      switch (event.type) {
-        case 'PushEvent':
-          if (event.payload.commits) {
-            const commits = event.payload.commits.length
-            commitCounts[date] = (commitCounts[date] || 0) + commits
-            activityCounts[date] = (activityCounts[date] || 0) + commits
-          }
-          break
-        case 'PullRequestEvent':
-        case 'IssuesEvent':
-        case 'CreateEvent':
-        case 'ReleaseEvent':
-        case 'ForkEvent':
-          activityCounts[date] = (activityCounts[date] || 0) + 1
-          break
-        default:
-          activityCounts[date] = (activityCounts[date] || 0) + 0.5
-          break
-      }
-    })
-
-    const maxDays = 90
-    const today = new Date()
-    const data: GitHubCommitDay[] = []
-
-    for (let i = maxDays - 1; i >= 0; i--) {
-      const date = new Date(today)
-      date.setUTCDate(date.getUTCDate() - i)
-      const dateStr = date.toISOString().split('T')[0]
-
-      const activityCount = activityCounts[dateStr] || 0
-      const commitCount = commitCounts[dateStr] || 0
-
-      const count = Math.round(activityCount)
-      let level = 0
-
-      if (count > 0) {
-        if (commitCount > 0) {
-          level = Math.min(4, Math.max(1, Math.ceil(commitCount / 2) + 1))
-        } else {
-          level = Math.min(3, Math.ceil(activityCount))
-        }
-      }
-
-      data.push({
-        date: dateStr,
-        count: commitCount > 0 ? commitCount : count,
-        level
-      })
-    }
-
-    return data
-  }
-
   const getCommitMapData = () => {
     if (commitData.length === 0) return []
 
@@ -353,11 +291,6 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
       case 4: return 'commit-level-4'
       default: return 'commit-level-0'
     }
-  }
-
-  const getDayLabel = (dayIndex: number) => {
-    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-    return days[dayIndex]
   }
 
   const handleDayHover = (day: GitHubCommitDay) => {
