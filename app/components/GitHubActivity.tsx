@@ -123,24 +123,22 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
 
     const fromDate = startDate.toISOString().split('T')[0]
     const toDate = endDate.toISOString().split('T')[0]
-
     const contributionsUrl = `https://github.com/users/${username}/contributions?from=${fromDate}&to=${toDate}`
 
     try {
-      const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(contributionsUrl)}`
+      const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(contributionsUrl)}`;
       const response = await fetch(proxyUrl)
 
       if (!response.ok) {
         throw new Error(`CORS proxy error: ${response.status}`)
       }
 
-      const data = await response.json()
-      const html = data.contents
+      // corsproxy.io returns HTML directly as text, not JSON
+      const html = await response.text()
 
       return parseContributionData(html, startDate, endDate)
     } catch (err) {
-      console.error('CORS proxy failed, trying direct approach:', err)
-
+      console.error('CORS proxy failed:', err)
       throw new Error('Could not fetch GitHub contributions page')
     }
   }
