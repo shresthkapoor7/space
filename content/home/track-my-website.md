@@ -24,4 +24,6 @@ maybe in the future (or if cursor spits out some magic), i’ll add something li
 
 gonna call this one caterpillar 🐛 - no idea why but sounds cool
 
+<Tweet id="1952569287409078490" />
+
 > 🐛 [caterpillar](https://github.com/shresthkapoor7/caterpillar)
