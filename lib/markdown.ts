@@ -84,8 +84,8 @@ export function readMarkdownFiles(category: string): Post[] {
 }
 
 // Get posts for specific categories
-export function getMathsPosts(): Post[] {
-  return readMarkdownFiles('maths')
+export function getmathPosts(): Post[] {
+  return readMarkdownFiles('math')
 }
 
 export function getFinancePosts(): Post[] {

@@ -8,7 +8,7 @@ export default function Navigation() {
 
   const navItems = [
     { href: '/', label: 'home' },
-    { href: '/maths', label: 'maths' },
+    { href: '/math', label: 'math' },
     { href: '/finance', label: 'finance' },
     { href: '/ml', label: 'ml' },
     // { href: '/project', label: 'project' },
@@ -17,7 +17,7 @@ export default function Navigation() {
 
   const isActive = (href: string) => {
     if (href === '/') {
-      return pathname === '/' || (pathname.startsWith('/') && pathname.split('/').length === 2 && !pathname.startsWith('/maths') && !pathname.startsWith('/finance') && !pathname.startsWith('/ml') && !pathname.startsWith('/strands'))
+      return pathname === '/' || (pathname.startsWith('/') && pathname.split('/').length === 2 && !pathname.startsWith('/math') && !pathname.startsWith('/finance') && !pathname.startsWith('/ml') && !pathname.startsWith('/strands'))
     } else {
       return pathname.startsWith(href)
     }

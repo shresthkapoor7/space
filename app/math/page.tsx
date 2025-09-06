@@ -2,15 +2,15 @@ import React from 'react'
 import BlogPost from '../components/BlogPost'
 import TableOfContents from '../components/TableOfContents'
 import DynamicTitle from '../components/DynamicTitle'
-import { getMathsPosts } from '../../lib/markdown'
+import { getmathPosts } from '../../lib/markdown'
 
-export default function Maths() {
-  const mathsPosts = getMathsPosts()
+export default function math() {
+  const mathPosts = getmathPosts()
 
   return (
     <div className="page-with-toc">
-      <DynamicTitle section="maths" />
-      <TableOfContents posts={mathsPosts} currentPage="maths" />
+      <DynamicTitle section="math" />
+      <TableOfContents posts={mathPosts} currentPage="math" />
       <div className="main-content">
         <br />
         <h1 className="page-title">mathematical chaos</h1>
@@ -22,11 +22,11 @@ export default function Maths() {
           />
         </div>
         <br />
-        {mathsPosts.map((post) => (
+        {mathPosts.map((post) => (
           <BlogPost
-            key={`maths-${post.id}`}
+            key={`math-${post.id}`}
             post={post}
-            currentPage="maths"
+            currentPage="math"
           />
         ))}
       </div>

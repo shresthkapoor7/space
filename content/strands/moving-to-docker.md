@@ -1,7 +1,7 @@
 ---
 id: 3
 date: '2025-08-16'
-title: "move to docker"
+title: "🐳 Strands needs a reset: moving to Docker"
 pinned: false
 ---
 
@@ -13,16 +13,15 @@ pinned: false
   />
 </div>
 
-### the frontend issues
+### The frontend mess
 
-haven't touched strands in a while, and right now i'm dealing with this weird situation where the frontend looks solid visually but the underlying code is a mess. the css is scattered everywhere with no real structure. i keep thinking about how clean the ∑pace codebase looks - everything has its place and you can actually find what you're looking for. that's what i want strands to feel like.
+Visually Strands looks fine, but under the hood the CSS is scattered everywhere. No structure, no consistency. I keep thinking about Σpace its clean, organized, and easy to navigate. That’s exactly what I want Strands to feel like.
 
-### the backend and auth issues
+### Backend + auth reality check
 
-then there's the backend situation. this being my first real express project, i was basically fumbling around in the dark when i started. but between then and now, i've actually taken time to understand the framework properly - watched tutorials, built some practice projects, and finally grasped how middleware and auth services actually work. funny thing is, i didn't even know nodemon existed and kept manually restarting my server like some kind of caveman.
-the real bottleneck though is postgres. the whole express setup isn't containerized, so the connection between postgres and express is just janky. and since i couldn't figure out how to expose the postgres port properly, i can't even peek inside the database to see what's happening. also shoutout to this [banger video](https://www.youtube.com/watch?v=SccSCuHhOw0)
+This was my first real Express project, so I was basically fumbling in the dark. Since then I’ve taken time to learn properly built practice apps, understood middleware/auth but my biggest bottleneck is still Postgres. Without containerization, connecting Express ↔ Postgres is just janky. I couldn’t even peek into the DB without hacking ports. (Shoutout to this [banger video](https://www.youtube.com/watch?v=SccSCuHhOw0) that finally clicked things for me.)
 
-### open router vs gemini
+### Open Router vs Gemini
 
 <div style="display: flex; justify-content: center; margin-top: 1rem;">
   <img
@@ -32,21 +31,19 @@ the real bottleneck though is postgres. the whole express setup isn't containeri
   />
 </div>
 
-don't even get me started on openrouter and gemini. openrouter making gemini (2.5 flash) paid is so stupid, and their credit system is bizarre - you get maybe 3 conversations with a decent model and suddenly you're out of credits. trying to juggle both apis with their different request formats has been a headache. but just having gemini makes it like a basic project and 2.5 flash is not good enough but is the only free one.
+API juggling shouldn’t be harder than building features. But OpenRouter’s credit system is bizarre, and Gemini 2.5 Flash isn’t strong enough.
 
-<center style="color:yellow">final verdict -> both are 🗑️</center>
+<center style="color:yellow">final verdict → both are 🗑️</center>
 
-### solution
+### The plan forward
 
-1. clean up the backend by removing openrouter temporarily, then dockerize everything and implement proper middleware with authentication.
-
-2. for the cleanup phase - ditch the save api and build auto-save functionality, remove openrouter for now, and add a rag-based system for chat.
-
-3. once that's solid, deploy it and test everything thoroughly before killing the current instance. during testing, i'll make the necessary frontend adjustments.
-
+1. Strip out OpenRouter for now, dockerize everything, and add proper middleware + auth.
+2. Rebuild the save API as auto-save, and add a RAG-based system for chat.
+3. Deploy a clean instance, test thoroughly, then shut down the old one while fixing frontend issues.
 
 honestly, since the backend isn't that complex yet, i'm considering just starting fresh.
 
-> ***sometimes a clean slate is worth more than trying to untangle old code.***
 
-<center style="color: pink"> ✨✨ and obviously some extra resume points for using docker ✨✨ </center>
+>Sometimes a clean slate is worth more than trying to untangle old code.
+
+<center style="color: pink"> ✨ Plus, some bonus resume points for Docker. ✨ </center>

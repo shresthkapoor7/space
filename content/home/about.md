@@ -1,7 +1,7 @@
 ---
 id: 7
 date: '2025-08-10'
-title: "shresth.md"
+title: "about.md"
 pinned: true
 ---
 
@@ -83,6 +83,10 @@ cs at [<span class="nyu-link">@nyu</span>](https://www.nyu.edu/), ex-swe [@talen
     margin: 0;
     font-weight: 400;
     letter-spacing: 0.5px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    white-space: nowrap;
   }
 
   .about-content {
@@ -122,7 +126,11 @@ cs at [<span class="nyu-link">@nyu</span>](https://www.nyu.edu/), ex-swe [@talen
       src="/images/shresth.JPG"
       alt="nerd"
     />
-    <p class="photo-caption">10/09/2025</p>
+    <p class="photo-caption">
+      <span>10/09/2025</span>
+      <span>~</span>
+      <span>sandy hook beach</span>
+    </p>
   </div>
   <div class="about-content">
 
@@ -130,7 +138,7 @@ cs at [<span class="nyu-link">@nyu</span>](https://www.nyu.edu/), ex-swe [@talen
 - **[strands](/strands)** slack threads but for LLMs
 - **[Σpace](/2)** my personal substack
 - **[riff](/5)** shazam but with spotify
-- **[caterpillar](/4)** track your favorite creators and me
+- **[brain rot]()** subway surfers inside cursor
 
   </div>
 </div>
@@ -138,6 +146,21 @@ cs at [<span class="nyu-link">@nyu</span>](https://www.nyu.edu/), ex-swe [@talen
 
 <center>
 
-[twitter](https://x.com/shresthkapoor7) | [github](https://github.com/shresthkapoor7)
+[twitter](https://twitter.com/shresthkapoor7) | [github](https://github.com/shresthkapoor7)
  | [linkedin](https://www.linkedin.com/in/shresth-kapoor-7skp/)
 </center>
+
+
+old projects
+
+caterpillar
+RAG for Obsidian
+RAG for ROS
+Snapple
+Trackmate
+
+hackathon builds
+
+agrosynth
+foak
+[un hackathon - geosight contributions](https://github.com/dsagal/GeoSight-OS/commit/2dc535f136dce4d3eef5a8269cbf3e0b22079e3c)

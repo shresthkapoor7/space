@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import BlogPost from '../../components/BlogPost'
 import DynamicTitle from '../../components/DynamicTitle'
-import { getMathsPosts } from '../../../lib/markdown'
+import { getmathPosts } from '../../../lib/markdown'
 
 interface PageProps {
   params: {
@@ -11,7 +11,7 @@ interface PageProps {
 
 export default function MathPost({ params }: PageProps) {
   const postId = parseInt(params.id)
-  const allPosts = getMathsPosts()
+  const allPosts = getmathPosts()
   const post = allPosts.find(p => p.id === postId)
 
   if (!post) {
@@ -22,17 +22,17 @@ export default function MathPost({ params }: PageProps) {
     <div className="post-container">
       <DynamicTitle title={post.title} />
       <div style={{ marginBottom: '1rem' }}>
-        <a href="/maths" style={{ color: 'var(--accent-color)', textDecoration: 'none' }}>
-          ← Back to all maths posts
+        <a href="/math" style={{ color: 'var(--accent-color)', textDecoration: 'none' }}>
+          ← Back to all math posts
         </a>
       </div>
-      <BlogPost post={post} currentPage="maths" />
+      <BlogPost post={post} currentPage="math" />
     </div>
   )
 }
 
 export function generateStaticParams() {
-  const posts = getMathsPosts()
+  const posts = getmathPosts()
   return posts.map((post) => ({
     id: post.id.toString(),
   }))
