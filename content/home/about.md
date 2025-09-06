@@ -144,7 +144,7 @@ cs at [<span class="nyu-link">@nyu</span>](https://www.nyu.edu/), ex-swe [@talen
 </div>
 
 
-<center>
+<!-- <center>
 
 [twitter](https://twitter.com/shresthkapoor7) | [github](https://github.com/shresthkapoor7)
  | [linkedin](https://www.linkedin.com/in/shresth-kapoor-7skp/)
@@ -163,4 +163,4 @@ hackathon builds
 
 agrosynth
 foak
-[un hackathon - geosight contributions](https://github.com/dsagal/GeoSight-OS/commit/2dc535f136dce4d3eef5a8269cbf3e0b22079e3c)
+[un hackathon - geosight contributions](https://github.com/dsagal/GeoSight-OS/commit/2dc535f136dce4d3eef5a8269cbf3e0b22079e3c) -->
