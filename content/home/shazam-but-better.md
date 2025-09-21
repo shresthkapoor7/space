@@ -5,6 +5,8 @@ title: "shazam but better"
 pinned: false
 ---
 
+<div style="color: red; text-align: center">(the project is on pause)</div>
+
 this will probably be the last project before i go deep into the mindless job applying arc. gonna build this one out with a friend. simple as always: a swiftui application that can analyze music but here’s the kicker no apple music links, only spotify (not really a kicker tbh). the app will also suggest similar music based on what you just heard.
 
 <div style="display: flex; justify-content: center; margin-top: 1rem;">
