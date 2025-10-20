@@ -7,7 +7,7 @@ pinned: true
 
 <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Caveat:wght@400;500;600;700&family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-hi i'm shresth. currently doing cs at [<span class="nyu-link">@nyu</span>](https://www.nyu.edu/), ex-swe [@talenttitan](https://talenttitan.com/). welcome to space my personal substack. tabs on the website:
+hi i'm shresth. currently studying cs at [<span class="nyu-link">@nyu</span>](https://www.nyu.edu/), ex-swe [@talenttitan](https://talenttitan.com/). welcome to space my personal substack. tabs on the website before you get lost :D
 
 <style>
   .nyu-link {
@@ -48,8 +48,7 @@ hi i'm shresth. currently doing cs at [<span class="nyu-link">@nyu</span>](https
 
   .about-image img {
     width: 300px;
-    border: 12px solid #faf9f7;
-    border-bottom: 40px solid #faf9f7;
+    border: 8px solid #faf9f7;
     border-radius: 0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px rgba(0, 0, 0, 0.2);
     filter: sepia(25%) contrast(1.1) brightness(1.05) saturate(0.9) hue-rotate(-5deg);
@@ -103,7 +102,7 @@ hi i'm shresth. currently doing cs at [<span class="nyu-link">@nyu</span>](https
     .about-image img {
       width: 250px;
       border: 10px solid #faf9f7;
-      border-bottom: 30px solid #faf9f7;
+      border-bottom: 10px solid #faf9f7;
     }
 
     .about-image::after {
@@ -126,11 +125,11 @@ hi i'm shresth. currently doing cs at [<span class="nyu-link">@nyu</span>](https
       src="/images/shresth.JPG"
       alt="nerd"
     />
-    <p class="photo-caption">
-      <span>10/09/2025</span>
+    <!-- <p class="photo-caption">
+      <span>17/10/2025</span>
       <!-- <span>~</span> -->
       <!-- <span>sandy hook beach</span> -->
-    </p>
+    <!-- </p> -->
   </div>
   <div class="about-content">
 
@@ -138,6 +137,7 @@ hi i'm shresth. currently doing cs at [<span class="nyu-link">@nyu</span>](https
   - **[finance](/finance)** thoughts, notes, and research as I explore quantitative finance and related models
   - **[ml](/ml)** experiments and reflections on computer vision, machine learning, and applied AI
   - **[strands](/strands)** my personal project aimed at improving how AI systems manage context
+  - **[home](/home)** everything else from hackathons to projects to random thoughts
 
 
 <!-- #### working on
