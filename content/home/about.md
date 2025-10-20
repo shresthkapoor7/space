@@ -155,9 +155,11 @@ hi i'm shresth. currently doing cs at [<span class="nyu-link">@nyu</span>](https
 
 > note 2: the blogs are open and you don't need to click on them to read them. you can just scroll through them.
 
-> note 3: have disabled music on the individual blog posts for more focused reading. if you click from the left sidebar menu you will land on the individual blog post.
+> note 3: you can also listen to music while you scroll through my posts and notes.
 
-> note 4: you can also listen to music while you scroll through my posts and notes.
+> note 4: have disabled music on the individual blog posts for more focused reading. if you click from the left sidebar menu you will land on the individual blog post.
+
+
 <!-- <center>
 
 [twitter](https://twitter.com/shresthkapoor7) | [github](https://github.com/shresthkapoor7)
