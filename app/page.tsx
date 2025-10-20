@@ -11,7 +11,7 @@ export default function Home() {
       <TableOfContents posts={homePosts} currentPage="home" />
       <div className="main-content">
         <br />
-        <div style={{textAlign: "center", color: "yellow", fontSize: "1.5rem", marginBottom: "1rem"}}>Welcome to my personal website.</div>
+        <div style={{textAlign: "center", color: "yellow", fontSize: "1.5rem", marginBottom: "1rem"}}>Welcome to my substack.</div>
         <div style={{textAlign: "center"}}>LinkedIn: <a href="https://www.linkedin.com/in/shresth-kapoor-7skp/" target="_blank" rel="noopener noreferrer">shresth kapoor</a> | GitHub: <a href="https://github.com/shresthkapoor7" target="_blank" rel="noopener noreferrer">shresthkapoor7</a> | Twitter: <a href="https://twitter.com/shresthkapoor7" target="_blank" rel="noopener noreferrer">shresthkapoor7</a></div>
         <div className="toc-header"></div>
         {homePosts.map((post) => (
