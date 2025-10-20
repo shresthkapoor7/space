@@ -38,7 +38,7 @@ export default function RootLayout({
                         </main>
                         <ConditionalSidebar />
                         <footer className="site-footer">
-                            <p>Written by <a href="https://github.com/shresthkapoor7" target="_blank" rel="noopener noreferrer"> Shresth Kapoor</a></p>
+                            <p>the website is engineered not designed.</p>
                         </footer>
                     </div>
                 </BodyWrapper>
