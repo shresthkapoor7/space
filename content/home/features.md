@@ -1,7 +1,7 @@
 ---
 id: 2
 date: '2025-07-19'
-title: "why Σpace and not substack"
+title: "Why this website and not Substack"
 pinned: true
 ---
 

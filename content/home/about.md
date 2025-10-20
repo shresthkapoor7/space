@@ -1,13 +1,13 @@
 ---
 id: 7
 date: '2025-08-10'
-title: "about.md"
+title: "About Me and the Website"
 pinned: true
 ---
 
 <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Caveat:wght@400;500;600;700&family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-cs at [<span class="nyu-link">@nyu</span>](https://www.nyu.edu/), ex-swe [@talenttitan](https://talenttitan.com/)
+hi i'm shresth. currently doing cs at [<span class="nyu-link">@nyu</span>](https://www.nyu.edu/), ex-swe [@talenttitan](https://talenttitan.com/). welcome to space my personal substack. tabs on the website:
 
 <style>
   .nyu-link {
@@ -128,22 +128,36 @@ cs at [<span class="nyu-link">@nyu</span>](https://www.nyu.edu/), ex-swe [@talen
     />
     <p class="photo-caption">
       <span>10/09/2025</span>
-      <span>~</span>
-      <span>sandy hook beach</span>
+      <!-- <span>~</span> -->
+      <!-- <span>sandy hook beach</span> -->
     </p>
   </div>
   <div class="about-content">
 
-#### working on
+  - **[math](/math)** posts and notes on linear algebra, calculus, and other math topics I’m revisiting and exploring
+  - **[finance](/finance)** thoughts, notes, and research as I explore quantitative finance and related models
+  - **[ml](/ml)** experiments and reflections on computer vision, machine learning, and applied AI
+  - **[strands](/strands)** my personal project aimed at improving how AI systems manage context
+
+
+<!-- #### working on
 - **[strands](/strands)** slack threads but for LLMs
 - **[Σpace](/2)** my personal substack
 - **[riff](/5)** shazam but with spotify
-- **[brain rot]()** subway surfers inside cursor
+- **[brain rot]()** subway surfers inside cursor -->
 
   </div>
 </div>
 
 
+
+> note 1: 📌 are the pinned posts.
+
+> note 2: the blogs are open and you don't need to click on them to read them. you can just scroll through them.
+
+> note 3: have disabled music on the individual blog posts for more focused reading. if you click from the left sidebar menu you will land on the individual blog post.
+
+> note 4: you can also listen to music while you scroll through my posts and notes.
 <!-- <center>
 
 [twitter](https://twitter.com/shresthkapoor7) | [github](https://github.com/shresthkapoor7)
