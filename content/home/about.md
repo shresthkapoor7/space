@@ -137,7 +137,7 @@ hi i'm shresth. currently studying cs at [<span class="nyu-link">@nyu</span>](ht
   - **[finance](/finance)** thoughts, notes, and research as I explore quantitative finance and related models
   - **[ml](/ml)** experiments and reflections on computer vision, machine learning, and applied AI
   - **[strands](/strands)** my personal project aimed at improving how AI systems manage context
-  - **[home](/home)** everything else from hackathons to projects to random thoughts
+  - **[home](/)** everything else from hackathons to projects to random thoughts
 
 
 <!-- #### working on
