@@ -65,19 +65,8 @@ export default function TableOfContents({ posts, currentPage, currentPostId }: T
   }, [posts, currentPage])
 
   const navigateToPost = (postId: number) => {
-    if (currentPostId !== undefined) {
-      const baseUrl = currentPage === 'home' ? '' : `/${currentPage}`
-      window.location.href = `${baseUrl}/${postId}`
-    } else {
-      const element = document.getElementById(`post-${currentPage}-${postId}`)
-      if (element) {
-        const yOffset = -80;
-        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-        window.scrollTo({ top: y, behavior: 'smooth' });
-        const baseUrl = currentPage === 'home' ? '' : `/${currentPage}`
-        window.history.pushState({}, '', `${baseUrl}/${postId}`)
-      }
-    }
+    const baseUrl = currentPage === 'home' ? '' : `/${currentPage}`
+    window.location.href = `${baseUrl}/${postId}`
     if (isMobile) {
       setIsOpen(false)
     }
@@ -159,7 +148,7 @@ export default function TableOfContents({ posts, currentPage, currentPostId }: T
 
       <aside className={`toc-sidebar ${isOpen ? 'toc-open' : ''} ${!isOpen ? 'toc-closed' : ''}`}>
         <div className="toc-header">
-          <h3>&nbsp;&nbsp;Contents</h3>
+          <h3>&nbsp;&nbsp;Posts</h3>
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="toc-close-button"

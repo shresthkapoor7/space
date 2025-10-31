@@ -86,7 +86,7 @@ body .post-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 16px 16px;
+  padding: 14px 12px 12px;
   border-bottom: 1px solid #333;
   position: sticky;
   top: 0;
@@ -96,20 +96,20 @@ body .post-container {
 
 .toc-header h3 {
   color: #cccccc;
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   font-weight: 600;
   margin: 0;
 }
 
 .toc-content {
-  padding: 20px 0;
+  padding: 12px 0;
 }
 
 .toc-sidebar {
   position: fixed;
   left: 0;
   top: 0;
-  width: 270px;
+  width: 240px;
   height: 100vh;
   background-color: rgba(26, 26, 26, 0.95);
   backdrop-filter: blur(10px);
@@ -125,6 +125,7 @@ body .post-container {
   border-right: none;
   border-left: 1px solid #333;
   transform: translateX(100%);
+  overflow-y: hidden;
 }
 
 .toc-sidebar.right-positioned.toc-open {
@@ -159,25 +160,25 @@ body .post-container {
 .toc-nav {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 6px;
 }
 
 .toc-link {
   background: none;
   border: none;
   text-align: left;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  padding-left: 16px;
-  border-radius: 8px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 12px;
+  border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
-  border-left: 3px solid transparent;
+  border-left: 2px solid transparent;
 }
 
 .toc-link.full-width {
   width: 100%;
-  padding-right: 16px;
+  padding-right: 12px;
   margin: 0;
   border-radius: 0;
 }
@@ -194,14 +195,14 @@ body .post-container {
 
 .toc-post-date {
   color: #888;
-  font-size: 0.8rem;
-  margin-bottom: 4px;
+  font-size: 0.7rem;
+  margin-bottom: 2px;
 }
 
 .toc-post-title {
   color: #cccccc;
-  font-size: 0.9rem;
-  line-height: 1.3;
+  font-size: 0.8rem;
+  line-height: 1.2;
   font-weight: 500;
 }
 
@@ -425,11 +426,6 @@ body .post-container {
     margin: 0 auto 15px auto;
     max-width: 800px;
     padding: 20px 20px 0;
-  }
-
-  body.toc-is-closed .main-header {
-    margin: 0 auto 15px auto;
-    max-width: 800px;
   }
 }
 
@@ -1619,12 +1615,12 @@ a:hover {
   position: fixed;
   right: 0;
   top: 0;
-  width: 270px;
+  width: 240px;
   height: 100vh;
   background-color: rgba(26, 26, 26, 0.95);
   backdrop-filter: blur(10px);
   border-left: 1px solid #333;
-  overflow-y: auto;
+  overflow-y: hidden;
   z-index: 1000;
   transform: translateX(100%);
   transition: transform 0.3s ease;
@@ -1765,12 +1761,12 @@ a:hover {
 }
 
 .commit-map-container {
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .commit-map-grid {
   display: flex;
-  gap: 4px;
+  gap: 3px;
   width: 100%;
 }
 
@@ -1802,13 +1798,13 @@ a:hover {
 .week-column {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 2px;
   flex: 1;
 }
 
 .commit-day {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 2px;
   border: 1px solid #1a1a1a;
 }
@@ -1836,9 +1832,9 @@ a:hover {
 .commit-map-legend {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
   justify-content: center;
-  margin-top: 8px;
+  margin-top: 6px;
 }
 
 .legend-squares {
@@ -1848,9 +1844,9 @@ a:hover {
 
 /* Commit Map Tooltip Area */
 .commit-tooltip-area {
-  margin-top: 12px;
-  padding: 8px 12px;
-  min-height: 40px;
+  margin-top: 8px;
+  padding: 4px 8px;
+  min-height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1866,18 +1862,18 @@ a:hover {
 .tooltip-contributions {
   font-weight: 600;
   color: #cccccc;
-  font-size: 0.75rem;
-  margin-bottom: 2px;
+  font-size: 0.65rem;
+  margin-bottom: 1px;
 }
 
 .tooltip-date {
   color: #888;
-  font-size: 0.7rem;
+  font-size: 0.6rem;
 }
 
 .tooltip-placeholder {
   color: #666;
-  font-size: 0.7rem;
+  font-size: 0.6rem;
   font-style: italic;
 }
 
@@ -1897,15 +1893,15 @@ a:hover {
 .github-nav {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 0 16px;
+  gap: 6px;
+  padding: 0 12px;
 }
 
 .github-activity-item {
-  padding: 12px;
-  border-radius: 8px;
+  padding: 8px 10px;
+  border-radius: 6px;
   background-color: rgba(42, 42, 42, 0.3);
-  border-left: 3px solid #333;
+  border-left: 2px solid #333;
   transition: all 0.2s ease;
 }
 
@@ -1916,29 +1912,29 @@ a:hover {
 
 .github-activity-type {
   color: #4a9eff;
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   font-weight: 600;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
   text-transform: uppercase;
 }
 
 .github-activity-repo {
   color: #cccccc;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   font-weight: 500;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
 }
 
 .github-activity-details {
   color: #888;
-  font-size: 0.75rem;
-  margin-bottom: 6px;
-  line-height: 1.3;
+  font-size: 0.65rem;
+  margin-bottom: 4px;
+  line-height: 1.2;
 }
 
 .github-activity-date {
   color: #666;
-  font-size: 0.7rem;
+  font-size: 0.6rem;
 }
 
 .github-loading,

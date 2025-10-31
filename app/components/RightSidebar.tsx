@@ -381,9 +381,9 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
       )}
 
       {!isMobile && (
-        <aside className={`toc-sidebar right-positioned ${isOpen ? 'toc-open' : ''} ${!isOpen ? 'toc-closed' : ''}`} style={{ right: 0, left: 'auto' }}>
+        <aside className={`toc-sidebar right-positioned ${isOpen ? 'toc-open' : ''} ${!isOpen ? 'toc-closed' : ''}`} style={{ right: 0, left: 'auto', width: '240px' }}>
         <div className="toc-header">
-          <h3>&nbsp;&nbsp;Current Favorites</h3>
+          <h3>&nbsp;&nbsp;For Vibes</h3>
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="toc-close-button"
@@ -401,9 +401,9 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
           </button>
         </div>
 
-        <div className="toc-content" style={{ paddingBottom: showPlayer ? '100px' : '20px' }}>
+        <div className="toc-content" style={{ paddingBottom: showPlayer ? '90px' : '12px', overflowY: 'hidden' }}>
           <nav className="toc-nav">
-            <div data-section="music" style={{ marginBottom: '20px' }}>
+            <div data-section="music" style={{ marginBottom: '12px' }}>
               {tracks.map((track) => (
                 <button
                   key={track.id}
@@ -412,7 +412,7 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    gap: '8px'
+                    gap: '6px'
                   }}
                   onClick={() => handleTrackPlay(track)}
                   disabled={!track.youtubeUrl}
@@ -425,17 +425,17 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
                   </div>
                   {track.youtubeUrl && (
                     <div style={{
-                      fontSize: '16px',
+                      fontSize: '14px',
                       color: currentlyPlaying === track.id ? '#ff6b6b' : '#666',
                       display: 'flex',
                       alignItems: 'center'
                     }}>
                       {currentlyPlaying === track.id && !isPaused ? (
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                           <path d="M6 4h4v16H6zM14 4h4v16h-4z" />
                         </svg>
                       ) : (
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                           <path d="M8 5v14l11-7z" />
                         </svg>
                       )}
@@ -446,7 +446,37 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
             </div>
 
             <div data-section="github">
-              <GitHubActivity username={githubUsername} />
+              {currentlyPlaying && !isPaused ? (
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  padding: '20px 16px'
+                }}>
+                  <img
+                    src="https://media.tenor.com/nXjNCZY_PE4AAAAM/happy-dance-moves.gif"
+                    alt="Music playing"
+                    style={{
+                      width: '100%',
+                      maxWidth: '200px',
+                      borderRadius: '8px',
+                      objectFit: 'cover',
+                      marginBottom: '12px'
+                    }}
+                  />
+                  <div style={{
+                    fontSize: '0.75rem',
+                    color: '#888',
+                    fontStyle: 'italic',
+                    textAlign: 'center',
+                    lineHeight: '1.4'
+                  }}>
+                    "your compliments don't make me happy, you fools!" ~ tony tony chopper
+                  </div>
+                </div>
+              ) : (
+                <GitHubActivity username={githubUsername} />
+              )}
             </div>
           </nav>
         </div>
@@ -455,12 +485,12 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
             <div style={{
               position: 'fixed',
               bottom: 0,
-              right: isOpen ? 0 : '-270px',
-              width: '270px',
+              right: isOpen ? 0 : '-240px',
+              width: '240px',
               backgroundColor: 'rgba(26, 26, 26, 0.95)',
               backdropFilter: 'blur(10px)',
               borderTop: '1px solid #333',
-              padding: '8px 20px 16px 20px',
+              padding: '6px 16px 12px 16px',
               zIndex: 1001,
               transition: 'right 0.3s ease'
             }}>
@@ -468,7 +498,7 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                marginBottom: '6px'
+                marginBottom: '4px'
               }}>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{
@@ -491,38 +521,13 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
                     {getCurrentTrack()?.artist || 'Choose from my favorites'}
                   </div>
                 </div>
-                <button
-                  onClick={() => {
-                    setShowPlayer(false)
-                    setCurrentlyPlaying(null)
-                  }}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: '#666',
-                    cursor: 'pointer',
-                    padding: '2px',
-                    marginLeft: '8px',
-                    flexShrink: 0
-                  }}
-                >
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                    <path
-                      d="M6 18L18 6M6 6l12 12"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
               </div>
 
               <div style={{
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                gap: '8px'
+                gap: '6px'
               }}>
                 <button
                   onClick={playPreviousTrack}
