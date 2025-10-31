@@ -14,8 +14,6 @@ export default function ConditionalSidebar() {
   useEffect(() => {
     if (isIndividualPost && !wasOnIndividualPost.current) {
       wasOnIndividualPost.current = true
-      sessionStorage.removeItem('music-current-track')
-      sessionStorage.removeItem('music-is-paused')
     } else if (!isIndividualPost && wasOnIndividualPost.current) {
       wasOnIndividualPost.current = false
       setSidebarKey(`sidebar-${Date.now()}`)

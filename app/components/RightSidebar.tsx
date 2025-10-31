@@ -60,39 +60,11 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
   const [isOpen, setIsOpen] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
   const [activeSection, setActiveSection] = useState('activity')
-  const [currentlyPlaying, setCurrentlyPlaying] = useState<number | null>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = sessionStorage.getItem('music-current-track')
-      return saved ? parseInt(saved) : null
-    }
-    return null
-  })
+  const [currentlyPlaying, setCurrentlyPlaying] = useState<number | null>(null)
   const [showPlayer, setShowPlayer] = useState(true)
-  const [isPaused, setIsPaused] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const saved = sessionStorage.getItem('music-is-paused')
-      return saved === 'true'
-    }
-    return false
-  })
+  const [isPaused, setIsPaused] = useState(true)
   const [youtubePlayer, setYoutubePlayer] = useState<any>(null)
   const playNextTrackRef = useRef<() => void>()
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      if (currentlyPlaying !== null) {
-        sessionStorage.setItem('music-current-track', currentlyPlaying.toString())
-      } else {
-        sessionStorage.removeItem('music-current-track')
-      }
-    }
-  }, [currentlyPlaying])
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      sessionStorage.setItem('music-is-paused', isPaused.toString())
-    }
-  }, [isPaused])
 
   useEffect(() => {
     const checkScreenSize = () => {
