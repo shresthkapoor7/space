@@ -1,7 +1,7 @@
 ---
 id: 4
 date: '2025-08-01'
-title: "track my website extension"
+title: "Extension to track static websites"
 pinned: false
 ---
 

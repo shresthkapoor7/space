@@ -1,7 +1,7 @@
 ---
 id: 3
 date: '2025-07-29'
-title: "notion who? i built my own job tracker"
+title: "Writing my own bash scripts to avoid using notion"
 pinned: false
 ---
 <div style="display: flex; justify-content: center; margin-top: 1rem;">

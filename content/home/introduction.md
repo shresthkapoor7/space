@@ -1,7 +1,7 @@
 ---
 id: 1
 date: '2025-07-19'
-title: "notepad on steroids"
+title: "Motivation for this Website"
 pinned: false
 ---
 
