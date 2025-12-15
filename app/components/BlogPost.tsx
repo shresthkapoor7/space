@@ -11,6 +11,7 @@ import Highlight from './Highlight'
 import TweetComponent from './Tweet'
 import SquigglyText from './SquigglyText'
 import FlashcardGrid from './FlashcardGrid'
+import PdfViewer from './PdfViewer'
 import 'katex/dist/katex.min.css'
 
 interface Post {
@@ -91,10 +92,33 @@ function processGlossary(content: string): { processedContent: string; glossaryE
   return { processedContent, glossaryElements }
 }
 
+// Function to process PDFs and create React elements
+function processPdfs(content: string): { processedContent: string; pdfElements: { [key: string]: JSX.Element } } {
+  const pdfElements: { [key: string]: JSX.Element } = {}
+  let processedContent = content
+
+  // Find all PDF components and replace with placeholders
+  const pdfRegex = /<pdf\s+link="([^"]+)"\s*\/?>/gi
+  let match
+  let index = 0
+
+  while ((match = pdfRegex.exec(content)) !== null) {
+    const pdfLink = match[1]
+    const placeholder = `PDF_PLACEHOLDER_${index}`
+
+    processedContent = processedContent.replace(match[0], `<div data-pdf-placeholder="${placeholder}"></div>`)
+    pdfElements[placeholder] = <PdfViewer key={placeholder} link={pdfLink} />
+    index++
+  }
+
+  return { processedContent, pdfElements }
+}
+
 export default function BlogPost({ post, currentPage = 'home' }: BlogPostProps) {
   const mathProcessedContent = preprocessMath(post.content)
   const { processedContent: tweetProcessedContent, tweetElements } = processTweets(mathProcessedContent)
-  const { processedContent, glossaryElements } = processGlossary(tweetProcessedContent)
+  const { processedContent: glossaryProcessedContent, glossaryElements } = processGlossary(tweetProcessedContent)
+  const { processedContent, pdfElements } = processPdfs(glossaryProcessedContent)
 
   const navigateToPost = () => {
     // We're on the main page, navigate to individual post
@@ -156,12 +180,15 @@ export default function BlogPost({ post, currentPage = 'home' }: BlogPostProps) 
               }
               return <span className={className} {...props}>{children}</span>
             },
-            div({ 'data-tweet-placeholder': placeholder, 'data-glossary-placeholder': glossaryPlaceholder, ...props }: any) {
+            div({ 'data-tweet-placeholder': placeholder, 'data-glossary-placeholder': glossaryPlaceholder, 'data-pdf-placeholder': pdfPlaceholder, ...props }: any) {
               if (placeholder && tweetElements[placeholder]) {
                 return tweetElements[placeholder]
               }
               if (glossaryPlaceholder && glossaryElements[glossaryPlaceholder]) {
                 return glossaryElements[glossaryPlaceholder]
+              }
+              if (pdfPlaceholder && pdfElements[pdfPlaceholder]) {
+                return pdfElements[pdfPlaceholder]
               }
               return <div {...props} />
             }

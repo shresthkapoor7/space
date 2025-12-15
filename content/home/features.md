@@ -33,7 +33,7 @@ plt.show()
 print("this is so cool right?!")
 ```
 
-3. Sharing links to individual blog posts like https://www.shresth.space/2
+3. Sharing links to individual blog posts like
 
 4. Creating tables, the same way you would do it in obsidian or notion.
 
@@ -41,7 +41,7 @@ print("this is so cool right?!")
 |------|-----|------|
 | shresth | 23  | delulu |
 
-5. Embedding tweets with just `<Tweet id="" />`
+5. Embedding tweets with just `<Tweet id="" />`, the tweet text, profile picture, date along with the media is all rendered. Have added lightbox modal to view the media.
 
 <Tweet id="1945713783562711165" />
 
@@ -62,3 +62,7 @@ $begin:math:display$
 $end:math:display$
 
 9. Listening to music while scrolling through posts because attention span is too short to read. They are basically embedded youtube video urls with preview hidden and some local storage magic to keep track of the current track and timestamp →
+
+10. Embedding PDFs with `<pdf link=""/>` - view, fullscreen, and download PDFs.
+
+<pdf link="images/random.pdf" />
