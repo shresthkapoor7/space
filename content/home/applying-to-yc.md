@@ -1,7 +1,7 @@
 ---
 id: 6
 date: '2025-08-05'
-title: "Applying to YC"
+title: "My YC Application"
 pinned: false
 ---
 

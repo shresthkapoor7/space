@@ -7,7 +7,7 @@ pinned: true
 
 <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Caveat:wght@400;500;600;700&family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-hi i'm shresth. currently studying cs at [<span class="nyu-link">@nyu</span>](https://www.nyu.edu/), ex-swe [@talenttitan](https://talenttitan.com/). welcome to space my personal substack. tabs on the website before you get lost :D
+Hi I'am Shresth. I'm currently studying Computer Science at [<span class="nyu-link">@nyu</span>](https://www.nyu.edu/), previously I worked as a Software Engineer at [@TalentTitan](https://talenttitan.com/).
 
 <style>
   .nyu-link {
@@ -133,11 +133,13 @@ hi i'm shresth. currently studying cs at [<span class="nyu-link">@nyu</span>](ht
   </div>
   <div class="about-content">
 
-  - **[math](/math)** posts and notes on linear algebra, calculus, and other math topics I’m revisiting and exploring
-  - **[finance](/finance)** thoughts, notes, and research as I explore quantitative finance and related models
-  - **[ml](/ml)** experiments and reflections on computer vision, machine learning, and applied AI
-  - **[strands](/strands)** my personal project aimed at improving how AI systems manage context
-  - **[home](/)** everything else from hackathons to projects to random thoughts
+  Here are some of the topics I'm exploring:
+
+  - **[math](/math)** ~ notes as I battle with linear algebra, calculus, and other math topics.
+  - **[finance](/finance)** ~ thoughts, and learnings as I explore quantitative finance and related models.
+  - **[ml](/ml)** ~ experiments and reflections on computer vision, machine learning, and applied AI.
+  - **[strands](/strands)** ~ my personal project aimed at improving how AI systems manage context.
+  - **[home](/)** ~ everything else from hackathon projects to random stuff.
 
 
 <!-- #### working on
@@ -151,13 +153,15 @@ hi i'm shresth. currently studying cs at [<span class="nyu-link">@nyu</span>](ht
 
 
 
-> note 1: 📌 are the pinned posts.
+Few notes about the website:
 
-> note 2: the blogs are open and you don't need to click on them to read them. you can just scroll through them.
+> 1: 📌 are the pinned posts.
 
-> note 3: you can also listen to music while you scroll through my posts and notes.
+> 2: The blogs are open and you can scroll through them ♾️.
 
-> note 4: have disabled music on the individual blog posts for more focused reading. if you click from the left sidebar menu you will land on the individual blog post.
+> 3: You can also listen to music 🎶 while you scroll through my posts and notes.
+
+> 4: Music is hidden 🚫 on the individual blog posts to give zen mode vibes.
 
 
 <!-- <center>

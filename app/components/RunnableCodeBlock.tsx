@@ -209,7 +209,7 @@ def capture_plot_${componentId}():
         # Save current figure to bytes
         buf = BytesIO()
         plt.savefig(buf, format='png', dpi=100, bbox_inches='tight',
-                   facecolor='#2a2a2a', edgecolor='none')
+                   facecolor='white', edgecolor='none')
         buf.seek(0)
 
         # Convert to base64
@@ -244,7 +244,7 @@ sys.stdout = stdout_${componentId}
 
       // If we have plot data, add it to output
       if (plotData) {
-        output += `\n\n📊 Generated Plot:\n<img src="data:image/png;base64,${plotData}" style="max-width: 100%; border-radius: 8px; margin-top: 10px;" />`
+        output += `\n\nGenerated Plot:\n<img src="data:image/png;base64,${plotData}" style="max-width: 100%; border-radius: 8px; margin-top: 10px;" />`
       }
 
       setOutput(output)

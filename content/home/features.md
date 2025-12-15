@@ -2,34 +2,63 @@
 id: 2
 date: '2025-07-19'
 title: "Special Features of this Website"
-pinned: false
+pinned: true
 ---
 
-i can write markdown in the blog posts and it will be rendered as html. i can write tooltips <mark data-tooltip="i am a tooltip">tooltip</mark>.
+All posts here are written in markdown as I am something of a markdown nerd my self, which then gets rendered as html.
 
-i can write code in the blog posts and it will be rendered as well i can run it in the browser.
+<div style="display: flex; justify-content: center; margin-top: 1rem;">
+  <img
+    src="/images/unnamed.jpg"
+    alt="nerd"
+    style="width: 400px;"
+  />
+</div>
+
+Think of it like writing latex on overleaf adding special symbols and tags which then gets rendered into codeblocks, math equations, tables, tweets, etc. These special symbols and features include:
+
+1. Adding <mark data-tooltip="i am a tooltip">tooltips</mark> with just `<tooltip>`
+2. Writing code by just putting ` ```python `, not only it gets rendered as a codeblock, but you can also execute that code in the browser.
 
 ```python
-print("hello world")
+import random as rd
+import numpy as np
+import matplotlib.pyplot as plt
+
+print(f"random number: {rd.randint(1, 100)}")
+numbers = np.random.randn(5)
+print(f"random numbers: {numbers}")
+plt.plot(numbers)
+plt.show()
+print("this is so cool right?!")
 ```
 
-i can also share links to individual posts
+3. Sharing links to individual blog posts like https://www.shresth.space/2
 
-i can make tables in the blog posts.
+4. Creating tables, the same way you would do it in obsidian or notion.
 
 | name | age | city |
 |------|-----|------|
 | shresth | 23  | delulu |
 
-i can also embed tweets <mark data-tooltip="image/video quality won't be perfect and no this is not iframe">but with a caveat</mark>
+5. Embedding tweets with just `<Tweet id="" />`
 
 <Tweet id="1945713783562711165" />
 
 
-added a new one - flashcards
+6. Adding Flashcards with `<details>` and `<summary>` tags.
 
 <div class="glossary-group">
-<details><summary>don't click</summary>don't look at the next one</details>
-<details><summary>don't click me</summary>don't click on the next one</details>
-<details><summary>please not me</summary>🎁</details>
+<details><summary>Gemini</summary>🗑️🗑️🗑️</details>
+<details><summary>Claude</summary>🥇🥇🥇</details>
+<details><summary>ChatGPT</summary>💬💬💬</details>
 </div>
+
+7. Pinning posts with `pinned: true` in the frontmatter.
+8. Math equations with `$ begin:math:display $` and `$ end:math:display $` tags.
+
+$begin:math:display$
+\int_0^1 x^2 dx = \frac{1}{3}
+$end:math:display$
+
+9. Listening to music while scrolling through posts because attention span is too short to read. They are basically embedded youtube video urls with preview hidden and some local storage magic to keep track of the current track and timestamp →
