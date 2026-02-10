@@ -117,89 +117,27 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
   }
 
   const fetchGitHubContributions = async (username: string): Promise<GitHubCommitDay[]> => {
-    const endDate = new Date()
-    const startDate = new Date()
-    startDate.setUTCDate(endDate.getUTCDate() - 90)
-
-    const fromDate = startDate.toISOString().split('T')[0]
-    const toDate = endDate.toISOString().split('T')[0]
-    const contributionsUrl = `https://github.com/users/${username}/contributions?from=${fromDate}&to=${toDate}`
-
     try {
-      const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(contributionsUrl)}`;
-      const response = await fetch(proxyUrl)
+      const apiUrl = `https://github-contributions-api.jogruber.de/v4/${username}?y=last`
+      const response = await fetch(apiUrl)
 
       if (!response.ok) {
-        throw new Error(`CORS proxy error: ${response.status}`)
+        throw new Error(`GitHub API error: ${response.status}`)
       }
 
-      // corsproxy.io returns HTML directly as text, not JSON
-      const html = await response.text()
+      const data = await response.json()
+      const ninetyDaysAgo = new Date()
+      ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90)
+      const ninetyDaysAgoStr = ninetyDaysAgo.toISOString().split('T')[0]
 
-      return parseContributionData(html, startDate, endDate)
+      const filteredContributions = data.contributions.filter((day: GitHubCommitDay) =>
+        day.date >= ninetyDaysAgoStr
+      )
+
+      return filteredContributions
     } catch (err) {
-      console.error('CORS proxy failed:', err)
-      throw new Error('Could not fetch GitHub contributions page')
-    }
-  }
-
-  const parseContributionData = (html: string, startDate: Date, endDate: Date): GitHubCommitDay[] => {
-    const data: GitHubCommitDay[] = []
-    const currentDate = new Date(startDate)
-
-    const contributionPattern = /(\d+)\s+contributions?\s+on\s+([A-Za-z]+\s+\d+(?:st|nd|rd|th))/g
-    const noContributionPattern = /No\s+contributions\s+on\s+([A-Za-z]+\s+\d+(?:st|nd|rd|th))/g
-
-    const contributionMap: { [key: string]: number } = {}
-
-    let match
-    while ((match = contributionPattern.exec(html)) !== null) {
-      const count = parseInt(match[1])
-      const dateStr = match[2]
-      contributionMap[dateStr] = count
-    }
-
-    while ((match = noContributionPattern.exec(html)) !== null) {
-      const dateStr = match[1]
-      contributionMap[dateStr] = 0
-    }
-
-    while (currentDate <= endDate) {
-      const dateStr = currentDate.toISOString().split('T')[0]
-      const monthName = currentDate.toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' })
-      const day = currentDate.getUTCDate()
-      const ordinal = getOrdinal(day)
-      const lookupKey = `${monthName} ${day}${ordinal}`
-
-      const count = contributionMap[lookupKey] || 0
-      let level = 0
-
-      if (count > 0) {
-        if (count >= 10) level = 4
-        else if (count >= 7) level = 3
-        else if (count >= 4) level = 2
-        else level = 1
-      }
-
-      data.push({
-        date: dateStr,
-        count,
-        level
-      })
-
-      currentDate.setUTCDate(currentDate.getUTCDate() + 1)
-    }
-
-    return data
-  }
-
-  const getOrdinal = (day: number): string => {
-    if (day >= 11 && day <= 13) return 'th'
-    switch (day % 10) {
-      case 1: return 'st'
-      case 2: return 'nd'
-      case 3: return 'rd'
-      default: return 'th'
+      console.error('GitHub API failed:', err)
+      throw new Error('Could not fetch GitHub contributions')
     }
   }
 
