@@ -65,7 +65,7 @@ export default function TableOfContents({ posts, currentPage, currentPostId }: T
   }, [posts, currentPage])
 
   const navigateToPost = (postId: number) => {
-    const baseUrl = currentPage === 'home' ? '' : `/${currentPage}`
+    const baseUrl = currentPage === 'home' ? '/home' : `/${currentPage}`
     window.location.href = `${baseUrl}/${postId}`
     if (isMobile) {
       setIsOpen(false)

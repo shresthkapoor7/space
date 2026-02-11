@@ -122,7 +122,7 @@ export default function BlogPost({ post, currentPage = 'home' }: BlogPostProps) 
 
   const navigateToPost = () => {
     // We're on the main page, navigate to individual post
-    const baseUrl = currentPage === 'home' ? '' : `/${currentPage}`
+    const baseUrl = currentPage === 'home' ? '/home' : `/${currentPage}`
     window.location.href = `${baseUrl}/${post.id}`
   }
 

@@ -1,0 +1,37 @@
+'use client'
+
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import Navigation from './Navigation'
+import ConditionalSidebar from './ConditionalSidebar'
+
+export default function LayoutContent({
+    children,
+}: {
+    children: React.ReactNode
+}) {
+    const pathname = usePathname()
+    const isLandingPage = pathname === '/'
+
+    if (isLandingPage) {
+        return <main>{children}</main>
+    }
+
+    return (
+        <div className="app-layout">
+            <header className="main-header">
+                <Link href="/home" className="logo">
+                    Σpace
+                </Link>
+                <Navigation />
+            </header>
+            <main className="main-wrapper">
+                {children}
+            </main>
+            <ConditionalSidebar />
+            <footer className="site-footer">
+                <p>the website is engineered not designed.</p>
+            </footer>
+        </div>
+    )
+}

@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
-import BlogPost from '../components/BlogPost'
-import DynamicTitle from '../components/DynamicTitle'
-import { getHomePosts } from '../../lib/markdown'
+import BlogPost from '../../components/BlogPost'
+import DynamicTitle from '../../components/DynamicTitle'
+import { getHomePosts } from '../../../lib/markdown'
 
 interface PageProps {
   params: {
@@ -22,7 +22,7 @@ export default function HomePost({ params }: PageProps) {
     <div className="post-container">
       <DynamicTitle title={post.title} />
       <div style={{ marginBottom: '1rem' }}>
-        <a href="/" style={{ color: 'var(--accent-color)', textDecoration: 'none' }}>
+        <a href="/home" style={{ color: 'var(--accent-color)', textDecoration: 'none' }}>
           ← Back to all posts
         </a>
       </div>

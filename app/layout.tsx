@@ -1,9 +1,7 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
-import Navigation from './components/Navigation'
 import GlobalConsoleLog from './components/GlobalConsoleLog'
 import BodyWrapper from './components/BodyWrapper'
-import ConditionalSidebar from './components/ConditionalSidebar'
+import LayoutContent from './components/LayoutContent'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -26,21 +24,9 @@ export default function RootLayout({
             <body>
                 <GlobalConsoleLog />
                 <BodyWrapper>
-                    <div className="app-layout">
-                        <header className="main-header">
-                            <Link href="/" className="logo">
-                                Σpace
-                            </Link>
-                            <Navigation />
-                        </header>
-                        <main className="main-wrapper">
-                            {children}
-                        </main>
-                        <ConditionalSidebar />
-                        <footer className="site-footer">
-                            <p>the website is engineered not designed.</p>
-                        </footer>
-                    </div>
+                    <LayoutContent>
+                        {children}
+                    </LayoutContent>
                 </BodyWrapper>
             </body>
         </html>
