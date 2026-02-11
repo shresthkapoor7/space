@@ -391,9 +391,9 @@ export default function LandingPage() {
       {showInstructions && (
         <div className="instructions">
           <div className="instructions-box">
-            <h2>╔═══════════════════════╗</h2>
-            <h2>║   SPACE INVADERS   ║</h2>
-            <h2>╚═══════════════════════╝</h2>
+            <h2>╔═══════════════════╗</h2>
+            <h2>║   SPACE INVADERS  ║</h2>
+            <h2>╚═══════════════════╝</h2>
             <div className="instructions-content">
               {!isMobile ? (
                 <>
@@ -499,11 +499,11 @@ export default function LandingPage() {
         }
 
         .instructions-box {
-          font-family: monospace;
+          font-family: 'Courier New', Courier, monospace;
           text-align: center;
           padding: 40px;
-          border: 3px solid #00ff00;
           background: rgba(0, 0, 0, 0.9);
+          border: 3px solid #00ff00;
           box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
         }
 
@@ -511,8 +511,12 @@ export default function LandingPage() {
           color: #00ff00;
           font-size: 1.2rem;
           margin: 0;
-          line-height: 1.4;
-          letter-spacing: 2px;
+          padding: 0;
+          line-height: 1.3;
+          letter-spacing: 0.05em;
+          font-family: 'Courier New', Courier, monospace;
+          white-space: pre;
+          font-weight: normal;
         }
 
         .instructions-content {
@@ -652,7 +656,7 @@ export default function LandingPage() {
 
           .instructions-box h2 {
             font-size: 0.7rem;
-            letter-spacing: 1px;
+            letter-spacing: 0.05em;
           }
 
           .instructions-content {
