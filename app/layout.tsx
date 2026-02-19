@@ -2,16 +2,12 @@ import type { Metadata } from 'next'
 import GlobalConsoleLog from './components/GlobalConsoleLog'
 import BodyWrapper from './components/BodyWrapper'
 import LayoutContent from './components/LayoutContent'
+import CursorDust from './components/CursorDust'
 import './globals.css'
 
 export const metadata: Metadata = {
-    title: 'Σpace',
+    title: 'Shresth Kapoor',
     description: 'notes dump',
-    icons: {
-        icon: '/icon.jpg',
-        apple: '/icon.jpg',
-        shortcut: '/icon.jpg',
-    },
 }
 
 export default function RootLayout({
@@ -24,6 +20,7 @@ export default function RootLayout({
             <body>
                 <GlobalConsoleLog />
                 <BodyWrapper>
+                    <CursorDust />
                     <LayoutContent>
                         {children}
                     </LayoutContent>

@@ -130,7 +130,7 @@ export default function BlogPost({ post, currentPage = 'home' }: BlogPostProps) 
     <article className="post" id={`post-${currentPage}-${post.id}`}>
       <div className="post-header">
         <div className="post-date">{post.date} {post.pinned && <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>📌</span>}</div>
-        <h2 className="post-title" onClick={navigateToPost} style={{ cursor: 'pointer' }}>{post.title}</h2>
+        <h2 className="post-title" onClick={navigateToPost}>{post.title}</h2>
       </div>
       <div className="post-content">
         <ReactMarkdown
