@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import Navigation from './Navigation'
 import ConditionalSidebar from './ConditionalSidebar'
+import ReadingProgressBar from './ReadingProgressBar'
 
 export default function LayoutContent({
     children,
@@ -12,6 +13,7 @@ export default function LayoutContent({
 }) {
     const pathname = usePathname()
     const isLandingPage = pathname === '/'
+    const isIndividualPost = pathname.split('/').filter(Boolean).length >= 2
 
     if (isLandingPage) {
         return <main>{children}</main>
@@ -19,6 +21,7 @@ export default function LayoutContent({
 
     return (
         <div className="app-layout">
+            {isIndividualPost && <ReadingProgressBar />}
             <header className="main-header">
                 <Link href="/home" className="logo">
                     Σpace

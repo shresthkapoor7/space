@@ -1,14 +1,27 @@
 'use client'
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 
 export default function LandingPage() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const router = useRouter()
   const [showEnter, setShowEnter] = useState(false)
   const [enemiesDefeated, setEnemiesDefeated] = useState(0)
   const [showInstructions, setShowInstructions] = useState(true)
   const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    if (!showEnter) return
+    const handleEnterKey = (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        router.push('/home')
+      }
+    }
+    window.addEventListener('keydown', handleEnterKey)
+    return () => window.removeEventListener('keydown', handleEnterKey)
+  }, [showEnter, router])
 
   useEffect(() => {
     const canvas = canvasRef.current
