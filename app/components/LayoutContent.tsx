@@ -33,7 +33,7 @@ export default function LayoutContent({
             </main>
             <ConditionalSidebar />
             <footer className="site-footer">
-                <p>the website is engineered not designed.</p>
+                <p>// i use arc btw, not arch you nerd</p>
             </footer>
         </div>
     )

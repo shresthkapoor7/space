@@ -397,7 +397,7 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
                   </>
                 ) : (
                   <div className="tooltip-placeholder">
-                    Hover over squares to see details
+                    Hover over to see details
                   </div>
                 )}
               </div>

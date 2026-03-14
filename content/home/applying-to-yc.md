@@ -5,7 +5,9 @@ title: "My YC Application"
 pinned: false
 ---
 
-for some weird reason i applied to yc because why not. here’s what i sent out. not ikigai or some shit like that just bored and had a bit too much monster (i hope it’s not unhealthy because man i’m addicted).
+Applied to YC on a caffeine-fueled whim. Here’s the video I sent them.
+
+Major respect to TikTokers, because talking to a camera is brutal. It took 5+ takes just to get this rough version. I usually look sideways when I’m thinking, so forcing eye contact with a lens felt totally unnatural. I ended up writing a script, but if you look closely at my eyes, you can absolutely tell I'm reading it.
 
 <style>
   @media (min-width: 1024px) {
@@ -60,8 +62,4 @@ for some weird reason i applied to yc because why not. here’s what i sent out.
   </div>
 </div>
 
-also, i respect tiktokers a lot more now. this video sucks tbh and it took me more than 5 takes. the hardest part was constantly looking at the camera while speaking no clue how people manage that. i have this thing where i look sideways when i’m 100% focused, so locking eyes with the lens felt like i was lying. wrote a script, but if you looked into my eyes you’d know this guy’s definitely reading off something.
-
 <Tweet id="1952344740164243745" />
-
-someone told me to try out monster nitro. have no clue what i’ll do after drinking that.

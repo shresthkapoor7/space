@@ -47,7 +47,7 @@ Hi I'am Shresth. I'm currently studying Computer Science at [<span class="nyu-li
   }
 
   .about-image img {
-    width: 300px;
+    width: 200px;
     border: 8px solid #faf9f7;
     border-radius: 0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px rgba(0, 0, 0, 0.2);
@@ -120,7 +120,7 @@ Hi I'am Shresth. I'm currently studying Computer Science at [<span class="nyu-li
 </style>
 
 <div class="about-container">
-  <div class="about-image">
+  <!-- <div class="about-image">
     <img
       src="/images/shresth.JPG"
       alt="nerd"
@@ -133,12 +133,11 @@ Hi I'am Shresth. I'm currently studying Computer Science at [<span class="nyu-li
   </div>
   <div class="about-content">
 
-  Here are some of the topics I'm exploring:
+  Here are some of the topics I'm currently exploring:
 
   - **[math](/math)** ~ notes as I battle with linear algebra, calculus, and other math topics.
   - **[finance](/finance)** ~ thoughts, and learnings as I explore quantitative finance and related models.
   - **[ml](/ml)** ~ experiments and reflections on computer vision, machine learning, and applied AI.
-  - **[strands](/strands)** ~ my personal project aimed at improving how AI systems manage context.
   - **[home](/)** ~ everything else from hackathon projects to random stuff.
 
 
@@ -150,19 +149,6 @@ Hi I'am Shresth. I'm currently studying Computer Science at [<span class="nyu-li
 
   </div>
 </div>
-
-
-
-Few notes about the website:
-
-> 1: 📌 are the pinned posts.
-
-> 2: The blogs are open and you can scroll through them ♾️.
-
-> 3: You can also listen to music 🎶 while you scroll through my posts and notes.
-
-> 4: Music is hidden 🚫 on the individual blog posts to give zen mode vibes.
-
 
 <!-- <center>
 

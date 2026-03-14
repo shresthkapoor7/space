@@ -166,10 +166,11 @@ export default function LandingPage() {
 
     const draw = () => {
       // Clear canvas with dark background
-      ctx.fillStyle = '#0a0a0a'
+      ctx.fillStyle = '#060504'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      // Draw moving stars background
+      // Draw grid and stars
+      drawGrid()
       drawStars()
 
       // Update player position
@@ -208,74 +209,96 @@ export default function LandingPage() {
       requestAnimationFrame(draw)
     }
 
+    const drawGrid = () => {
+      const gridSize = 50
+      ctx.strokeStyle = 'rgba(255, 130, 60, 0.07)'
+      ctx.lineWidth = 0.5
+      ctx.beginPath()
+      for (let x = 0; x <= canvas.width; x += gridSize) {
+        ctx.moveTo(x, 0)
+        ctx.lineTo(x, canvas.height)
+      }
+      for (let y = 0; y <= canvas.height; y += gridSize) {
+        ctx.moveTo(0, y)
+        ctx.lineTo(canvas.width, y)
+      }
+      ctx.stroke()
+    }
+
     const drawStars = () => {
-      ctx.fillStyle = '#ffffff'
       stars.forEach(star => {
         star.y += star.speed
         if (star.y > canvas.height) {
           star.y = 0
           star.x = Math.random() * canvas.width
         }
-
+        ctx.fillStyle = `rgba(255, 200, 160, ${star.size * 0.2 + 0.05})`
         ctx.fillRect(star.x, star.y, star.size, star.size)
       })
     }
 
     const drawPlayer = () => {
-      const fontSize = canvas.width <= 480 ? 10 : 14
-      ctx.font = `${fontSize}px monospace`
+      const fontSize = canvas.width <= 480 ? 11 : 14
+      ctx.font = `${fontSize}px 'Courier New', monospace`
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
-      ctx.fillStyle = '#00ff00'
+      ctx.fillStyle = '#FF8C55'
+      ctx.shadowBlur = 12
+      ctx.shadowColor = '#FF6B35'
 
-      // Classic spaceship ASCII art
+      // Σpace ship
       const ship = [
         '  ^  ',
-        ' /|\\ ',
-        '/_|_\\',
-        ' | | '
+        ' /Σ\\ ',
+        '/___\\'
       ]
 
       ship.forEach((line, i) => {
-        ctx.fillText(line, player.x, player.y + (i - 1.5) * fontSize)
+        ctx.fillText(line, player.x, player.y + (i - 1) * fontSize)
       })
+      ctx.shadowBlur = 0
     }
 
     const drawEnemies = () => {
-      const fontSize = canvas.width <= 480 ? 10 : 14
-      ctx.font = `${fontSize}px monospace`
+      const symSize = canvas.width <= 480 ? 24 : 30
+      ctx.font = `${symSize}px 'Georgia', 'Times New Roman', serif`
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
 
       enemies.forEach(enemy => {
         if (!enemy.alive) return
 
-        // Different enemy types
-        let enemySprite: string[]
+        let symbol: string
         let color: string
+        let glowStrength: number
 
         switch (enemy.type) {
-          case 0: // Type 1: Crab
-            enemySprite = [' /oo\\ ', '<(##)>', ' \\__/ ']
-            color = '#ff00ff'
+          case 0: // ∑ row — brightest
+            symbol = '∑'
+            color = '#FFAA66'
+            glowStrength = 18
             break
-          case 1: // Type 2: Squid
-            enemySprite = [' /||\\ ', '(====)', ' \\  / ']
-            color = '#00ffff'
+          case 1: // ∫ row — main
+            symbol = '∫'
+            color = '#FF7A42'
+            glowStrength = 14
             break
-          case 2: // Type 3: Octopus
-            enemySprite = [' dMMb ', '<O##O>', ' \\||/ ']
-            color = '#ffff00'
+          case 2: // ∂ row — dimmest
+            symbol = '∂'
+            color = '#C05520'
+            glowStrength = 10
             break
           default:
-            enemySprite = [' *** ', '*****', ' *** ']
-            color = '#ffffff'
+            symbol = '∇'
+            color = '#FF7A42'
+            glowStrength = 14
         }
 
+        ctx.shadowBlur = glowStrength
+        ctx.shadowColor = color
         ctx.fillStyle = color
-        enemySprite.forEach((line, i) => {
-          ctx.fillText(line, enemy.x, enemy.y + (i - 1) * fontSize)
-        })
+        ctx.fillText(symbol, enemy.x, enemy.y)
+        ctx.shadowBlur = 0
       })
     }
 
@@ -308,14 +331,16 @@ export default function LandingPage() {
     }
 
     const updateBullets = () => {
-      ctx.fillStyle = '#ffffff'
+      ctx.fillStyle = '#FFAA66'
+      ctx.shadowBlur = 8
+      ctx.shadowColor = '#FF6B35'
 
       for (let i = bullets.length - 1; i >= 0; i--) {
         const bullet = bullets[i]
         bullet.y -= bullet.speed
 
         // Draw bullet
-        ctx.fillRect(bullet.x - 2, bullet.y, 4, 10)
+        ctx.fillRect(bullet.x - 1, bullet.y, 2, 12)
 
         // Remove if off screen
         if (bullet.y < 0) {
@@ -331,7 +356,7 @@ export default function LandingPage() {
           const dx = bullet.x - enemy.x
           const dy = bullet.y - enemy.y
 
-          if (Math.abs(dx) < 25 && Math.abs(dy) < 20) {
+          if (Math.abs(dx) < 20 && Math.abs(dy) < 20) {
             // Hit!
             enemy.alive = false
             bullets.splice(i, 1)
@@ -349,39 +374,47 @@ export default function LandingPage() {
           }
         }
       }
+      ctx.shadowBlur = 0
     }
 
     const drawHUD = () => {
-      const fontSize = canvas.width <= 768 ? 16 : 24
+      const fontSize = canvas.width <= 768 ? 13 : 16
       const padding = canvas.width <= 480 ? 10 : 20
-      const spacing = canvas.width <= 480 ? 20 : 30
 
-      ctx.font = `bold ${fontSize}px monospace`
-      ctx.textAlign = 'left'
       ctx.textBaseline = 'top'
 
-      // Score
-      ctx.fillStyle = '#ff0000'
-      ctx.fillText('1UP', padding, padding)
-      ctx.fillStyle = '#ffffff'
-      ctx.fillText(String(defeated).padStart(2, '0'), padding, padding + fontSize + 5)
+      ctx.shadowBlur = 6
+      ctx.shadowColor = 'rgba(255, 107, 53, 0.6)'
 
-      // Hi-Score
-      ctx.fillStyle = '#ff0000'
+      // Killed count
+      ctx.font = `${fontSize}px 'Courier New', monospace`
+      ctx.textAlign = 'left'
+      ctx.fillStyle = 'rgba(255, 130, 60, 0.45)'
+      ctx.fillText('killed', padding, padding)
+      ctx.font = `bold ${fontSize}px 'Courier New', monospace`
+      ctx.fillStyle = '#FF8C55'
+      ctx.fillText(String(defeated).padStart(2, '0'), padding, padding + fontSize + 4)
+
+      // Target
+      ctx.font = `${fontSize}px 'Courier New', monospace`
       ctx.textAlign = 'center'
-      ctx.fillText('SCORE NEEDED', canvas.width / 2, padding)
-      ctx.fillStyle = '#00ffff'
-      ctx.fillText(String(ENEMIES_TO_DEFEAT).padStart(4, '0'), canvas.width / 2, padding + fontSize + 5)
+      ctx.fillStyle = 'rgba(255, 130, 60, 0.45)'
+      ctx.fillText('target', canvas.width / 2, padding)
+      ctx.font = `bold ${fontSize}px 'Courier New', monospace`
+      ctx.fillStyle = '#FF8C55'
+      ctx.fillText(String(ENEMIES_TO_DEFEAT).padStart(2, '0'), canvas.width / 2, padding + fontSize + 4)
 
-      // Lives indicator (hide on very small screens)
+      // Ship icons
       if (canvas.width > 480) {
+        ctx.font = `${fontSize}px 'Courier New', monospace`
         ctx.textAlign = 'right'
-        ctx.fillStyle = '#00ff00'
+        ctx.fillStyle = 'rgba(255, 107, 53, 0.35)'
         const livesX = canvas.width - padding
         for (let i = 0; i < 3; i++) {
-          ctx.fillText('^', livesX - i * spacing, padding + 10)
+          ctx.fillText('^', livesX - i * 22, padding + 6)
         }
       }
+      ctx.shadowBlur = 0
     }
 
     draw()
@@ -405,7 +438,7 @@ export default function LandingPage() {
         <div className="instructions">
           <div className="instructions-box">
             <h2>╔═══════════════════╗</h2>
-            <h2>║   SPACE INVADERS  ║</h2>
+            <h2>║      ΣPACE        ║</h2>
             <h2>╚═══════════════════╝</h2>
             <div className="instructions-content">
               {!isMobile ? (
@@ -483,7 +516,7 @@ export default function LandingPage() {
           width: 100vw;
           height: 100vh;
           overflow: hidden;
-          background-color: #0a0a0a;
+          background-color: #060504;
           cursor: crosshair;
         }
 
@@ -507,7 +540,7 @@ export default function LandingPage() {
           display: flex;
           align-items: center;
           justify-content: center;
-          background: rgba(0, 0, 0, 0.85);
+          background: rgba(6, 5, 4, 0.9);
           animation: fadeIn 0.5s ease-in;
         }
 
@@ -515,13 +548,13 @@ export default function LandingPage() {
           font-family: 'Courier New', Courier, monospace;
           text-align: center;
           padding: 40px;
-          background: rgba(0, 0, 0, 0.9);
-          border: 3px solid #00ff00;
-          box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
+          background: rgba(10, 8, 6, 0.95);
+          border: 1px solid #FF6B35;
+          box-shadow: 0 0 40px rgba(255, 107, 53, 0.15);
         }
 
         .instructions-box h2 {
-          color: #00ff00;
+          color: #FF6B35;
           font-size: 1.2rem;
           margin: 0;
           padding: 0;
@@ -546,17 +579,16 @@ export default function LandingPage() {
         .key {
           display: inline-block;
           padding: 5px 12px;
-          background: #333;
-          border: 2px solid #666;
-          border-radius: 4px;
-          color: #00ff00;
+          background: rgba(255, 107, 53, 0.08);
+          border: 1px solid rgba(255, 107, 53, 0.4);
+          border-radius: 3px;
+          color: #FF9966;
           font-weight: bold;
           margin: 0 5px;
-          box-shadow: 0 2px 0 #000;
         }
 
         .mission {
-          color: #ffff00;
+          color: #FF9966;
           font-weight: bold;
           margin-top: 25px !important;
           font-size: 1.1rem;
@@ -609,7 +641,7 @@ export default function LandingPage() {
         }
 
         .footer-links a:hover {
-          color: #00ff00;
+          color: #FF6B35;
         }
 
         .footer-links span {
@@ -630,9 +662,9 @@ export default function LandingPage() {
         }
 
         .control-btn {
-          background: rgba(0, 255, 0, 0.2);
-          border: 2px solid #00ff00;
-          color: #00ff00;
+          background: rgba(255, 107, 53, 0.12);
+          border: 1px solid #FF6B35;
+          color: #FF6B35;
           font-family: monospace;
           font-size: 1.2rem;
           font-weight: bold;
@@ -646,7 +678,7 @@ export default function LandingPage() {
         }
 
         .control-btn:active {
-          background: rgba(0, 255, 0, 0.4);
+          background: rgba(255, 107, 53, 0.25);
           transform: scale(0.95);
         }
 

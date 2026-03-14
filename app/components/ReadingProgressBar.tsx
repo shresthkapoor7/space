@@ -25,7 +25,7 @@ export default function ReadingProgressBar() {
         left: 0,
         width: `${progress}%`,
         height: '3px',
-        background: '#4a9eff',
+        background: '#FF6B35',
         zIndex: 9999,
         transition: 'width 0.1s linear',
         pointerEvents: 'none',

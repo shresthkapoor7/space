@@ -353,9 +353,9 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
       )}
 
       {!isMobile && (
-        <aside className={`toc-sidebar right-positioned ${isOpen ? 'toc-open' : ''} ${!isOpen ? 'toc-closed' : ''}`} style={{ right: 0, left: 'auto', width: '240px' }}>
+        <aside className={`toc-sidebar right-positioned ${isOpen ? 'toc-open' : ''} ${!isOpen ? 'toc-closed' : ''}`} style={{ right: 0, left: 'auto', width: '210px' }}>
         <div className="toc-header">
-          <h3>&nbsp;&nbsp;For Vibes</h3>
+          <h3>for vibes</h3>
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="toc-close-button"
@@ -373,7 +373,7 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
           </button>
         </div>
 
-        <div className="toc-content" style={{ paddingBottom: showPlayer ? '90px' : '12px', overflowY: 'hidden' }}>
+        <div className="toc-content" style={{ paddingBottom: showPlayer ? '90px' : '12px', overflowY: 'hidden', overflowX: 'hidden' }}>
           <nav className="toc-nav">
             <div data-section="music" style={{ marginBottom: '12px' }}>
               {tracks.map((track) => (
@@ -398,7 +398,7 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
                   {track.youtubeUrl && (
                     <div style={{
                       fontSize: '14px',
-                      color: currentlyPlaying === track.id ? '#ff6b6b' : '#666',
+                      color: currentlyPlaying === track.id ? '#FF6B35' : '#666',
                       display: 'flex',
                       alignItems: 'center'
                     }}>
@@ -457,11 +457,11 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
             <div style={{
               position: 'fixed',
               bottom: 0,
-              right: isOpen ? 0 : '-240px',
-              width: '240px',
-              backgroundColor: 'rgba(26, 26, 26, 0.95)',
+              right: isOpen ? 0 : '-210px',
+              width: '210px',
+              backgroundColor: 'rgba(13, 12, 10, 0.97)',
               backdropFilter: 'blur(10px)',
-              borderTop: '1px solid #333',
+              borderTop: '1px solid #2a2520',
               padding: '6px 16px 12px 16px',
               zIndex: 1001,
               transition: 'right 0.3s ease'
@@ -544,9 +544,9 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
                   }}
                   style={{
                     background: 'none',
-                    border: '1px solid #ff6b6b',
+                    border: '1px solid #FF6B35',
                     borderRadius: '50%',
-                    color: '#ff6b6b',
+                    color: '#FF6B35',
                     cursor: 'pointer',
                     padding: '4px',
                     display: 'flex',
