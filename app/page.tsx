@@ -638,7 +638,7 @@ export default function LandingPage() {
           font-weight: bold;
           padding: 20px;
           border-radius: 10px;
-          cursor: var(--cursor-pointer);
+          cursor: pointer;
           transition: all 0.2s;
           user-select: none;
           -webkit-tap-highlight-color: transparent;

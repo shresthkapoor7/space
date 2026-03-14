@@ -167,7 +167,7 @@ export default function PdfViewer({ link }: PdfViewerProps) {
           border-radius: 4px;
           background: transparent;
           color: #999;
-          cursor: var(--cursor-pointer);
+          cursor: pointer;
           transition: all 0.2s;
           text-decoration: none;
           display: inline-flex;
@@ -260,7 +260,7 @@ export default function PdfViewer({ link }: PdfViewerProps) {
           color: white;
           font-size: 1.5rem;
           line-height: 1;
-          cursor: var(--cursor-pointer);
+          cursor: pointer;
           z-index: 10000;
           display: flex;
           align-items: center;

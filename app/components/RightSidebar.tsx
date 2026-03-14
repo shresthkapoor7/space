@@ -508,7 +508,7 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
                     background: 'none',
                     border: 'none',
                     color: currentlyPlaying ? '#666' : '#444',
-                    cursor: currentlyPlaying ? 'var(--cursor-pointer)' : 'not-allowed',
+                    cursor: currentlyPlaying ? 'pointer' : 'not-allowed',
                     padding: '2px',
                     opacity: currentlyPlaying ? 1 : 0.5
                   }}
@@ -547,7 +547,7 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
                     border: '1px solid #ff6b6b',
                     borderRadius: '50%',
                     color: '#ff6b6b',
-                    cursor: 'var(--cursor-pointer)',
+                    cursor: 'pointer',
                     padding: '4px',
                     display: 'flex',
                     alignItems: 'center',
@@ -572,7 +572,7 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
                     background: 'none',
                     border: 'none',
                     color: currentlyPlaying ? '#666' : '#444',
-                    cursor: currentlyPlaying ? 'var(--cursor-pointer)' : 'not-allowed',
+                    cursor: currentlyPlaying ? 'pointer' : 'not-allowed',
                     padding: '2px',
                     opacity: currentlyPlaying ? 1 : 0.5
                   }}
