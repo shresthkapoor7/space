@@ -19,13 +19,8 @@ export default function StrandsPost({ params }: PageProps) {
   }
 
   return (
-    <div className="post-container">
+    <div>
       <DynamicTitle title={post.title} />
-      <div style={{ marginBottom: '1rem' }}>
-        <a href="/strands" style={{ color: 'var(--accent-color)', textDecoration: 'none' }}>
-          ← Back to all strands posts
-        </a>
-      </div>
       <BlogPost post={post} currentPage="strands" />
     </div>
   )

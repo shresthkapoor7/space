@@ -1,7 +1,9 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { usePathname } from 'next/navigation'
 import GitHubActivity from './GitHubActivity'
+import { sampleTracks, type Track } from '../../lib/tracks'
 
 declare global {
   interface Window {
@@ -10,12 +12,10 @@ declare global {
   }
 }
 
-interface Track {
-  id: number
-  title: string
-  artist: string
-  isPlaying?: boolean
-  youtubeUrl?: string
+interface Heading {
+  id: string
+  text: string
+  level: number
 }
 
 interface RightSidebarProps {
@@ -23,145 +23,76 @@ interface RightSidebarProps {
   githubUsername?: string
 }
 
-const sampleTracks: Track[] = [
-  {
-    id: 1,
-    title: "Thru the night",
-    artist: "Jack Harlow",
-    youtubeUrl: "https://www.youtube.com/watch?v=wPrEkA_gQp4"
-  },
-  {
-    id: 2,
-    title: "No Pole",
-    artist: "Don Toliver",
-    youtubeUrl: "https://www.youtube.com/watch?v=A5mURRozXtg"
-  },
-  {
-    id: 3,
-    title: "DUMBO",
-    artist: "Travis Scott",
-    youtubeUrl: "https://www.youtube.com/watch?v=pyLs2dk9aVU"
-  },
-  {
-    id: 4,
-    title: "Freak",
-    artist: "Doja Cat",
-    youtubeUrl: "https://www.youtube.com/watch?v=Wc9_dsv5YYA"
-  },
-  {
-    id: 5,
-    title: "Double Take",
-    artist: "Dhruv",
-    youtubeUrl: "https://youtu.be/R8FHtIhWqNo"
-  }
-]
-
 export default function RightSidebar({ tracks = sampleTracks, githubUsername = "shresthkapoor7" }: RightSidebarProps) {
-  const [isOpen, setIsOpen] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
-  const [activeSection, setActiveSection] = useState('activity')
+  const pathname = usePathname()
+  const pathParts = pathname.split('/').filter(Boolean)
+  const isPostPage = pathParts.length >= 2
+
+  const [headings, setHeadings] = useState<Heading[]>([])
+  const [activeHeading, setActiveHeading] = useState('')
   const [currentlyPlaying, setCurrentlyPlaying] = useState<number | null>(null)
-  const [showPlayer, setShowPlayer] = useState(true)
   const [isPaused, setIsPaused] = useState(true)
   const [youtubePlayer, setYoutubePlayer] = useState<any>(null)
   const playNextTrackRef = useRef<() => void>()
 
+  // Scan for headings on any page that has .post-content
   useEffect(() => {
-    const checkScreenSize = () => {
-      const mobile = window.innerWidth < 1024
-      setIsMobile(mobile)
-      if (!mobile && !isOpen) {
-        setIsOpen(true)
-      } else if (mobile && isOpen) {
-        setIsOpen(false)
-      }
+    const scan = () => {
+      const contentEls = document.querySelectorAll('.post-content')
+      if (!contentEls.length) { setHeadings([]); return }
+
+      const found: Heading[] = []
+      contentEls.forEach(contentEl => {
+        contentEl.querySelectorAll('h2, h3').forEach((el, i) => {
+          const text = el.textContent || ''
+          const slug = text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + i
+          if (!el.id) (el as HTMLElement).id = slug
+          found.push({ id: (el as HTMLElement).id, text, level: parseInt(el.tagName[1]) })
+        })
+      })
+
+      setHeadings(found)
     }
 
-    checkScreenSize()
-    window.addEventListener('resize', checkScreenSize)
+    const timer = setTimeout(scan, 400)
+    return () => clearTimeout(timer)
+  }, [pathname])
 
-    return () => window.removeEventListener('resize', checkScreenSize)
-  }, [])
-
+  // IntersectionObserver for active heading
   useEffect(() => {
-    if (isMobile) {
-      if (isOpen) {
-        document.body.classList.add('right-sidebar-is-open')
-        document.body.classList.remove('right-sidebar-is-closed')
-      } else {
-        document.body.classList.remove('right-sidebar-is-open')
-        document.body.classList.add('right-sidebar-is-closed')
-      }
-    } else {
-      if (isOpen) {
-        document.body.classList.remove('right-sidebar-is-closed')
-        document.body.classList.remove('right-sidebar-is-open')
-      } else {
-        document.body.classList.add('right-sidebar-is-closed')
-        document.body.classList.remove('right-sidebar-is-open')
-      }
-    }
+    if (!headings.length) return
 
-    return () => {
-      document.body.classList.remove('right-sidebar-is-open')
-      document.body.classList.remove('right-sidebar-is-closed')
-    }
-  }, [isOpen, isMobile])
+    const observer = new IntersectionObserver(
+      entries => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActiveHeading(entry.target.id)
+            break
+          }
+        }
+      },
+      { root: document.getElementById('main-area-scroll'), rootMargin: '-10% 0px -70% 0px', threshold: 0 }
+    )
 
-  useEffect(() => {
-    if (!isOpen) return
+    headings.forEach(h => {
+      const el = document.getElementById(h.id)
+      if (el) observer.observe(el)
+    })
 
-    const handleScroll = () => {
-      const sidebar = document.querySelector('.right-positioned .toc-content')
-      if (!sidebar) return
+    return () => observer.disconnect()
+  }, [headings])
 
-      const musicSection = sidebar.querySelector('[data-section="music"]')
-      const githubSection = sidebar.querySelector('[data-section="github"]')
-
-      if (!musicSection || !githubSection) return
-
-      const sidebarRect = sidebar.getBoundingClientRect()
-      const musicRect = musicSection.getBoundingClientRect()
-      const githubRect = githubSection.getBoundingClientRect()
-
-      const musicVisibility = Math.max(0, Math.min(musicRect.bottom, sidebarRect.bottom) - Math.max(musicRect.top, sidebarRect.top))
-      const githubVisibility = Math.max(0, Math.min(githubRect.bottom, sidebarRect.bottom) - Math.max(githubRect.top, sidebarRect.top))
-
-      if (githubVisibility > musicVisibility && githubVisibility > 100) {
-        setActiveSection('github')
-      } else {
-        setActiveSection('activity')
-      }
-    }
-
-    const sidebar = document.querySelector('.right-positioned .toc-content')
-    if (sidebar) {
-      sidebar.addEventListener('scroll', handleScroll)
-      handleScroll()
-    }
-
-    return () => {
-      if (sidebar) {
-        sidebar.removeEventListener('scroll', handleScroll)
-      }
-    }
-  }, [isOpen])
-
+  // YouTube player setup
   useEffect(() => {
     if (window.YT && window.YT.Player && !youtubePlayer) {
       createYouTubePlayer()
       return
     }
-
     if (!window.YT) {
       const tag = document.createElement('script')
       tag.src = 'https://www.youtube.com/iframe_api'
-      const firstScriptTag = document.getElementsByTagName('script')[0]
-      firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag)
-
-      window.onYouTubeIframeAPIReady = () => {
-        createYouTubePlayer()
-      }
+      document.getElementsByTagName('script')[0].parentNode?.insertBefore(tag, document.getElementsByTagName('script')[0])
+      window.onYouTubeIframeAPIReady = () => createYouTubePlayer()
     } else if (!youtubePlayer) {
       createYouTubePlayer()
     }
@@ -170,434 +101,195 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
   const createYouTubePlayer = useCallback(() => {
     if (window.YT && window.YT.Player && !youtubePlayer) {
       const playerElement = document.getElementById('youtube-player')
-      if (!playerElement) {
-        setTimeout(createYouTubePlayer, 100)
-        return
-      }
-
-      const player = new window.YT.Player('youtube-player', {
-        height: '1',
-        width: '1',
-        playerVars: {
-          controls: 0,
-          modestbranding: 1,
-          rel: 0,
-          showinfo: 0,
-          fs: 0,
-          cc_load_policy: 0,
-          iv_load_policy: 3,
-          autohide: 1,
-          disablekb: 1,
-          playsinline: 1
-        },
-                events: {
-          onReady: (event: any) => {
-            setYoutubePlayer(event.target)
-          },
+      if (!playerElement) { setTimeout(createYouTubePlayer, 100); return }
+      new window.YT.Player('youtube-player', {
+        height: '1', width: '1',
+        playerVars: { controls: 0, modestbranding: 1, rel: 0, showinfo: 0, fs: 0, cc_load_policy: 0, iv_load_policy: 3, autohide: 1, disablekb: 1, playsinline: 1 },
+        events: {
+          onReady: (event: any) => setYoutubePlayer(event.target),
           onStateChange: (event: any) => {
-            const playerState = event.data
-
-            if (playerState === window.YT.PlayerState.PLAYING) {
-              setIsPaused(false)
-            } else if (playerState === window.YT.PlayerState.PAUSED) {
-              setIsPaused(true)
-            } else if (playerState === window.YT.PlayerState.ENDED) {
-              // Auto-play next track when current song ends
-              setTimeout(() => {
-                if (playNextTrackRef.current) {
-                  playNextTrackRef.current()
-                }
-              }, 100) // Small delay to ensure state is updated
-            }
+            if (event.data === window.YT.PlayerState.PLAYING) setIsPaused(false)
+            else if (event.data === window.YT.PlayerState.PAUSED) setIsPaused(true)
+            else if (event.data === window.YT.PlayerState.ENDED) setTimeout(() => playNextTrackRef.current?.(), 100)
           },
-          onError: (event: any) => {
-            // Handle common errors
-            if (event.data === 2) {
-            } else if (event.data === 5) {
-            } else if (event.data === 100) {
-            } else if (event.data === 101 || event.data === 150) {
-            }
-          }
         }
       })
     }
   }, [youtubePlayer])
 
-  const toggleDrawer = () => {
-    setIsOpen(!isOpen)
-  }
+  useEffect(() => { playNextTrackRef.current = playNextTrack }, [currentlyPlaying, youtubePlayer])
 
-  const extractYouTubeId = (url: string): string | null => {
-    const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/
-    const match = url.match(regExp)
-    return (match && match[7].length === 11) ? match[7] : null
+  // Listen for command palette track play events
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const { trackId } = (e as CustomEvent).detail
+      const track = tracks.find(t => t.id === trackId)
+      if (track) handleTrackPlay(track)
+    }
+    window.addEventListener('cmd-play-track', handler)
+    return () => window.removeEventListener('cmd-play-track', handler)
+  }, [youtubePlayer, currentlyPlaying, isPaused])
+
+  const extractYouTubeId = (url: string) => {
+    const match = url.match(/^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/)
+    return match && match[7].length === 11 ? match[7] : null
   }
 
   const handleTrackPlay = (track: Track) => {
     if (!track.youtubeUrl || !youtubePlayer) return
-
     if (currentlyPlaying === track.id) {
-      if (isPaused) {
-        youtubePlayer.playVideo()
-        setIsPaused(false)
-      } else {
-        youtubePlayer.pauseVideo()
-        setIsPaused(true)
-      }
+      if (isPaused) { youtubePlayer.playVideo(); setIsPaused(false) }
+      else { youtubePlayer.pauseVideo(); setIsPaused(true) }
     } else {
       const videoId = extractYouTubeId(track.youtubeUrl)
-      if (videoId) {
-        youtubePlayer.loadVideoById(videoId)
-        setCurrentlyPlaying(track.id)
-        setShowPlayer(true)
-        setIsPaused(false)
-      }
+      if (videoId) { youtubePlayer.loadVideoById(videoId); setCurrentlyPlaying(track.id); setIsPaused(false) }
     }
   }
 
-  const getCurrentTrack = () => {
-    return tracks.find(track => track.id === currentlyPlaying)
-  }
-
-    const playNextTrack = useCallback(() => {
-
-
-    // Try to get the player if it's null but should exist
-    let player = youtubePlayer
-    if (!player) {
-      const playerElement = document.getElementById('youtube-player')
-      if (playerElement && window.YT && window.YT.get) {
-        player = window.YT.get('youtube-player')
-        if (player) {
-          setYoutubePlayer(player)
-        }
-      }
-    }
-
-    if (!player) {
-      return
-    }
-
-    const currentIndex = tracks.findIndex(track => track.id === currentlyPlaying)
-
-    if (currentIndex === -1) {
-      return
-    }
-
-    const nextIndex = (currentIndex + 1) % tracks.length
-    const nextTrack = tracks[nextIndex]
-
+  function playNextTrack() {
+    const player = youtubePlayer
+    if (!player) return
+    const currentIndex = tracks.findIndex(t => t.id === currentlyPlaying)
+    if (currentIndex === -1) return
+    const nextTrack = tracks[(currentIndex + 1) % tracks.length]
     if (nextTrack?.youtubeUrl) {
       const videoId = extractYouTubeId(nextTrack.youtubeUrl)
-
-      if (videoId) {
-        try {
-          if (player.loadVideoById && typeof player.loadVideoById === 'function') {
-            player.loadVideoById(videoId)
-            setCurrentlyPlaying(nextTrack.id)
-            setIsPaused(false)
-          } else {
-          }
-        } catch (error) {
-          if (error instanceof Error && error.message && error.message.includes('destroyed')) {
-            setYoutubePlayer(null)
-            setTimeout(() => createYouTubePlayer(), 500)
-          }
-        }
-      } else {
-      }
-    } else {
+      if (videoId) { player.loadVideoById(videoId); setCurrentlyPlaying(nextTrack.id); setIsPaused(false) }
     }
-  }, [youtubePlayer, currentlyPlaying, tracks])
-
-  useEffect(() => {
-    playNextTrackRef.current = playNextTrack
-  }, [playNextTrack])
+  }
 
   const playPreviousTrack = () => {
     if (!youtubePlayer) return
-
-    const currentIndex = tracks.findIndex(track => track.id === currentlyPlaying)
-    const prevIndex = currentIndex === 0 ? tracks.length - 1 : currentIndex - 1
-    const prevTrack = tracks[prevIndex]
-
-    if (prevTrack.youtubeUrl) {
+    const currentIndex = tracks.findIndex(t => t.id === currentlyPlaying)
+    const prevTrack = tracks[currentIndex === 0 ? tracks.length - 1 : currentIndex - 1]
+    if (prevTrack?.youtubeUrl) {
       const videoId = extractYouTubeId(prevTrack.youtubeUrl)
-      if (videoId) {
-        youtubePlayer.loadVideoById(videoId)
-        setCurrentlyPlaying(prevTrack.id)
-        setIsPaused(false)
-      }
+      if (videoId) { youtubePlayer.loadVideoById(videoId); setCurrentlyPlaying(prevTrack.id); setIsPaused(false) }
     }
   }
 
+  const getCurrentTrack = () => tracks.find(t => t.id === currentlyPlaying)
+
   return (
-    <>
+    <aside className="right-sidebar">
+      <div className="right-sidebar-inner">
 
-      {!isMobile && !isOpen && (
-        <button
-          onClick={toggleDrawer}
-          className="desktop-toc-button right-positioned"
-          aria-label="Open activity sidebar"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M21 12H3m9-9l-9 9 9 9"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </button>
-      )}
-
-      {!isMobile && (
-        <aside className={`toc-sidebar right-positioned ${isOpen ? 'toc-open' : ''} ${!isOpen ? 'toc-closed' : ''}`} style={{ right: 0, left: 'auto', width: '210px' }}>
-        <div className="toc-header">
-          <h3>for vibes</h3>
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="toc-close-button"
-            aria-label={isOpen ? "Close activity sidebar" : "Open activity sidebar"}
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M6 18L18 6M6 6l12 12"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-        </div>
-
-        <div className="toc-content" style={{ paddingBottom: showPlayer ? '90px' : '12px', overflowY: 'hidden', overflowX: 'hidden' }}>
-          <nav className="toc-nav">
-            <div data-section="music" style={{ marginBottom: '12px' }}>
-              {tracks.map((track) => (
-                <button
-                  key={track.id}
-                  className={`toc-link full-width ${currentlyPlaying === track.id ? 'playing' : ''}`}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    gap: '6px'
-                  }}
-                  onClick={() => handleTrackPlay(track)}
-                  disabled={!track.youtubeUrl}
-                >
-                  <div style={{ flex: 1, textAlign: 'left' }}>
-                    <div className="toc-post-date">
-                      {track.artist}
-                    </div>
-                    <div className="toc-post-title">{track.title}</div>
-                  </div>
-                  {track.youtubeUrl && (
-                    <div style={{
-                      fontSize: '14px',
-                      color: currentlyPlaying === track.id ? '#FF6B35' : '#666',
-                      display: 'flex',
-                      alignItems: 'center'
-                    }}>
-                      {currentlyPlaying === track.id && !isPaused ? (
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M6 4h4v16H6zM14 4h4v16h-4z" />
-                        </svg>
-                      ) : (
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M8 5v14l11-7z" />
-                        </svg>
-                      )}
-                    </div>
-                  )}
-                </button>
-              ))}
-            </div>
-
-            <div data-section="github">
-              {currentlyPlaying && !isPaused ? (
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  padding: '20px 16px'
-                }}>
-                  <img
-                    src="https://media.tenor.com/nXjNCZY_PE4AAAAM/happy-dance-moves.gif"
-                    alt="Music playing"
-                    style={{
-                      width: '100%',
-                      maxWidth: '200px',
-                      borderRadius: '8px',
-                      objectFit: 'cover',
-                      marginBottom: '12px'
-                    }}
-                  />
-                  <div style={{
-                    fontSize: '0.75rem',
-                    color: '#888',
-                    fontStyle: 'italic',
-                    textAlign: 'center',
-                    lineHeight: '1.4'
-                  }}>
-                    "your compliments don't make me happy, you fools!" ~ tony tony chopper
-                  </div>
-                </div>
-              ) : (
-                <GitHubActivity username={githubUsername} />
-              )}
-            </div>
-          </nav>
-        </div>
-
-                  {!isMobile && showPlayer && (
-            <div style={{
-              position: 'fixed',
-              bottom: 0,
-              right: isOpen ? 0 : '-210px',
-              width: '210px',
-              backgroundColor: 'rgba(13, 12, 10, 0.97)',
-              backdropFilter: 'blur(10px)',
-              borderTop: '1px solid #2a2520',
-              padding: '6px 16px 12px 16px',
-              zIndex: 1001,
-              transition: 'right 0.3s ease'
-            }}>
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: '4px'
-              }}>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{
-                    fontSize: '0.75rem',
-                    color: '#fff',
-                    fontWeight: '500',
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis'
-                  }}>
-                    {getCurrentTrack()?.title || 'Select a track to play'}
-                  </div>
-                  <div style={{
-                    fontSize: '0.65rem',
-                    color: '#888',
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis'
-                  }}>
-                    {getCurrentTrack()?.artist || 'Choose from my favorites'}
-                  </div>
-                </div>
-              </div>
-
-              <div style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                gap: '6px'
-              }}>
-                <button
-                  onClick={playPreviousTrack}
-                  disabled={!currentlyPlaying}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: currentlyPlaying ? '#666' : '#444',
-                    cursor: currentlyPlaying ? 'pointer' : 'not-allowed',
-                    padding: '2px',
-                    opacity: currentlyPlaying ? 1 : 0.5
-                  }}
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
-                  </svg>
-                </button>
-
-                <button
-                  onClick={() => {
-                    if (!youtubePlayer) return
-
-                    if (currentlyPlaying) {
-                      if (isPaused) {
-                        youtubePlayer.playVideo()
-                        setIsPaused(false)
-                      } else {
-                        youtubePlayer.pauseVideo()
-                        setIsPaused(true)
-                      }
-                    } else {
-                      const firstTrackWithUrl = tracks.find(track => track.youtubeUrl)
-                      if (firstTrackWithUrl && firstTrackWithUrl.youtubeUrl) {
-                        const videoId = extractYouTubeId(firstTrackWithUrl.youtubeUrl)
-                        if (videoId) {
-                          youtubePlayer.loadVideoById(videoId)
-                          setCurrentlyPlaying(firstTrackWithUrl.id)
-                          setIsPaused(false)
-                        }
-                      }
+        {/* Post headings TOC */}
+        {headings.length > 0 && (
+          <div className="right-sidebar-section">
+            <div className="right-sidebar-section-label">Table of Contents</div>
+            <nav className="right-toc-nav">
+              {headings.map(h => (
+                <a
+                  key={h.id}
+                  href={`#${h.id}`}
+                  className={`right-toc-link${h.level === 3 ? ' indent' : ''}${activeHeading === h.id ? ' active' : ''}`}
+                  onClick={e => {
+                    e.preventDefault()
+                    const el = document.getElementById(h.id)
+                    const scroller = document.getElementById('main-area-scroll')
+                    if (el && scroller) {
+                      scroller.scrollTo({ top: el.offsetTop - 32, behavior: 'smooth' })
                     }
                   }}
-                  style={{
-                    background: 'none',
-                    border: '1px solid #FF6B35',
-                    borderRadius: '50%',
-                    color: '#FF6B35',
-                    cursor: 'pointer',
-                    padding: '4px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}
                 >
-                  {currentlyPlaying && !isPaused ? (
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M6 4h4v16H6zM14 4h4v16h-4z" />
-                    </svg>
-                  ) : (
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                  )}
-                </button>
+                  {h.text}
+                </a>
+              ))}
+            </nav>
+          </div>
+        )}
 
-                <button
-                  onClick={playNextTrack}
-                  disabled={!currentlyPlaying}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: currentlyPlaying ? '#666' : '#444',
-                    cursor: currentlyPlaying ? 'pointer' : 'not-allowed',
-                    padding: '2px',
-                    opacity: currentlyPlaying ? 1 : 0.5
-                  }}
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M16 18h2V6h-2zM6 6v12l8.5-6z" />
-                  </svg>
-                </button>
+        {/* Music */}
+        <div className="right-sidebar-section">
+          <div className="right-sidebar-section-label">music</div>
 
-              </div>
-              <div
-                id="youtube-player"
-                style={{
-                  position: 'absolute',
-                  left: '-9999px',
-                  width: '1px',
-                  height: '1px',
-                  overflow: 'hidden'
+          {/* Vinyl disk player */}
+          <div className="vinyl-player">
+            <div className="vinyl-controls-row">
+              <button onClick={playPreviousTrack} disabled={!currentlyPlaying} className="vinyl-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" /></svg>
+              </button>
+
+              <button
+                className={`vinyl-disk${currentlyPlaying && !isPaused ? ' spinning' : ''}`}
+                onClick={() => {
+                  if (!youtubePlayer) return
+                  if (currentlyPlaying) {
+                    if (isPaused) { youtubePlayer.playVideo(); setIsPaused(false) }
+                    else { youtubePlayer.pauseVideo(); setIsPaused(true) }
+                  } else {
+                    const first = tracks.find(t => t.youtubeUrl)
+                    if (first?.youtubeUrl) {
+                      const videoId = extractYouTubeId(first.youtubeUrl)
+                      if (videoId) { youtubePlayer.loadVideoById(videoId); setCurrentlyPlaying(first.id); setIsPaused(false) }
+                    }
+                  }
                 }}
-              />
+              >
+                {(() => {
+                  const track = getCurrentTrack()
+                  const videoId = track?.youtubeUrl ? extractYouTubeId(track.youtubeUrl) : null
+                  return videoId ? (
+                    <img
+                      src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`}
+                      alt={track?.title}
+                      className="vinyl-art"
+                    />
+                  ) : (
+                    <div className="vinyl-art vinyl-art-empty" />
+                  )
+                })()}
+                <div className="vinyl-hole" />
+              </button>
+
+              <button onClick={playNextTrack} disabled={!currentlyPlaying} className="vinyl-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 18h2V6h-2zM6 6v12l8.5-6z" /></svg>
+              </button>
             </div>
-          )}
-        </aside>
-      )}
-    </>
+
+            <div className="vinyl-track-info">
+              <div className="vinyl-track-title">{getCurrentTrack()?.title || 'Select a track'}</div>
+              <div className="vinyl-track-artist">{getCurrentTrack()?.artist || ''}</div>
+            </div>
+          </div>
+
+          {/* Track list */}
+          <div className="right-track-list">
+            {tracks.map(track => (
+              <button
+                key={track.id}
+                className={`right-track-item${currentlyPlaying === track.id ? ' playing' : ''}`}
+                onClick={() => handleTrackPlay(track)}
+                disabled={!track.youtubeUrl}
+              >
+                <div className="right-track-info">
+                  <div className="right-track-artist">{track.artist}</div>
+                  <div className="right-track-title">{track.title}</div>
+                </div>
+                <div className="right-track-icon">
+                  {currentlyPlaying === track.id && !isPaused ? (
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4h4v16H6zM14 4h4v16h-4z" /></svg>
+                  ) : (
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+                  )}
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* GitHub Activity */}
+        <div className="right-sidebar-section">
+        <GitHubActivity username={githubUsername} />
+        </div>
+
+      </div>
+
+      <div
+        id="youtube-player"
+        style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', overflow: 'hidden' }}
+      />
+    </aside>
   )
 }
-

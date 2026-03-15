@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation'
 import BlogPost from '../../components/BlogPost'
-import TableOfContents from '../../components/TableOfContents'
 import DynamicTitle from '../../components/DynamicTitle'
 import { getProjectPosts } from '../../../lib/markdown'
 
@@ -20,18 +19,9 @@ export default function ProjectPost({ params }: PageProps) {
   }
 
   return (
-    <div className="page-with-toc">
+    <div>
       <DynamicTitle title={post.title} />
-      <TableOfContents posts={allPosts} currentPage="project" currentPostId={postId} />
-      <div className="main-content">
-        <div style={{ marginBottom: '1rem' }}>
-          <a href="/project" style={{ color: 'var(--accent-color)', textDecoration: 'none' }}>
-            ← Back to all project posts
-          </a>
-        </div>
-        <h1 className="page-title">project stuff</h1>
-        <BlogPost post={post} currentPage="project" />
-      </div>
+      <BlogPost post={post} currentPage="project" />
     </div>
   )
 }

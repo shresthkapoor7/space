@@ -19,13 +19,8 @@ export default function HomePost({ params }: PageProps) {
   }
 
   return (
-    <div className="post-container">
+    <div>
       <DynamicTitle title={post.title} />
-      <div style={{ marginBottom: '1rem' }}>
-        <a href="/home" style={{ color: 'var(--accent-color)', textDecoration: 'none' }}>
-          ← Back to all posts
-        </a>
-      </div>
       <BlogPost post={post} currentPage="home" />
     </div>
   )

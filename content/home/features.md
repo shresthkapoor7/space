@@ -2,7 +2,7 @@
 id: 2
 date: '2025-07-19'
 title: "Special Features of this Website"
-pinned: true
+pinned: false
 ---
 
 All posts here are written in markdown as I am something of a markdown nerd my self, which then gets rendered as html.

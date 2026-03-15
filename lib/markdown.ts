@@ -107,3 +107,35 @@ export function getProjectPosts(): Post[] {
 export function getHomePosts(): Post[] {
   return readMarkdownFiles('home')
 }
+
+export interface PostSummary {
+  id: number
+  date: string
+  title: string
+  pinned?: boolean
+  content?: string
+}
+
+function stripMarkdown(md: string): string {
+  return md
+    .replace(/^#+\s+/gm, '')           // headings
+    .replace(/\*\*(.+?)\*\*/g, '$1')   // bold
+    .replace(/\*(.+?)\*/g, '$1')       // italic
+    .replace(/`{1,3}[^`]*`{1,3}/g, '') // code
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // links
+    .replace(/^[-*>]\s+/gm, '')        // lists / blockquotes
+    .replace(/\n{2,}/g, ' ')           // collapse whitespace
+    .trim()
+}
+
+export function getAllCategoryPosts(): Record<string, PostSummary[]> {
+  const categories = ['home', 'math', 'finance', 'ml', 'strands']
+  const result: Record<string, PostSummary[]> = {}
+  for (const cat of categories) {
+    result[cat] = readMarkdownFiles(cat).map(({ id, date, title, pinned, content }) => ({
+      id, date, title, pinned,
+      content: stripMarkdown(content),
+    }))
+  }
+  return result
+}

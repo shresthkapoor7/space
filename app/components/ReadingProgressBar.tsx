@@ -6,15 +6,18 @@ export default function ReadingProgressBar() {
   const [progress, setProgress] = useState(0)
 
   useEffect(() => {
+    const scroller = document.getElementById('main-area-scroll')
+    if (!scroller) return
+
     const updateProgress = () => {
-      const scrollTop = window.scrollY
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight
-      setProgress(docHeight > 0 ? (scrollTop / docHeight) * 100 : 0)
+      const scrollTop = scroller.scrollTop
+      const scrollHeight = scroller.scrollHeight - scroller.clientHeight
+      setProgress(scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0)
     }
 
-    window.addEventListener('scroll', updateProgress, { passive: true })
+    scroller.addEventListener('scroll', updateProgress, { passive: true })
     updateProgress()
-    return () => window.removeEventListener('scroll', updateProgress)
+    return () => scroller.removeEventListener('scroll', updateProgress)
   }, [])
 
   return (

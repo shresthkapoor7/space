@@ -129,7 +129,7 @@ export default function BlogPost({ post, currentPage = 'home' }: BlogPostProps) 
   return (
     <article className="post" id={`post-${currentPage}-${post.id}`}>
       <div className="post-header">
-        <div className="post-date">{post.date} {post.pinned && <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>📌</span>}</div>
+        <div className="post-date">{post.date} {post.pinned && <span className="post-pin" />}</div>
         <h2 className="post-title" onClick={navigateToPost} style={{ cursor: 'pointer' }}>{post.title}</h2>
       </div>
       <div className="post-content">

@@ -437,9 +437,9 @@ export default function LandingPage() {
       {showInstructions && (
         <div className="instructions">
           <div className="instructions-box">
-            <h2>╔═══════════════════╗</h2>
-            <h2>║      ΣPACE        ║</h2>
-            <h2>╚═══════════════════╝</h2>
+            <h2>╔═══════════════╗</h2>
+            <h2>║     ΣPACE     ║</h2>
+            <h2>╚═══════════════╝</h2>
             <div className="instructions-content">
               {!isMobile ? (
                 <>

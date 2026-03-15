@@ -5,9 +5,14 @@ title: "Extension to track static websites"
 pinned: false
 ---
 
-so many people have their own blogs on their personal websites but most of them are old posts, and the only traction those posts get is when someone randomly follows them on twitter and stumbles across their site. so i thought about this having an extension where you can track your favorite creators. i’m not sure, maybe that’s what RSS was for, but clearly i’m not <mark data-tooltip="new slang for boomers">unc</mark>. so i’ll never know.
+So many people have their own blogs on personal websites, but most of them are old posts that only get traction when someone randomly stumbles across them on Twitter. I thought - there should be a way to follow your favorite personal sites the same way you follow people.
 
-the idea is simple: add your favorite site links, and if anything changes on that page, you get notified. i wanna keep this project simple and not too complicated, so no supabase, no backend running across a dozen services. no email updates just a ping on the extension that says
+Maybe that's what RSS was for. But I'm clearly not <mark data-tooltip="new slang for boomers">unc</mark> enough to know that.
+
+## The idea
+
+Simple: add your favorite site links, and if anything changes on that page, you get notified. No Supabase, no backend sprawl, no email blasts. Just a ping on the extension that says -
+
 > *look, your favorite nerd made an update.*
 
 <div style="display: flex; justify-content: center; margin-top: 1rem;">
@@ -18,12 +23,14 @@ the idea is simple: add your favorite site links, and if anything changes on tha
   />
 </div>
 
-maybe in the future (or if cursor spits out some magic), i’ll add something like “x users are keeping up with your site” would be a cool touch. and obviously, if this isn’t your thing, you can always go the normie route with substack, medium, dev.to, or whatever. but if you’re reading this, you’re probably a nerd so hang on while i vibe code this listening to the weekend.
+## Where it's going
+
+Maybe down the line: *"x users are keeping up with your site"* - a lightweight social layer for people who actually write. Obviously if that's not your thing, Substack exists. But if you're reading this you're probably a nerd, so.
+
+Calling it **caterpillar** 🐛 - no idea why, just sounds right.
 
 <Tweet id="1951440189349568611" />
 
-gonna call this one caterpillar 🐛 - no idea why but sounds cool
-
 <Tweet id="1952569287409078490" />
 
-> 🐛 [caterpillar](https://github.com/shresthkapoor7/caterpillar)
+> 🐛 [caterpillar on GitHub](https://github.com/shresthkapoor7/caterpillar)

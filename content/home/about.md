@@ -5,168 +5,53 @@ title: "About Me and the Website"
 pinned: true
 ---
 
-<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Caveat:wght@400;500;600;700&family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
+## Whoami
 
-Hi I'am Shresth. I'm currently studying Computer Science at [<span class="nyu-link">@nyu</span>](https://www.nyu.edu/), previously I worked as a Software Engineer at [@TalentTitan](https://talenttitan.com/).
+Hi, I'm Shresth - CS student at [@nyu](https://www.nyu.edu/), previously a Software Engineer at [@Talent Titan](https://talenttitan.com/), an EdTech startup in India.
 
-<style>
-  .nyu-link {
-    color: #8b5cf6 !important;
-    text-decoration: underline;
-    text-decoration-style: dotted;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 3px;
-    transition: all 0.2s ease;
-  }
+I spend most of my time thinking about math, markets, and machine learning. This site is where I dump those thoughts - notes, experiments, and the occasional half-finished idea.
 
-  .nyu-link:hover {
-    color: #a78bfa !important;
-    text-decoration-style: solid;
-    text-decoration-thickness: 2px;
-  }
+## What's here
 
-  .about-container {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-    margin-top: 1rem;
-  }
+- **[Math](/math)** - Notes from my ongoing battle with linear algebra, calculus, and whatever else breaks my brain.
+- **[Finance](/finance)** - Thoughts on quant finance, trading models, and related rabbit holes.
+- **[ML](/ml)** - Experiments and reflections on computer vision, machine learning, and applied AI.
+- **[Home](/home)** - Everything else. Hackathon builds, side projects, random stuff.
 
-  .about-image {
-    flex-shrink: 0;
-  }
+## How this works
 
-  .about-image {
-    position: relative;
-    transform: rotate(-2deg);
-    transition: transform 0.3s ease;
-  }
+Everything is written in markdown and rendered with a few extra features I built in. Mostly because vanilla markdown felt boring.
 
-  .about-image:hover {
-    transform: rotate(0deg);
-  }
+**Runnable code** - blocks execute right in the browser:
 
-  .about-image img {
-    width: 200px;
-    border: 8px solid #faf9f7;
-    border-radius: 0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px rgba(0, 0, 0, 0.2);
-    filter: sepia(25%) contrast(1.1) brightness(1.05) saturate(0.9) hue-rotate(-5deg);
-  }
+```python
+import random
+print(f"random number: {random.randint(1, 100)}")
+print("yep, this runs in your browser")
+```
 
-  .about-image::after {
-    content: '';
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    right: 12px;
-    bottom: 40px;
-    background: linear-gradient(45deg,
-      rgba(139, 69, 19, 0.03) 0%,
-      rgba(160, 82, 45, 0.02) 25%,
-      rgba(210, 180, 140, 0.03) 50%,
-      rgba(139, 69, 19, 0.02) 75%,
-      rgba(101, 67, 33, 0.03) 100%);
-    pointer-events: none;
-    mix-blend-mode: multiply;
-  }
+**Math** - LaTeX via `$` delimiters:
 
-  .photo-caption {
-    position: absolute;
-    bottom: 18px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 18px;
-    color: #333;
-    font-family: 'Kalam', 'Caveat', 'Dancing Script', cursive;
-    margin: 0;
-    font-weight: 400;
-    letter-spacing: 0.5px;
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    white-space: nowrap;
-  }
+$begin:math:display$
+\int_0^1 x^2 \, dx = \frac{1}{3}
+$end:math:display$
 
-  .about-content {
-    flex: 1;
-  }
+**Tooltips** - hover over <mark data-tooltip="you found it">marked text</mark> to see them.
 
-  @media (max-width: 768px) {
-    .about-container {
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
-    }
+**Flashcards** - collapse/expand with `<details>`:
 
-    .about-image img {
-      width: 250px;
-      border: 10px solid #faf9f7;
-      border-bottom: 10px solid #faf9f7;
-    }
-
-    .about-image::after {
-      top: 10px;
-      left: 10px;
-      right: 10px;
-      bottom: 30px;
-    }
-
-    .photo-caption {
-      bottom: 16px;
-      font-size: 12px;
-    }
-  }
-</style>
-
-<div class="about-container">
-  <!-- <div class="about-image">
-    <img
-      src="/images/shresth.JPG"
-      alt="nerd"
-    />
-    <!-- <p class="photo-caption">
-      <span>17/10/2025</span>
-      <!-- <span>~</span> -->
-      <!-- <span>sandy hook beach</span> -->
-    <!-- </p> -->
-  </div>
-  <div class="about-content">
-
-  Here are some of the topics I'm currently exploring:
-
-  - **[math](/math)** ~ notes as I battle with linear algebra, calculus, and other math topics.
-  - **[finance](/finance)** ~ thoughts, and learnings as I explore quantitative finance and related models.
-  - **[ml](/ml)** ~ experiments and reflections on computer vision, machine learning, and applied AI.
-  - **[home](/)** ~ everything else from hackathon projects to random stuff.
-
-
-<!-- #### working on
-- **[strands](/strands)** slack threads but for LLMs
-- **[Σpace](/2)** my personal substack
-- **[riff](/5)** shazam but with spotify
-- **[brain rot]()** subway surfers inside cursor -->
-
-  </div>
+<div class="glossary-group">
+<details><summary>Gemini</summary>🗑️🗑️🗑️</details>
+<details><summary>Claude</summary>🥇🥇🥇</details>
+<details><summary>ChatGPT</summary>💬💬💬</details>
 </div>
 
-<!-- <center>
+**Tweets** - embedded with `<Tweet id="" />`:
 
-[twitter](https://twitter.com/shresthkapoor7) | [github](https://github.com/shresthkapoor7)
- | [linkedin](https://www.linkedin.com/in/shresth-kapoor-7skp/)
-</center>
+<Tweet id="1945713783562711165" />
 
+**PDFs** - embedded, fullscreen-able, downloadable:
 
-old projects
+<pdf link="images/random.pdf" />
 
-caterpillar
-RAG for Obsidian
-RAG for ROS
-Snapple
-Trackmate
-
-hackathon builds
-
-agrosynth
-foak
-[un hackathon - geosight contributions](https://github.com/dsagal/GeoSight-OS/commit/2dc535f136dce4d3eef5a8269cbf3e0b22079e3c) -->
+**Music** - there's a player in the right sidebar. ⌘K to search and queue tracks.

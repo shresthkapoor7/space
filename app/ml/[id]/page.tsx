@@ -19,13 +19,8 @@ export default function MLPost({ params }: PageProps) {
   }
 
   return (
-    <div className="post-container">
+    <div>
       <DynamicTitle title={post.title} />
-      <div style={{ marginBottom: '1rem' }}>
-        <a href="/ml" style={{ color: 'var(--accent-color)', textDecoration: 'none' }}>
-          ← Back to all ML posts
-        </a>
-      </div>
       <BlogPost post={post} currentPage="ml" />
     </div>
   )

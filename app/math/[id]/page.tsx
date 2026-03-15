@@ -19,13 +19,8 @@ export default function MathPost({ params }: PageProps) {
   }
 
   return (
-    <div className="post-container">
+    <div>
       <DynamicTitle title={post.title} />
-      <div style={{ marginBottom: '1rem' }}>
-        <a href="/math" style={{ color: 'var(--accent-color)', textDecoration: 'none' }}>
-          ← Back to all math posts
-        </a>
-      </div>
       <BlogPost post={post} currentPage="math" />
     </div>
   )

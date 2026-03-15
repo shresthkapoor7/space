@@ -179,7 +179,7 @@ export default function TableOfContents({ posts, currentPage, currentPostId }: T
                 }`}
               >
                 <div className="toc-post-date">
-                  {post.date} {post.pinned && <span className="pin-icon">📌</span>}
+                  {post.date} {post.pinned && <span className="post-pin" />}
                 </div>
                 <div className="toc-post-title">{post.title}</div>
               </button>

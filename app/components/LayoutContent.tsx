@@ -2,39 +2,72 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import Navigation from './Navigation'
-import ConditionalSidebar from './ConditionalSidebar'
+import LeftSidebar from './LeftSidebar'
+import RightSidebar from './RightSidebar'
 import ReadingProgressBar from './ReadingProgressBar'
+import CommandPalette from './CommandPalette'
 
-export default function LayoutContent({
-    children,
-}: {
-    children: React.ReactNode
-}) {
-    const pathname = usePathname()
-    const isLandingPage = pathname === '/'
-    const isIndividualPost = pathname.split('/').filter(Boolean).length >= 2
+interface PostSummary {
+  id: number
+  date: string
+  title: string
+  pinned?: boolean
+}
 
-    if (isLandingPage) {
-        return <main>{children}</main>
-    }
+interface LayoutContentProps {
+  children: React.ReactNode
+  allCategoryPosts: Record<string, PostSummary[]>
+}
 
-    return (
-        <div className="app-layout">
-            {isIndividualPost && <ReadingProgressBar />}
-            <header className="main-header">
-                <Link href="/home" className="logo">
-                    Σpace
-                </Link>
-                <Navigation />
-            </header>
-            <main className="main-wrapper">
-                {children}
-            </main>
-            <ConditionalSidebar />
-            <footer className="site-footer">
-                <p>// i use arc btw, not arch you nerd</p>
-            </footer>
+export default function LayoutContent({ children, allCategoryPosts }: LayoutContentProps) {
+  const pathname = usePathname()
+  const isLandingPage = pathname === '/'
+
+  if (isLandingPage) {
+    return <main>{children}</main>
+  }
+
+  const pathParts = pathname.split('/').filter(Boolean)
+  const category = pathParts[0] || ''
+  const postIdStr = pathParts[1]
+  const isPostPage = !!postIdStr
+
+  let postTitle = ''
+  if (isPostPage) {
+    const postId = parseInt(postIdStr)
+    const posts = allCategoryPosts[category] || []
+    const post = posts.find(p => p.id === postId)
+    postTitle = post?.title || ''
+  }
+
+  return (
+    <div className="app-layout">
+      <CommandPalette allCategoryPosts={allCategoryPosts} />
+      {isPostPage && <ReadingProgressBar />}
+      <LeftSidebar allCategoryPosts={allCategoryPosts} />
+      <div id="main-area-scroll" className="main-area">
+        <div className="main-center">
+          <div className="mobile-header">
+            <Link href="/home" className="logo">Σpace</Link>
+          </div>
+          {isPostPage && (
+            <div className="breadcrumb">
+              <Link href="/home" className="breadcrumb-link">Home</Link>
+              <span className="breadcrumb-sep">›</span>
+              <Link href={`/${category}`} className="breadcrumb-link">{category}</Link>
+              <span className="breadcrumb-sep">›</span>
+              <span className="breadcrumb-current">{postTitle}</span>
+            </div>
+          )}
+          <main className="main-inner">
+            {children}
+          </main>
+          <footer className="site-footer">
+            <p>// welcome to my over engineered personal website</p>
+          </footer>
         </div>
-    )
+        <RightSidebar />
+      </div>
+    </div>
+  )
 }

@@ -4,6 +4,9 @@ date: '2025-07-29'
 title: "Writing my own bash scripts to avoid using notion"
 pinned: false
 ---
+
+Always wanted to track how many job applications I'm sending out. Thought about Notion - too bloated. Excel - still need a mouse for that, ngmi.
+
 <div style="display: flex; justify-content: center; margin-top: 1rem;">
   <img
     src="https://pbs.twimg.com/media/F-g2IU8bEAAEXgz.jpg:large"
@@ -12,20 +15,19 @@ pinned: false
   />
 </div>
 
-always wanted to keep track of how many applications i'm sending out. thought about using notion but it's too bloated for me. they have notion ai but it's mid can't even edit databases properly, tried so many times, never worked. could use excel but i still need a mouse for that so yeah, ngmi.
+## The setup
 
-
-anyways i had this local folder with my latex resume running inside cursor (pretty sure i set it up last week or so). the idea was that i could tweak my projects based on the jd. then i thought, what if i just track all my applications here too?
+I already had a local folder with my LaTeX resume running inside Cursor - the idea being I could tweak projects based on the JD. Then it clicked: why not track applications from the same place?
 
 <div style="display: flex; justify-content: center; margin-top: 1rem;">
   <img
     src="https://i.imgur.com/Cs7mn9E.png"
-    alt="nerd"
+    alt="folder structure"
     style="width: 400px;"
   />
 </div>
 
-fast forward and i’ve got 3 shell scripts written (technically 4, but using 3), with a folder structure like:
+Ended up with 3 shell scripts and a folder structure like this:
 
 ```
 resume/
@@ -43,22 +45,24 @@ resume/
 └── README.md
 ```
 
-1. `create_application.sh` when i run this, it creates a folder for the application and drops in a copy of my main.tex file. i can make edits to tailor it for the role.
+## The scripts
+
+**`create_application.sh`** - creates a folder for the role and drops in a copy of `main.tex` to tailor.
 
 ```bash
 ./create_application.sh "google" "software engineer"
 ```
 
-2. `list_applications.sh` i use two json files: job_applications.json and application_info.json. the first one tracks everything - id, company, position, date, folder name, status, all that. when i run the script below, it lists out all the applications i’ve made so far.
+**`list_applications.sh`** - reads from `job_applications.json` and lists everything: id, company, position, date, status.
 
 ```bash
 ./list_applications.sh
 ```
 
-3. `export_applications.sh` this one’s my favorite. every application folder has its own application_info.json with extras like job url, contact person, notes, etc.
+**`export_applications.sh`** - my favorite. Each application folder has its own `application_info.json` with the job URL, contact, notes, etc. This dumps it all into a CSV.
 
 ```bash
 ./export_applications.sh
 ```
 
-this script dumps everything into a csv with s.no, company, position, date_applied, folder, notes, status, job_posting_url. and since it’s csv, i can even run analysis on it 🤓 (yes i know, i’ve gone full nerd).
+Output: `s.no, company, position, date_applied, folder, notes, status, job_posting_url`. Since it's CSV, you can run actual analysis on it. Yes I know, full nerd territory. No regrets.
