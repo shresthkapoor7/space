@@ -2643,7 +2643,13 @@ a:hover {
   }
 
   .right-sidebar {
-    display: none !important;
+    position: fixed !important;
+    top: -9999px !important;
+    left: -9999px !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
   }
 
   .mobile-menu-btn {
