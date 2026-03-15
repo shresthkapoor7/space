@@ -2265,6 +2265,7 @@ a:hover {
   min-width: 0;
   height: 100vh;
   overflow-y: auto;
+  overscroll-behavior: contain;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
