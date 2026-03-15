@@ -2089,6 +2089,7 @@ a:hover {
   height: 100vh;
   overflow-y: auto;
   overflow-x: visible;
+  overscroll-behavior: contain;
   border-right: none;
   background: #0d0c0a;
   z-index: 100;

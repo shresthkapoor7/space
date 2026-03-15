@@ -7,7 +7,7 @@ pinned: true
 
 ## Whoami
 
-Hi, I'm Shresth - CS student at [@nyu](https://www.nyu.edu/), previously a Software Engineer at [@Talent Titan](https://talenttitan.com/), an EdTech startup in India.
+Hi, I'm Shresth - CS student at [@nyu](https://www.nyu.edu/), previously a Software Engineer at [@TalentTitan](https://talenttitan.com/), an EdTech startup in India.
 
 I spend most of my time thinking about math, markets, and machine learning. This site is where I dump those thoughts - notes, experiments, and the occasional half-finished idea.
 
@@ -20,7 +20,7 @@ I spend most of my time thinking about math, markets, and machine learning. This
 
 ## How this works
 
-Everything is written in markdown and rendered with a few extra features I built in. Mostly because vanilla markdown felt boring.
+Everything here is written in Markdown (which helps your AI agent scrape this faster... assuming it can beat the Space Invaders game). I also built in some custom rendering features, mostly because vanilla Markdown felt a little too boring.
 
 **Runnable code** - blocks execute right in the browser:
 
