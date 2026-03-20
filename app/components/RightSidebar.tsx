@@ -249,7 +249,7 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
             </div>
 
             <div className="vinyl-track-info">
-              <div className="vinyl-track-title">{getCurrentTrack()?.title || 'Select a track'}</div>
+              <div className="vinyl-track-title">{getCurrentTrack()?.title || 'Tap to play'}</div>
               <div className="vinyl-track-artist">{getCurrentTrack()?.artist || ''}</div>
             </div>
           </div>

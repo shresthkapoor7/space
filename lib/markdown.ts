@@ -104,6 +104,14 @@ export function getProjectPosts(): Post[] {
   return readMarkdownFiles('project')
 }
 
+export function getAIAgentsPosts(): Post[] {
+  return readMarkdownFiles('aiagents')
+}
+
+export function getHackathonsPosts(): Post[] {
+  return readMarkdownFiles('hackathons')
+}
+
 export function getHomePosts(): Post[] {
   return readMarkdownFiles('home')
 }
@@ -129,7 +137,7 @@ function stripMarkdown(md: string): string {
 }
 
 export function getAllCategoryPosts(): Record<string, PostSummary[]> {
-  const categories = ['home', 'math', 'finance', 'ml', 'strands']
+  const categories = ['home', 'math', 'finance', 'ml', 'strands', 'project', 'aiagents', 'hackathons']
   const result: Record<string, PostSummary[]> = {}
   for (const cat of categories) {
     result[cat] = readMarkdownFiles(cat).map(({ id, date, title, pinned, content }) => ({

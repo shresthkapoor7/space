@@ -9,15 +9,18 @@ export default function Navigation() {
   const navItems = [
     { href: '/home', label: 'home' },
     { href: '/math', label: 'math' },
-    { href: '/finance', label: 'finance' },
+    // { href: '/finance', label: 'finance' },
     { href: '/ml', label: 'ml' },
-    // { href: '/project', label: 'project' },
-    { href: '/strands', label: 'strands' },
+    { href: '/project', label: 'projects' },
+    { href: '/aiagents', label: 'ai agents' },
+    { href: '/hackathons', label: 'hackathons' },
+    // { href: '/strands', label: 'strands' },
   ]
 
   const isActive = (href: string) => {
     if (href === '/home') {
-      return pathname === '/home' || (pathname.startsWith('/') && pathname.split('/').length === 2 && !pathname.startsWith('/math') && !pathname.startsWith('/finance') && !pathname.startsWith('/ml') && !pathname.startsWith('/strands') && !pathname.startsWith('/home'))
+      const knownSections = ['/math', '/finance', '/ml', '/strands', '/project', '/aiagents', '/hackathons']
+      return pathname === '/home' || (pathname.startsWith('/') && pathname.split('/').length === 2 && !knownSections.some(s => pathname.startsWith(s)) && !pathname.startsWith('/home'))
     } else {
       return pathname.startsWith(href)
     }

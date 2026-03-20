@@ -10,6 +10,7 @@ export default function PdfViewer({ link }: PdfViewerProps) {
   const [mounted, setMounted] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [isFullscreen, setIsFullscreen] = useState(false)
+  const [darkMode, setDarkMode] = useState(true)
 
   useEffect(() => {
     setMounted(true)
@@ -80,6 +81,22 @@ export default function PdfViewer({ link }: PdfViewerProps) {
           <span className="pdf-label">PDF</span>
           <div className="pdf-controls">
             <button
+              onClick={() => setDarkMode(d => !d)}
+              className={`pdf-icon-btn${darkMode ? ' pdf-icon-btn-active' : ''}`}
+              title={darkMode ? 'Light mode' : 'Dark mode'}
+            >
+              {darkMode ? (
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="5" stroke="currentColor" strokeWidth="1.5"/>
+                  <path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                </svg>
+              ) : (
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              )}
+            </button>
+            <button
               onClick={toggleFullscreen}
               className="pdf-icon-btn"
               title="Fullscreen"
@@ -103,7 +120,7 @@ export default function PdfViewer({ link }: PdfViewerProps) {
         <div className="pdf-viewer-wrapper">
           <iframe
             src={normalizedLink}
-            className="pdf-iframe"
+            className={`pdf-iframe${darkMode ? ' pdf-dark' : ''}`}
             title="PDF Viewer"
             onError={handleError}
           />
@@ -119,7 +136,7 @@ export default function PdfViewer({ link }: PdfViewerProps) {
             </button>
             <iframe
               src={normalizedLink}
-              className="pdf-iframe-fullscreen"
+              className={`pdf-iframe-fullscreen${darkMode ? ' pdf-dark' : ''}`}
               title="PDF Viewer Fullscreen"
             />
           </div>
@@ -181,6 +198,12 @@ export default function PdfViewer({ link }: PdfViewerProps) {
           color: #ccc;
         }
 
+        .pdf-icon-btn-active {
+          background: rgba(255, 255, 255, 0.08);
+          border-color: #555;
+          color: #eee;
+        }
+
         .pdf-viewer-wrapper {
           width: 100%;
           height: 600px;
@@ -191,6 +214,11 @@ export default function PdfViewer({ link }: PdfViewerProps) {
           width: 100%;
           height: 100%;
           border: none;
+          transition: filter 0.3s ease;
+        }
+
+        .pdf-dark {
+          filter: invert(0.88) hue-rotate(180deg);
         }
 
         .pdf-loading,

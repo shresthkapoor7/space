@@ -21,7 +21,7 @@ interface LayoutContentProps {
 
 export default function LayoutContent({ children, allCategoryPosts }: LayoutContentProps) {
   const pathname = usePathname()
-  const isLandingPage = pathname === '/'
+  const isLandingPage = pathname === '/' || pathname === '/game'
 
   if (isLandingPage) {
     return <main>{children}</main>
@@ -48,7 +48,9 @@ export default function LayoutContent({ children, allCategoryPosts }: LayoutCont
       <div id="main-area-scroll" className="main-area">
         <div className="main-center">
           <div className="mobile-header">
-            <Link href="/home" className="logo">Σpace</Link>
+            <Link href="/game" className="logo logo-game" title="Play Σpace Invaders">
+              <span className="logo-sigma">Σ</span>pace
+            </Link>
           </div>
           {isPostPage && (
             <div className="breadcrumb">

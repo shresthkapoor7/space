@@ -19,6 +19,8 @@ interface CommandPaletteProps {
 type ResultItem =
   | { type: 'post'; label: string; sub: string; snippet: string; href: string }
   | { type: 'track'; label: string; sub: string; trackId: number }
+  | { type: 'game'; label: string; sub: string; href: string }
+  | { type: 'rss'; label: string; sub: string; href: string }
 
 function getSnippet(content: string, query: string, maxLen = 80): string {
   const lower = content.toLowerCase()
@@ -71,7 +73,19 @@ export default function CommandPalette({ allCategoryPosts }: CommandPaletteProps
         trackId: t.id,
       }))
 
-    return [...trackItems, ...postItems]
+    const gameItem: ResultItem = {
+      type: 'game',
+      label: 'Play Σpace Invaders',
+      sub: '~/game',
+      href: '/game',
+    }
+
+    const showGame = !q.trim() || 'space invaders game play'.includes(q.toLowerCase()) || 'σpace'.includes(q.toLowerCase())
+
+    const rssItem: ResultItem = { type: 'rss', label: 'RSS Feed', sub: '/rss.xml', href: '/rss.xml' }
+    const showRss = !q.trim() || 'rss feed subscribe'.includes(q.toLowerCase())
+
+    return [...(showGame ? [gameItem] : []), ...(showRss ? [rssItem] : []), ...trackItems, ...postItems]
   }
 
   const filtered = buildItems(query)
@@ -109,7 +123,9 @@ export default function CommandPalette({ allCategoryPosts }: CommandPaletteProps
   }, [open])
 
   const execute = useCallback((item: ResultItem) => {
-    if (item.type === 'post') {
+    if (item.type === 'rss') {
+      window.open(item.href, '_blank')
+    } else if (item.type === 'post' || item.type === 'game') {
       router.push(item.href)
     } else {
       window.dispatchEvent(new CustomEvent('cmd-play-track', { detail: { trackId: item.trackId } }))
@@ -141,7 +157,7 @@ export default function CommandPalette({ allCategoryPosts }: CommandPaletteProps
           <input
             ref={inputRef}
             className="cmd-input"
-            placeholder="Search posts or play a track..."
+            placeholder="Search posts, play a track, or launch game..."
             value={query}
             onChange={e => setQuery(e.target.value)}
           />
@@ -153,7 +169,7 @@ export default function CommandPalette({ allCategoryPosts }: CommandPaletteProps
           ) : (
             filtered.map((item, i) => (
               <button
-                key={item.type === 'post' ? item.href : `track-${item.trackId}`}
+                key={item.type === 'track' ? `track-${item.trackId}` : item.href}
                 className={`cmd-item${i === selected ? ' selected' : ''}`}
                 onClick={() => execute(item)}
                 onMouseEnter={() => setSelected(i)}
@@ -163,6 +179,18 @@ export default function CommandPalette({ allCategoryPosts }: CommandPaletteProps
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                       <polyline points="14 2 14 8 20 8" />
+                    </svg>
+                  ) : item.type === 'game' ? (
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="2" y="6" width="20" height="12" rx="2" />
+                      <path d="M6 12h4m-2-2v4" />
+                      <circle cx="16" cy="11" r="1" fill="currentColor" stroke="none" />
+                      <circle cx="18" cy="13" r="1" fill="currentColor" stroke="none" />
+                    </svg>
+                  ) : item.type === 'rss' ? (
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                      <circle cx="6.18" cy="17.82" r="2.18"/>
+                      <path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"/>
                     </svg>
                   ) : (
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">

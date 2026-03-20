@@ -7,23 +7,21 @@ pinned: true
 
 ## Whoami
 
-Hi, I'm Shresth - CS student at [@nyu](https://www.nyu.edu/), previously a Software Engineer at [@TalentTitan](https://talenttitan.com/), an EdTech startup in India.
-
-I spend most of my time thinking about math, markets, and machine learning. This site is where I dump those thoughts - notes, experiments, and the occasional half-finished idea.
+Hi, I'm Shresth - CS student at [@nyu](https://www.nyu.edu/), previously a Software Engineer at [@TalentTitan](https://talenttitan.com/), an EdTech startup in India. Currently, my focus is on building agentic AI systems. Welcome to Σpace where I document what I learn.
 
 ## What's here
 
-- **[Math](/math)** - Notes from my ongoing battle with linear algebra, calculus, and whatever else breaks my brain.
-- **[Finance](/finance)** - Thoughts on quant finance, trading models, and related rabbit holes.
+- **[AI Agents](/aiagents)** - Tools I've used, systems I've built, and what I actually learned.
+- **[Projects](/projects)** - DIA, Strands, HiveMind, and everything else I've shipped.
+- **[Hackathons](/hackathons)** - Builds from 24-36hr sprints.
 - **[ML](/ml)** - Experiments and reflections on computer vision, machine learning, and applied AI.
-- **[Home](/home)** - Everything else. Hackathon builds, side projects, random stuff.
+- **[Math](/math)** - Notes from my ongoing battle with linear algebra.
 
 ## How this works
 
 Everything here is written in Markdown (which helps your AI agent scrape this faster... assuming it can beat the Space Invaders game). I also built in some custom rendering features, mostly because vanilla Markdown felt a little too boring.
 
 **Runnable code** - blocks execute right in the browser:
-
 ```python
 import random
 print(f"random number: {random.randint(1, 100)}")
@@ -48,7 +46,7 @@ $end:math:display$
 
 **Tweets** - embedded with `<Tweet id="" />`:
 
-<Tweet id="1945713783562711165" />
+<Tweet id="2033264246755053926" />
 
 **PDFs** - embedded, fullscreen-able, downloadable:
 

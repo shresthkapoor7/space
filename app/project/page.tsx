@@ -7,7 +7,7 @@ export default function Project() {
   return (
     <div>
       <DynamicTitle section="project" />
-      <h1 className="page-title">project stuff</h1>
+      <h1 className="page-title">Things I've built</h1>
       <PostList posts={projectPosts} category="project" />
     </div>
   )

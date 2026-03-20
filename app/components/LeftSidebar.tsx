@@ -17,10 +17,12 @@ interface LeftSidebarProps {
 
 const categoryLabels: Record<string, string> = {
   home: 'home',
-  math: 'math',
-  finance: 'finance',
+  aiagents: 'aiagents',
+  project: 'projects',
+  hackathons: 'hackathons',
   ml: 'ml',
-  strands: 'strands',
+  math: 'math',
+  // strands: 'strands',
 }
 
 export default function LeftSidebar({ allCategoryPosts }: LeftSidebarProps) {
@@ -86,7 +88,17 @@ export default function LeftSidebar({ allCategoryPosts }: LeftSidebarProps) {
 
       <aside className={`left-sidebar${isMobile ? (isMobileOpen ? ' left-sidebar-mobile-open' : ' left-sidebar-mobile-closed') : ''}`}>
         <div className="left-sidebar-header">
-          <Link href="/home" className="logo">Σpace</Link>
+          <div className="logo-row">
+            <Link href="/game" className="logo logo-game" title="Play Σpace Invaders">
+              <span className="logo-sigma">Σ</span>pace
+            </Link>
+            <a href="/rss.xml" className="rss-link" title="RSS Feed" target="_blank" rel="noopener noreferrer">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="6.18" cy="17.82" r="2.18"/>
+                <path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"/>
+              </svg>
+            </a>
+          </div>
           <button
             className="sidebar-search-hint"
             onClick={() => window.dispatchEvent(new CustomEvent('cmd-open'))}

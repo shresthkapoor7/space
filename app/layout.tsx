@@ -27,6 +27,11 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
     title: 'Shresth Kapoor',
     description: 'notes dump',
+    alternates: {
+        types: {
+            'application/rss+xml': 'https://shresth.space/rss.xml',
+        },
+    },
 }
 
 export default function RootLayout({

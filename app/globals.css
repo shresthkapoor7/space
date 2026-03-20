@@ -442,6 +442,50 @@ body .post-container {
   margin-bottom: 16px;
 }
 
+.logo-game {
+  position: relative;
+  transition: letter-spacing 0.2s ease;
+}
+
+.logo-game .logo-sigma {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.logo-game:hover {
+  letter-spacing: 0.04em;
+}
+
+.logo-game:hover .logo-sigma {
+  transform: translateY(-2px) rotate(-10deg) scale(1.15);
+  animation: sigma-pulse 0.6s ease infinite alternate;
+}
+
+.logo-game::after {
+  content: ' ▸';
+  font-size: 0.7rem;
+  opacity: 0;
+  color: #FF6B35;
+  vertical-align: middle;
+  transition: opacity 0.2s ease;
+  letter-spacing: 0;
+}
+
+.logo-game:hover::after {
+  opacity: 0.6;
+  animation: blink-caret 0.8s step-end infinite;
+}
+
+@keyframes sigma-pulse {
+  from { text-shadow: 0 0 6px #FF6B35, 0 0 12px #FF4500; }
+  to   { text-shadow: 0 0 14px #FF8C55, 0 0 28px #FF6B35; }
+}
+
+@keyframes blink-caret {
+  0%, 100% { opacity: 0.6; }
+  50%       { opacity: 0; }
+}
+
 nav {
   display: flex;
   gap: 20px;
@@ -2098,6 +2142,29 @@ a:hover {
 .left-sidebar-header {
   padding: 20px 16px 14px;
   border-bottom: 1px solid #1a1814;
+}
+
+.logo-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.logo-row .logo {
+  margin-bottom: 0;
+}
+
+.rss-link {
+  color: #444;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+  margin-top: 2px;
+}
+
+.rss-link:hover {
+  color: #FF6B35;
 }
 
 .sidebar-search-hint {

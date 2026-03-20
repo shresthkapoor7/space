@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { useRouter } from 'next/navigation'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
@@ -115,6 +116,7 @@ function processPdfs(content: string): { processedContent: string; pdfElements: 
 }
 
 export default function BlogPost({ post, currentPage = 'home' }: BlogPostProps) {
+  const router = useRouter()
   const mathProcessedContent = preprocessMath(post.content)
   const { processedContent: tweetProcessedContent, tweetElements } = processTweets(mathProcessedContent)
   const { processedContent: glossaryProcessedContent, glossaryElements } = processGlossary(tweetProcessedContent)
@@ -137,6 +139,21 @@ export default function BlogPost({ post, currentPage = 'home' }: BlogPostProps) 
           remarkPlugins={[remarkGfm, remarkMath]}
           rehypePlugins={[rehypeRaw, rehypeKatex]}
           components={{
+            a({ href, children, ...props }: any) {
+              const isInternal = href && (href.startsWith('/') || href.startsWith('#'))
+              if (isInternal) {
+                return (
+                  <a
+                    href={href}
+                    onClick={(e) => { e.preventDefault(); router.push(href) }}
+                    {...props}
+                  >
+                    {children}
+                  </a>
+                )
+              }
+              return <a href={href} target="_blank" rel="noopener noreferrer" {...props}>{children}</a>
+            },
             code({ className, children, ...props }: any) {
               const match = /language-(\w+)/.exec(className || '')
               const language = match ? match[1] : ''
