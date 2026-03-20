@@ -1,5 +1,5 @@
 ---
-id: 3
+id: 2
 date: '2025-07-29'
 title: "Writing my own bash scripts to avoid using notion"
 pinned: false

@@ -1,5 +1,5 @@
 ---
-id: 7
+id: 1
 date: '2025-08-10'
 title: "About Me and the Website"
 pinned: true
@@ -12,14 +12,14 @@ Hi, I'm Shresth - CS student at [@nyu](https://www.nyu.edu/), previously a Softw
 ## What's here
 
 - **[AI Agents](/aiagents)** - Tools I've used, systems I've built, and what I actually learned.
-- **[Projects](/projects)** - DIA, Strands, HiveMind, and everything else I've shipped.
+- **[Projects](/project)** - DIA, Strands, HiveMind, and everything else I've shipped.
 - **[Hackathons](/hackathons)** - Builds from 24-36hr sprints.
 - **[ML](/ml)** - Experiments and reflections on computer vision, machine learning, and applied AI.
 - **[Math](/math)** - Notes from my ongoing battle with linear algebra.
 
 ## How this works
 
-Everything here is written in Markdown (which helps your AI agent scrape this faster... assuming it can beat the Space Invaders game). I also built in some custom rendering features, mostly because vanilla Markdown felt a little too boring.
+Everything here is written in Markdown (which helps your AI agent scrape this faster). I also built in some custom rendering features, mostly because vanilla Markdown felt a little too boring.
 
 **Runnable code** - blocks execute right in the browser:
 ```python

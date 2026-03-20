@@ -1,9 +1,9 @@
 ---
 id: 3
-date: '2026-02-27'
+date: '2026-03-20'
 title: "Experience with Google's music generation tool - Lyria 3"
 pinned: False
 ---
 
 
-adsf
+Working on it
