@@ -14,12 +14,11 @@ export default function Navigation() {
     { href: '/project', label: 'projects' },
     { href: '/aiagents', label: 'ai agents' },
     { href: '/hackathons', label: 'hackathons' },
-    // { href: '/strands', label: 'strands' },
   ]
 
   const isActive = (href: string) => {
     if (href === '/home') {
-      const knownSections = ['/math', '/finance', '/ml', '/strands', '/project', '/aiagents', '/hackathons']
+      const knownSections = ['/math', '/finance', '/ml', '/project', '/aiagents', '/hackathons']
       return pathname === '/home' || (pathname.startsWith('/') && pathname.split('/').length === 2 && !knownSections.some(s => pathname.startsWith(s)) && !pathname.startsWith('/home'))
     } else {
       return pathname.startsWith(href)

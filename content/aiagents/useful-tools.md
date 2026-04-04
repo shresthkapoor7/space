@@ -1,8 +1,8 @@
 ---
-id: 2
+id: 1
 date: '2026-03-16'
 title: "Useful AI tools - locus, lyria, exa, browser use"
-pinned: true
+pinned: false
 ---
 
 The space is moving fast with new tools shipping every day and it's genuinely hard to keep up. These are a few I've had the chance to actually test, and they're worth knowing about.
@@ -13,7 +13,7 @@ The space is moving fast with new tools shipping every day and it's genuinely ha
 
 <div style="display: flex; justify-content: center; margin-top: 1rem;">
   <img
-    src="https://paywithlocus.com/assets/hero-right-dark-1IpLhdkJ.svg"
+    src="https://pbs.twimg.com/media/HDyaXGuWoAAEqoE.jpg"
     alt="paywithlocus"
   />
 </div>
@@ -94,5 +94,118 @@ The `density`, `brightness`, and `guidance` values are hand-tuned per winning wo
 
 ## Exa - Search API for your AI
 
-Back in 2025 (not that long ago but for dramatic effect) I was working on [strands](/project/4) and I wanted to add search functionality to it
-so ... (testing rss feed will come back to this)
+<div style="display: flex; justify-content: center; margin-top: 1rem;">
+  <img
+    src="https://exa.imgix.net/og-image.png/"
+    alt="exaai"
+  />
+</div>
+
+Back in 2025 I was adding search to a project and reached for the obvious choice: Brave Search + Gemini. It worked, but barely with slow responses, mediocre relevance, and enough friction that I kept second-guessing whether search was even worth including.
+
+Then I switched to [Exa](https://exa.ai/). The latency difference alone was hard to ignore: 178ms versus 559ms on Brave. Beyond speed, the result quality was noticeably better more relevant hits, less noise. They also published a [search evals breakdown for coding agents](https://exa.ai/blog/webcode) that I've been meaning to put to use in [dowsing](https://github.com/shresthkapoor7/dowsing/).
+
+### How I used it in DIA
+
+[DIA](/project/1) is a company research agent, and Exa became the first tool it reaches for before anything else. The integration lives in `backend/services/exa.py` and calls the Exa `/search` API across four distinct modes depending on what the agent needs:
+
+| search_type | Behavior |
+|---|---|
+| `company_overview` | General semantic search, `useAutoprompt: false` |
+| `news` | Neural search, filtered to last 90 days |
+| `funding` | Appends "funding investment round" to the query |
+| `competitors` | Appends "competitors alternatives" to the query |
+
+Each call returns up to N results with up to 2000 chars of body text and 3 highlight sentences per result.
+
+The agent is prompted (`prompts.py:30`) to always start with `exa_search(company_overview)` as a baseline, then run all four modes for a thorough report. If Exa comes back thin, it escalates to `abstract_verify_company` or `browser_use_scrape`. Every result also gets chunked and stored in Supabase/pgvector via `loop.py:38` for retrieval in future sessions. The tool description includes `Cost: $0.007/search` so Claude can factor that in when deciding how many searches to run.
+
+### Links
+
+- [Exa](https://exa.ai/)
+- [Docs](https://docs.exa.ai/)
+- [Search evals for coding agents](https://exa.ai/blog/webcode)
+
+
+
+## Browser Use - The Way AI Uses the Web
+
+<div style="display: flex; justify-content: center; margin-top: 1rem;">
+  <img
+    src="https://browser-use.com/og/browser-use-og.png"
+    alt="browser-use"
+  />
+</div>
+
+[Browser Use](https://cloud.browser-use.com/) is genuinely impressive and genuinely expensive. It's a web navigator that spins up a real browser, uses an LLM to navigate pages, and returns structured findings via their cloud API. The idea is solid. My last call costed \$0.61. They give you ~$10 in credits to start, but at that rate it adds up fast.
+
+### How I used it in DIA
+
+In [DIA](/project/1), Browser Use is the last resort — it only fires when Exa comes back thin, or when a company's website looks important but didn't get indexed well. The integration in `backend/services/browser_use.py` works in two phases:
+
+1. **Create task** — POSTs a natural-language instruction: `"Visit {url} and {objective}. Extract key information and return it as structured text."`
+2. **Poll for result** — hits `/tasks/{task_id}/status` every 2 seconds, up to 30 times (~60s timeout), then returns the output once `status == "finished"`
+
+To keep the agent from reaching for it too readily, the tool description explicitly says `EXPENSIVE ($0.10/task) — Do NOT use unless you have a clear reason. Takes 30–60 seconds.` and `prompts.py:18` lists the only two valid triggers: Exa data is thin/suspicious, or the company website looks important but Exa didn't capture it well. It only runs after `exa_search` and optionally `abstract_verify_company` have already been tried.
+
+Unlike Exa's fixed rate, Browser Use returns the actual cost in the response so the agent loop reads `tool_result.get("cost")` and passes the real value to the cost accumulator. Scraped content also gets chunked and stored in pgvector, so future sessions on the same company can skip the $0.10 call entirely.
+
+### Under the hood
+
+Browser Use is open source, and the architecture is worth understanding. It runs Chrome via CDP and builds a structured representation of each page before sending anything to the LLM:
+
+```
+browser_use/
+├── agent/
+│   ├── service.py              ← main agent loop (step, run, multi_act)
+│   ├── views.py                ← AgentOutput, ActionModel, AgentHistory pydantic models
+│   ├── message_manager/
+│   │   └── service.py          ← builds messages sent to LLM
+│   ├── prompts.py              ← AgentMessagePrompt, system prompt loading
+│   └── system_prompts/
+│       └── system_prompt.md    ← LLM instructions (what DOM format looks like, rules)
+├── browser/
+│   └── session.py              ← CDP session management, BrowserSession, watchdogs
+├── dom/
+│   ├── service.py              ← DOM extraction, EnhancedDOMTree building
+│   └── serializer/
+│       └── serializer.py       ← DOM → indexed text serialization
+└── tools/
+    ├── service.py              ← action registration + execution handlers
+    └── registry/
+        └── views.py            ← ActionModel base class
+```
+
+The DOM pipeline looks like this:
+
+```
+CDP: DOMSnapshot.captureSnapshot()   → raw DOM tree + computed bounds
+CDP: Accessibility.getFullAXTree()   → semantic roles, names, states
+↓
+Merge into EnhancedDOMTreeNode[]
+  - bounding box (is element in viewport?)
+  - ax_node (role="button", name="Submit", disabled=false)
+  - shadow DOM traversal (open + closed)
+  - iframe content (configurable depth)
+  - paint order (filter obscured elements)
+↓
+Prune non-interactive nodes
+↓
+Assign [index] to interactive nodes → selector_map
+↓
+Serialize to text → sent to LLM
+```
+
+Even with all that, two problems remain. First, it's slow a minute per call is common. Second, and more fundamentally: what about authenticated sites? LinkedIn, Jira, X Browser Use can't touch those (I think they have a way you can give access but I wouldn't with sensitive stuff) because it's running in an isolated sandbox with no session state.
+
+### Why I built Dowsing
+
+Those two problems are what [dowsing](https://github.com/shresthkapoor7/dowsing) is meant to address. It runs locally inside your actual Chrome browser, so authenticated sites work by default. It uses ONNX for local embeddings, is written in Rust, and makes zero LLM calls extraction is done entirely with cosine similarity, which means results come back in under a second.
+
+The tradeoff is that it's intelligent but not smart. On LinkedIn the page text is sparse enough that embeddings don't have much to work with. And some cases need custom handling PDFs have no DOM at all, so the usual approach doesn't apply. Still experimental, but the direction feels right.
+
+### Links
+
+- [Browser Use Cloud](https://cloud.browser-use.com/)
+- [GitHub (open source)](https://github.com/browser-use/browser-use)
+- [Dowsing — the local alternative I am building](https://github.com/shresthkapoor7/dowsing)

@@ -22,7 +22,6 @@ const categoryLabels: Record<string, string> = {
   hackathons: 'hackathons',
   ml: 'ml',
   math: 'math',
-  // strands: 'strands',
 }
 
 export default function LeftSidebar({ allCategoryPosts }: LeftSidebarProps) {
@@ -112,7 +111,7 @@ export default function LeftSidebar({ allCategoryPosts }: LeftSidebarProps) {
           </button>
         </div>
 
-        <div className="left-sidebar-section-label">Posts</div>
+        <div className="left-sidebar-section-label">Topics</div>
 
         <nav className="left-sidebar-nav">
           {categories.map(cat => {

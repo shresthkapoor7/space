@@ -2,7 +2,7 @@
 id: 1
 date: '2025-08-10'
 title: "About Me and the Website"
-pinned: true
+pinned: false
 ---
 
 ## Whoami
@@ -12,7 +12,7 @@ Hi, I'm Shresth - CS student at [@nyu](https://www.nyu.edu/), previously a Softw
 ## What's here
 
 - **[AI Agents](/aiagents)** - Tools I've used, systems I've built, and what I actually learned.
-- **[Projects](/project)** - DIA, Strands, HiveMind, and everything else I've shipped.
+- **[Projects](/project)** - DIA, Hive, and everything else I am building.
 - **[Hackathons](/hackathons)** - Builds from 24-36hr sprints.
 - **[ML](/ml)** - Experiments and reflections on computer vision, machine learning, and applied AI.
 - **[Math](/math)** - Notes from my ongoing battle with linear algebra.
