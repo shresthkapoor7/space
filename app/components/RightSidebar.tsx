@@ -35,6 +35,35 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
   const [youtubePlayer, setYoutubePlayer] = useState<any>(null)
   const playNextTrackRef = useRef<() => void>()
 
+  const vinylRef = useRef<HTMLButtonElement>(null)
+  const rotationRef = useRef(0)
+  const rafRef = useRef<number | null>(null)
+  const lastTimeRef = useRef<number | null>(null)
+  const DEG_PER_MS = 360 / 4000
+
+  const startSpinning = useCallback(() => {
+    if (rafRef.current) return
+    const animate = (timestamp: number) => {
+      if (lastTimeRef.current !== null) {
+        rotationRef.current = (rotationRef.current + (timestamp - lastTimeRef.current) * DEG_PER_MS) % 360
+      }
+      lastTimeRef.current = timestamp
+      if (vinylRef.current) vinylRef.current.style.transform = `rotate(${rotationRef.current}deg)`
+      rafRef.current = requestAnimationFrame(animate)
+    }
+    rafRef.current = requestAnimationFrame(animate)
+  }, [])
+
+  const stopSpinning = useCallback(() => {
+    if (rafRef.current) { cancelAnimationFrame(rafRef.current); rafRef.current = null }
+    lastTimeRef.current = null
+  }, [])
+
+  useEffect(() => {
+    if (!isPaused && currentlyPlaying) startSpinning()
+    else stopSpinning()
+  }, [isPaused, currentlyPlaying])
+
   // Scan for headings on any page that has .post-content
   useEffect(() => {
     const scan = () => {
@@ -212,7 +241,8 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
               </button>
 
               <button
-                className={`vinyl-disk${currentlyPlaying && !isPaused ? ' spinning' : ''}`}
+                ref={vinylRef}
+                className="vinyl-disk"
                 onClick={() => {
                   if (!youtubePlayer) return
                   if (currentlyPlaying) {
