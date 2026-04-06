@@ -2511,6 +2511,7 @@ a:hover {
 .right-track-info {
   flex: 1;
   min-width: 0;
+  display: none;
 }
 
 .right-track-artist {
@@ -2527,6 +2528,10 @@ a:hover {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.right-track-item.playing .right-track-info {
+  display: block;
 }
 
 .right-track-item.playing .right-track-title {
@@ -2891,18 +2896,27 @@ a:hover {
 
 /* ===== VINYL PLAYER ===== */
 .vinyl-player {
-  padding: 12px 16px 8px;
+  padding: 8px 16px 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+}
+
+.vinyl-plinth {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  background: #0e0d0b;
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05), inset 0 -1px 0 rgba(0,0,0,0.5);
 }
 
 .vinyl-controls-row {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 28px;
 }
 
 .vinyl-btn {
@@ -2927,17 +2941,89 @@ a:hover {
 
 /* The disk itself */
 .vinyl-disk {
-  position: relative;
-  width: 100px;
-  height: 100px;
+  position: absolute;
+  left: 19px;
+  top: 19px;
+  width: 162px;
+  height: 162px;
   border-radius: 50%;
   border: none;
   padding: 0;
   cursor: pointer;
   overflow: hidden;
-  background: #111;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-  flex-shrink: 0;
+  background:
+    repeating-radial-gradient(
+      circle at center,
+      #181818 0px, #181818 2px,
+      #111 2px, #111 5px
+    );
+  box-shadow: 0 4px 24px rgba(0,0,0,0.8);
+}
+
+/* Glow ring — shown when playing */
+.vinyl-glow-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at center,
+    transparent 63%,
+    rgba(255, 107, 53, 0.18) 66%,
+    rgba(255, 107, 53, 0.32) 68%,
+    rgba(255, 107, 53, 0.14) 70%,
+    transparent 72%
+  );
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.vinyl-glow-ring.active {
+  opacity: 1;
+}
+
+/* Album art — small circle in center */
+.vinyl-art-wrap {
+  position: absolute;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  overflow: hidden;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  background: #0a0a0a;
+}
+
+/* Tonearm */
+.tonearm-pivot-dot {
+  position: absolute;
+  right: 8px;
+  top: 10px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #c8c8c8, #444);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.8), 0 0 0 2px #1e1e1e;
+  z-index: 3;
+}
+
+.tonearm-arm {
+  position: absolute;
+  right: 5px;
+  top: 10px;
+  width: 16px;
+  height: 92px;
+  transform-origin: 8px 4px;
+  transform: rotate(-12deg);
+  transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 2;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.7));
+}
+
+.tonearm-arm.on-record {
+  transform: rotate(28deg);
 }
 
 @keyframes vinyl-spin {
@@ -2951,21 +3037,12 @@ a:hover {
 
 .vinyl-art {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 135%;
+  height: 135%;
   object-fit: cover;
-  border-radius: 50%;
-}
-
-.vinyl-art-empty {
-  background: repeating-radial-gradient(
-    circle at center,
-    #1a1a1a 0px,
-    #1a1a1a 6px,
-    #222 6px,
-    #222 12px
-  );
 }
 
 /* Center hole */
@@ -2974,12 +3051,13 @@ a:hover {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 13px;
-  height: 13px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: #0d0c0a;
-  box-shadow: 0 0 0 2px #333;
+  box-shadow: 0 0 0 2px #2a2a2a;
   pointer-events: none;
+  z-index: 3;
 }
 
 .vinyl-track-info {

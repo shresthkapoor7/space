@@ -40,6 +40,8 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
   const rafRef = useRef<number | null>(null)
   const lastTimeRef = useRef<number | null>(null)
   const DEG_PER_MS = 360 / 4000
+  const audioCtxRef = useRef<AudioContext | null>(null)
+  const prevIsPausedRef = useRef(true)
 
   const startSpinning = useCallback(() => {
     if (rafRef.current) return
@@ -59,9 +61,56 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
     lastTimeRef.current = null
   }, [])
 
+  const getAudioCtx = () => {
+    if (!audioCtxRef.current) audioCtxRef.current = new AudioContext()
+    return audioCtxRef.current
+  }
+
+  const playNeedleDrop = () => {
+    try {
+      const ctx = getAudioCtx()
+      const buf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 0.12), ctx.sampleRate)
+      const data = buf.getChannelData(0)
+      for (let i = 0; i < data.length; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.006))
+      }
+      const src = ctx.createBufferSource()
+      src.buffer = buf
+      const gain = ctx.createGain()
+      gain.gain.value = 0.28
+      src.connect(gain)
+      gain.connect(ctx.destination)
+      src.start()
+    } catch (_) {}
+  }
+
+  const playNeedleLift = () => {
+    try {
+      const ctx = getAudioCtx()
+      const buf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 0.07), ctx.sampleRate)
+      const data = buf.getChannelData(0)
+      for (let i = 0; i < data.length; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.014))
+      }
+      const src = ctx.createBufferSource()
+      src.buffer = buf
+      const gain = ctx.createGain()
+      gain.gain.value = 0.14
+      src.connect(gain)
+      gain.connect(ctx.destination)
+      src.start()
+    } catch (_) {}
+  }
+
   useEffect(() => {
-    if (!isPaused && currentlyPlaying) startSpinning()
-    else stopSpinning()
+    if (!isPaused && currentlyPlaying) {
+      if (prevIsPausedRef.current) playNeedleDrop()
+      startSpinning()
+    } else {
+      if (!prevIsPausedRef.current) playNeedleLift()
+      stopSpinning()
+    }
+    prevIsPausedRef.current = isPaused
   }, [isPaused, currentlyPlaying])
 
   // Scan for headings on any page that has .post-content
@@ -148,15 +197,28 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
 
   useEffect(() => { playNextTrackRef.current = playNextTrack }, [currentlyPlaying, youtubePlayer])
 
-  // Listen for command palette track play events
+  // Listen for command palette music control events
   useEffect(() => {
     const handler = (e: Event) => {
-      const { trackId } = (e as CustomEvent).detail
-      const track = tracks.find(t => t.id === trackId)
-      if (track) handleTrackPlay(track)
+      const { action } = (e as CustomEvent).detail
+      if (!youtubePlayer) return
+      if (action === 'playpause') {
+        if (!currentlyPlaying) {
+          const first = tracks.find(t => t.youtubeUrl)
+          if (first?.youtubeUrl) {
+            const videoId = extractYouTubeId(first.youtubeUrl)
+            if (videoId) { youtubePlayer.loadVideoById(videoId); setCurrentlyPlaying(first.id); setIsPaused(false) }
+          }
+        } else if (isPaused) { youtubePlayer.playVideo(); setIsPaused(false) }
+        else { youtubePlayer.pauseVideo(); setIsPaused(true) }
+      } else if (action === 'next') {
+        playNextTrack()
+      } else if (action === 'prev') {
+        playPreviousTrack()
+      }
     }
-    window.addEventListener('cmd-play-track', handler)
-    return () => window.removeEventListener('cmd-play-track', handler)
+    window.addEventListener('cmd-music', handler)
+    return () => window.removeEventListener('cmd-music', handler)
   }, [youtubePlayer, currentlyPlaying, isPaused])
 
   const extractYouTubeId = (url: string) => {
@@ -235,11 +297,7 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
 
           {/* Vinyl disk player */}
           <div className="vinyl-player">
-            <div className="vinyl-controls-row">
-              <button onClick={playPreviousTrack} disabled={!currentlyPlaying} className="vinyl-btn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" /></svg>
-              </button>
-
+            <div className="vinyl-plinth">
               <button
                 ref={vinylRef}
                 className="vinyl-disk"
@@ -257,22 +315,41 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
                   }
                 }}
               >
-                {(() => {
-                  const track = getCurrentTrack()
-                  const videoId = track?.youtubeUrl ? extractYouTubeId(track.youtubeUrl) : null
-                  return videoId ? (
-                    <img
-                      src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`}
-                      alt={track?.title}
-                      className="vinyl-art"
-                    />
-                  ) : (
-                    <div className="vinyl-art vinyl-art-empty" />
-                  )
-                })()}
+                <div className={`vinyl-glow-ring${!isPaused && currentlyPlaying ? ' active' : ''}`} />
+                <div className="vinyl-art-wrap">
+                  {(() => {
+                    const track = getCurrentTrack()
+                    const videoId = track?.youtubeUrl ? extractYouTubeId(track.youtubeUrl) : null
+                    return videoId
+                      ? <img src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`} alt={track?.title} className="vinyl-art" />
+                      : null
+                  })()}
+                </div>
                 <div className="vinyl-hole" />
               </button>
 
+              {/* Tonearm */}
+              <div className="tonearm-pivot-dot" />
+              <div className={`tonearm-arm${!isPaused && currentlyPlaying ? ' on-record' : ''}`}>
+                <svg width="16" height="92" viewBox="0 0 16 92" fill="none">
+                  <defs>
+                    <linearGradient id="armGrad" x1="0" y1="0" x2="1" y2="0">
+                      <stop offset="0%" stopColor="#444"/>
+                      <stop offset="40%" stopColor="#aaa"/>
+                      <stop offset="100%" stopColor="#555"/>
+                    </linearGradient>
+                  </defs>
+                  <path d="M 6,2 L 6.5,80 L 9.5,80 L 10,2 Z" fill="url(#armGrad)"/>
+                  <path d="M 6.5,78 L 3,88 L 7,90 L 9.5,80 Z" fill="#888"/>
+                  <circle cx="5" cy="89" r="2.5" fill="#bbb"/>
+                </svg>
+              </div>
+            </div>
+
+            <div className="vinyl-controls-row">
+              <button onClick={playPreviousTrack} disabled={!currentlyPlaying} className="vinyl-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" /></svg>
+              </button>
               <button onClick={playNextTrack} disabled={!currentlyPlaying} className="vinyl-btn">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 18h2V6h-2zM6 6v12l8.5-6z" /></svg>
               </button>
@@ -284,29 +361,6 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
             </div>
           </div>
 
-          {/* Track list */}
-          <div className="right-track-list">
-            {tracks.map(track => (
-              <button
-                key={track.id}
-                className={`right-track-item${currentlyPlaying === track.id ? ' playing' : ''}`}
-                onClick={() => handleTrackPlay(track)}
-                disabled={!track.youtubeUrl}
-              >
-                <div className="right-track-info">
-                  <div className="right-track-artist">{track.artist}</div>
-                  <div className="right-track-title">{track.title}</div>
-                </div>
-                <div className="right-track-icon">
-                  {currentlyPlaying === track.id && !isPaused ? (
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4h4v16H6zM14 4h4v16h-4z" /></svg>
-                  ) : (
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
-                  )}
-                </div>
-              </button>
-            ))}
-          </div>
         </div>
 
         {/* GitHub Activity */}

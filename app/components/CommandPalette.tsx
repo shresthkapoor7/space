@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { sampleTracks } from '../../lib/tracks'
 
 interface PostSummary {
   id: number
@@ -18,7 +17,7 @@ interface CommandPaletteProps {
 
 type ResultItem =
   | { type: 'post'; label: string; sub: string; snippet: string; href: string }
-  | { type: 'track'; label: string; sub: string; trackId: number }
+  | { type: 'music'; label: string; sub: string; action: 'playpause' | 'next' | 'prev' }
   | { type: 'game'; label: string; sub: string; href: string }
   | { type: 'rss'; label: string; sub: string; href: string }
 
@@ -60,18 +59,15 @@ export default function CommandPalette({ allCategoryPosts }: CommandPaletteProps
         }))
     )
 
-    const trackItems: ResultItem[] = sampleTracks
-      .filter(t => {
-        if (!q.trim()) return true
-        const ql = q.toLowerCase()
-        return t.title.toLowerCase().includes(ql) || t.artist.toLowerCase().includes(ql) || 'play'.includes(ql)
-      })
-      .map(t => ({
-        type: 'track' as const,
-        label: `Play: ${t.title}`,
-        sub: t.artist,
-        trackId: t.id,
-      }))
+    const musicControls: ResultItem[] = [
+      { type: 'music', label: 'Play / Pause', sub: 'music', action: 'playpause' },
+      { type: 'music', label: 'Next Track',   sub: 'music', action: 'next' },
+      { type: 'music', label: 'Prev Track',   sub: 'music', action: 'prev' },
+    ].filter(() => {
+      if (!q.trim()) return true
+      const ql = q.toLowerCase()
+      return 'music play pause next prev track'.includes(ql)
+    }) as ResultItem[]
 
     const gameItem: ResultItem = {
       type: 'game',
@@ -85,7 +81,7 @@ export default function CommandPalette({ allCategoryPosts }: CommandPaletteProps
     const rssItem: ResultItem = { type: 'rss', label: 'RSS Feed', sub: '/rss.xml', href: '/rss.xml' }
     const showRss = !q.trim() || 'rss feed subscribe'.includes(q.toLowerCase())
 
-    return [...(showGame ? [gameItem] : []), ...(showRss ? [rssItem] : []), ...trackItems, ...postItems]
+    return [...(showGame ? [gameItem] : []), ...musicControls, ...(showRss ? [rssItem] : []), ...postItems]
   }
 
   const filtered = buildItems(query)
@@ -127,8 +123,8 @@ export default function CommandPalette({ allCategoryPosts }: CommandPaletteProps
       window.open(item.href, '_blank')
     } else if (item.type === 'post' || item.type === 'game') {
       router.push(item.href)
-    } else {
-      window.dispatchEvent(new CustomEvent('cmd-play-track', { detail: { trackId: item.trackId } }))
+    } else if (item.type === 'music') {
+      window.dispatchEvent(new CustomEvent('cmd-music', { detail: { action: item.action } }))
     }
     setOpen(false)
   }, [router])
@@ -169,7 +165,7 @@ export default function CommandPalette({ allCategoryPosts }: CommandPaletteProps
           ) : (
             filtered.map((item, i) => (
               <button
-                key={item.type === 'track' ? `track-${item.trackId}` : item.href}
+                key={item.type === 'music' ? `music-${item.action}` : item.href}
                 className={`cmd-item${i === selected ? ' selected' : ''}`}
                 onClick={() => execute(item)}
                 onMouseEnter={() => setSelected(i)}
@@ -192,10 +188,12 @@ export default function CommandPalette({ allCategoryPosts }: CommandPaletteProps
                       <circle cx="6.18" cy="17.82" r="2.18"/>
                       <path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"/>
                     </svg>
+                  ) : item.type === 'music' && item.action === 'playpause' ? (
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                  ) : item.type === 'music' && item.action === 'next' ? (
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M16 18h2V6h-2zM6 6v12l8.5-6z"/></svg>
                   ) : (
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
                   )}
                 </span>
                 <span className="cmd-item-body">
