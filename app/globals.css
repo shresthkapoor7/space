@@ -3599,7 +3599,8 @@ nav a.active {
 .tui-chrome {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  position: fixed;
+  inset: 0;
   overflow: hidden;
 }
 
