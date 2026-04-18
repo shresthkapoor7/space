@@ -13,7 +13,7 @@ body {
 body {
   background-color: #0d0c0a;
   color: #d4d4d4;
-  font-family: var(--font-inter), 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-jetbrains), 'JetBrains Mono', monospace;
   line-height: 1.65;
   font-size: 16px;
 }
@@ -106,8 +106,13 @@ body .post-container {
 }
 
 .toc-header h3::before {
-  content: '> ';
-  color: rgba(255, 107, 53, 0.3);
+  content: '──[ ';
+  color: rgba(255, 107, 53, 0.35);
+}
+
+.toc-header h3::after {
+  content: ' ]';
+  color: rgba(255, 107, 53, 0.35);
 }
 
 .toc-content {
@@ -436,7 +441,7 @@ body .post-container {
   text-decoration: none;
   font-size: 1.6rem;
   font-weight: 700;
-  font-family: var(--font-space-grotesk), 'Space Grotesk', sans-serif;
+  font-family: var(--font-jetbrains), 'JetBrains Mono', monospace;
   letter-spacing: -0.03em;
   display: block;
   margin-bottom: 16px;
@@ -784,7 +789,7 @@ nav a.active::before {
 
 .post-content {
   font-size: 1rem;
-  font-family: var(--font-inter), 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-jetbrains), 'JetBrains Mono', monospace;
   line-height: 1.75;
 }
 
@@ -799,10 +804,16 @@ nav a.active::before {
 }
 
 .post-content blockquote {
-  border-left: 3px solid #FF6B35;
-  padding-left: 15px;
+  border-left: 1px solid rgba(255, 107, 53, 0.35);
+  padding-left: 16px;
   margin: 15px 0;
-  color: #aaa;
+  color: #999;
+}
+
+.post-content blockquote::before {
+  content: '> ';
+  color: rgba(255, 107, 53, 0.5);
+  font-style: normal;
 }
 
 .post-content ul,
@@ -1717,8 +1728,13 @@ a:hover {
 }
 
 .section-header h4::before {
-  content: '> ';
-  color: rgba(255, 107, 53, 0.3);
+  content: '──[ ';
+  color: rgba(255, 107, 53, 0.35);
+}
+
+.section-header h4::after {
+  content: ' ]';
+  color: rgba(255, 107, 53, 0.35);
 }
 
 /* Music List Styles */
@@ -2194,9 +2210,26 @@ a:hover {
   color: #777;
 }
 
-.sidebar-search-hint span {
+.sidebar-search-mid {
   flex: 1;
-  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  min-width: 0;
+  justify-content: flex-start;
+}
+
+.sidebar-search-placeholder {
+  color: inherit;
+  opacity: 0.95;
+}
+
+.sidebar-search-hint .tui-dollar {
+  flex: 0 0 auto;
+}
+
+.sidebar-search-hint .tui-cursor {
+  flex: 0 0 auto;
 }
 
 .sidebar-search-hint kbd {
@@ -2226,8 +2259,13 @@ a:hover {
 }
 
 .left-sidebar-section-label::before {
-  content: '> ';
-  color: rgba(255, 107, 53, 0.25);
+  content: '──[ ';
+  color: rgba(255, 107, 53, 0.35);
+}
+
+.left-sidebar-section-label::after {
+  content: ' ]';
+  color: rgba(255, 107, 53, 0.35);
 }
 
 .left-sidebar-nav {
@@ -2435,8 +2473,13 @@ a:hover {
 }
 
 .right-sidebar-section-label::before {
-  content: '> ';
-  color: rgba(255, 107, 53, 0.25);
+  content: '──[ ';
+  color: rgba(255, 107, 53, 0.35);
+}
+
+.right-sidebar-section-label::after {
+  content: ' ]';
+  color: rgba(255, 107, 53, 0.35);
 }
 
 /* Right TOC */
@@ -2787,7 +2830,7 @@ a:hover {
   color: #d4d4d4;
   font-size: 1rem;
   font-weight: 500;
-  font-family: var(--font-space-grotesk), sans-serif;
+  font-family: var(--font-jetbrains), 'JetBrains Mono', monospace;
   margin-bottom: 6px;
   line-height: 1.3;
   transition: color 0.15s ease;
@@ -3074,7 +3117,7 @@ a:hover {
   color: #d4d4d4;
   font-size: 0.82rem;
   font-weight: 600;
-  font-family: var(--font-space-grotesk), sans-serif;
+  font-family: var(--font-jetbrains), 'JetBrains Mono', monospace;
   margin-bottom: 3px;
 }
 
@@ -3082,6 +3125,97 @@ a:hover {
   color: #555;
   font-size: 0.72rem;
   font-family: var(--font-jetbrains), monospace;
+}
+
+/* TUI-style spectrum (simulated — no PCM from YouTube iframe) */
+.tui-viz {
+  width: 100%;
+  max-width: 200px;
+  box-sizing: border-box;
+  background: #0c0b09;
+  border: 1px solid #252320;
+  padding: 7px 9px 6px;
+  font-family: var(--font-jetbrains), 'JetBrains Mono', monospace;
+}
+
+.tui-viz--live {
+  border-color: rgba(255, 107, 53, 0.32);
+  box-shadow:
+    inset 0 0 14px rgba(255, 107, 53, 0.06),
+    0 0 0 1px rgba(255, 107, 53, 0.06);
+}
+
+.tui-viz-chrome {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 0.58rem;
+  margin-bottom: 5px;
+  color: rgba(255, 107, 53, 0.42);
+  user-select: none;
+}
+
+.tui-viz-prompt {
+  color: rgba(255, 107, 53, 0.72);
+  font-weight: 600;
+}
+
+.tui-viz-title {
+  flex: 1;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tui-viz-ch {
+  color: #4a4540;
+  font-size: 0.55rem;
+  letter-spacing: 0.06em;
+}
+
+.tui-viz--live .tui-viz-ch {
+  color: rgba(255, 107, 53, 0.55);
+}
+
+.tui-viz-bars {
+  margin: 0;
+  padding: 0;
+  font-size: 0.58rem;
+  line-height: 1;
+  letter-spacing: -0.06em;
+  color: rgba(255, 130, 88, 0.78);
+  white-space: pre;
+  overflow: hidden;
+  font-variant-ligatures: none;
+}
+
+.tui-viz--live .tui-viz-bars {
+  color: rgba(255, 145, 100, 0.95);
+  text-shadow: 0 0 10px rgba(255, 107, 53, 0.22);
+}
+
+.tui-viz-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  margin-top: 3px;
+  font-size: 0.52rem;
+  color: #3a3632;
+  letter-spacing: 0.12em;
+  user-select: none;
+}
+
+.tui-viz-dots {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: center;
+  letter-spacing: 0.08em;
+  opacity: 0.85;
 }
 
 /* ===== COMMAND PALETTE ===== */
@@ -3118,9 +3252,14 @@ a:hover {
   border-bottom: 1px solid #1a1814;
 }
 
-.cmd-search-icon {
-  color: rgba(255, 107, 53, 0.5);
+.cmd-prompt {
   flex-shrink: 0;
+  font-family: var(--font-jetbrains), 'JetBrains Mono', monospace;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: rgba(255, 107, 53, 0.55);
+  line-height: 1;
+  user-select: none;
 }
 
 .cmd-input {
@@ -3130,7 +3269,7 @@ a:hover {
   outline: none;
   color: #d4d4d4;
   font-size: 0.9rem;
-  font-family: var(--font-inter), sans-serif;
+  font-family: var(--font-jetbrains), 'JetBrains Mono', monospace;
   caret-color: #FF6B35;
 }
 
@@ -3194,7 +3333,7 @@ a:hover {
 .cmd-item-label {
   color: #c8c3bc;
   font-size: 0.82rem;
-  font-family: var(--font-inter), sans-serif;
+  font-family: var(--font-jetbrains), 'JetBrains Mono', monospace;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -3233,7 +3372,7 @@ a:hover {
   text-align: center;
   color: #444;
   font-size: 0.82rem;
-  font-family: var(--font-inter), sans-serif;
+  font-family: var(--font-jetbrains), 'JetBrains Mono', monospace;
 }
 
 .cmd-footer {
@@ -3256,4 +3395,492 @@ a:hover {
   font-family: var(--font-jetbrains), monospace;
   font-size: 0.68rem;
   margin-right: 3px;
+}
+
+/* ===== PHASE 5: TUI — ASCII ART + COMMAND PROMPT STYLING ===== */
+
+/* ── Markdown-style heading prefixes ──
+   Renders raw Markdown syntax inline — h1 gets #, h2 gets ##, h3 gets ###.
+   font-size: 0.7em keeps the sigil smaller than the heading itself. */
+.post-content h1::before {
+  content: '# ';
+  color: rgba(255, 107, 53, 0.32);
+  font-size: 0.7em;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.post-content h2::before {
+  content: '## ';
+  color: rgba(255, 107, 53, 0.28);
+  font-size: 0.7em;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.post-content h3::before {
+  content: '### ';
+  color: rgba(255, 107, 53, 0.22);
+  font-size: 0.7em;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+/* ── Date brackets ── */
+.post-date::before,
+.post-list-meta::before {
+  content: '[';
+  color: rgba(255, 107, 53, 0.3);
+  margin-right: 2px;
+}
+.post-date::after,
+.post-list-meta::after {
+  content: ']';
+  color: rgba(255, 107, 53, 0.3);
+  margin-left: 2px;
+}
+
+/* ── Search button: $ prompt ── */
+.tui-dollar {
+  color: rgba(255, 107, 53, 0.7);
+  font-size: 0.75rem;
+  font-family: var(--font-jetbrains), monospace;
+  flex-shrink: 0;
+}
+
+.tui-cursor {
+  color: rgba(255, 107, 53, 0.6);
+  font-size: 0.72rem;
+  animation: cursor-blink 1.1s step-end infinite;
+}
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* ── Footer command prompt ── */
+.tui-footer-prompt {
+  color: rgba(255, 107, 53, 0.55);
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.78rem;
+  margin-right: 4px;
+}
+
+.site-footer p {
+  color: rgba(255, 107, 53, 0.25);
+  font-size: 0.75rem;
+  font-family: var(--font-jetbrains), monospace;
+  letter-spacing: 0.02em;
+}
+
+/* ===== PHASE 4: TUI — CRT EFFECTS ===== */
+
+/* ── Scanline overlay ──
+   Horizontal lines every 3px — mimics the phosphor row spacing of a CRT.
+   z-index above all UI (9999) but pointer-events: none so it never blocks clicks. */
+.tui-scanlines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.09) 0px,
+    rgba(0, 0, 0, 0.09) 1px,
+    transparent          1px,
+    transparent          3px
+  );
+}
+
+/* ── CRT vignette ──
+   Darkens the corners/edges — classic CRT electron-beam falloff. */
+.tui-vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    transparent          55%,
+    rgba(0, 0, 0, 0.22)  80%,
+    rgba(0, 0, 0, 0.45) 100%
+  );
+}
+
+/* ── Film grain ──
+   SVG feTurbulence generates fractal noise; tiled at 200px and shifted
+   every 0.18s to animate the grain without heavy JS. */
+.tui-grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9997;
+  opacity: 0.038;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  animation: grain-drift 0.18s steps(1) infinite;
+}
+
+@keyframes grain-drift {
+  0%   { background-position:   0px   0px; }
+  20%  { background-position: -40px  20px; }
+  40%  { background-position:  20px -40px; }
+  60%  { background-position: -20px  40px; }
+  80%  { background-position:  40px -20px; }
+  100% { background-position:   0px   0px; }
+}
+
+/* ── Phosphor glow — logo ── */
+.logo {
+  text-shadow:
+    0 0  8px rgba(255, 107, 53, 0.55),
+    0 0 22px rgba(255, 107, 53, 0.15);
+}
+
+/* ── Phosphor glow — active navigation ── */
+nav a.active {
+  text-shadow: 0 0 8px rgba(255, 107, 53, 0.5);
+}
+.left-sidebar-cat-header.active .cat-label {
+  text-shadow: 0 0 8px rgba(255, 107, 53, 0.45);
+}
+.left-sidebar-post-link.active {
+  text-shadow: 0 0 6px rgba(255, 107, 53, 0.4);
+}
+
+/* ── Phosphor glow — sidebar section labels ── */
+.left-sidebar-section-label,
+.right-sidebar-section-label {
+  text-shadow: 0 0 10px rgba(255, 107, 53, 0.18);
+}
+
+/* ── Phosphor glow — title bar session tag ── */
+.tui-session {
+  text-shadow:
+    0 0  8px rgba(255, 107, 53, 0.55),
+    0 0 18px rgba(255, 107, 53, 0.18);
+}
+
+/* ── Phosphor glow — post titles ── */
+.post-title {
+  text-shadow: 0 0 14px rgba(255, 107, 53, 0.18);
+}
+.post-content h1,
+.post-content h2 {
+  text-shadow: 0 0 10px rgba(232, 228, 222, 0.07);
+}
+
+/* ── Subtle CRT flicker ──
+   Very rare — fires 3 quick opacity dips in a 14-second cycle.
+   Perceptible only if you're watching for it. */
+@keyframes crt-flicker {
+  0%,   87%,   89.5%, 92%,   100% { opacity: 1;    }
+  88%                              { opacity: 0.96; }
+  89%                              { opacity: 0.93; }
+  90%                              { opacity: 0.98; }
+  91%                              { opacity: 0.95; }
+}
+
+.tui-chrome {
+  animation: crt-flicker 14s step-end infinite;
+}
+
+/* ── Disable CRT effects for users who prefer reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .tui-grain      { animation: none; }
+  .tui-chrome     { animation: none; }
+  .tui-scanlines,
+  .tui-vignette,
+  .tui-grain      { display: none; }
+}
+
+/* ===== PHASE 3: TUI — TERMINAL CHROME ===== */
+
+/* Outer wrapper: stacks title bar → content → status bar */
+.tui-chrome {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* app-layout fills the space between the two bars */
+.tui-chrome > .app-layout {
+  flex: 1;
+  min-height: 0;       /* critical: lets nested overflow work in a flex child */
+  height: auto !important;
+  overflow: hidden;
+}
+
+/* Sidebars fill the app-layout height (desktop only) */
+@media (min-width: 1024px) {
+  .tui-chrome .left-sidebar {
+    height: 100%;
+  }
+  .tui-chrome .main-area {
+    height: 100%;
+  }
+}
+
+/* ── Title bar ── */
+.tui-titlebar {
+  height: 28px;
+  flex-shrink: 0;
+  background: #0a0908;
+  border-bottom: 1px solid #2a2520;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.7rem;
+  z-index: 200;
+  user-select: none;
+}
+
+.tui-titlebar-left {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  overflow: hidden;
+}
+
+.tui-session {
+  color: rgba(255, 107, 53, 0.85);
+  flex-shrink: 0;
+}
+
+.tui-sep {
+  color: rgba(255, 107, 53, 0.2);
+  margin: 0 3px;
+  flex-shrink: 0;
+}
+
+.tui-path {
+  color: rgba(255, 107, 53, 0.45);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tui-titlebar-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  min-width: 0;
+  max-width: min(52vw, 420px);
+  flex-shrink: 1;
+  padding-left: 12px;
+}
+
+.tui-listening {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  min-width: 0;
+  font-size: 0.64rem;
+}
+
+.tui-listening-label {
+  flex-shrink: 0;
+  color: rgba(255, 107, 53, 0.42);
+  text-transform: lowercase;
+}
+
+.tui-listening-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: rgba(200, 198, 194, 0.72);
+}
+
+.tui-listening--live .tui-listening-title {
+  color: rgba(228, 226, 222, 0.95);
+}
+
+.tui-indicator {
+  flex-shrink: 0;
+  font-size: 0.55rem;
+  line-height: 1;
+}
+
+.tui-indicator--live {
+  color: #FF6B35;
+  animation: tui-pulse 2.4s ease-in-out infinite;
+}
+
+.tui-indicator--idle {
+  color: rgba(255, 107, 53, 0.28);
+  animation: none;
+}
+
+@keyframes tui-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.15; }
+}
+
+/* ── Status bar ── */
+.tui-statusbar {
+  height: 24px;
+  flex-shrink: 0;
+  background: #0a0908;
+  border-top: 1px solid #2a2520;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 0 14px;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.65rem;
+  z-index: 200;
+  overflow: hidden;
+  user-select: none;
+}
+
+.tui-status-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #444;
+  flex-shrink: 0;
+}
+
+.tui-status-item kbd {
+  background: #161310;
+  border: 1px solid #2a2520;
+  padding: 0 4px;
+  font-size: 0.6rem;
+  font-family: var(--font-jetbrains), monospace;
+  color: rgba(255, 107, 53, 0.5);
+  line-height: 1.5;
+}
+
+.tui-status-right {
+  margin-left: auto;
+  color: rgba(255, 107, 53, 0.22);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Hide chrome bars on mobile — mobile has its own header paradigm */
+@media (max-width: 1023px) {
+  .tui-titlebar,
+  .tui-statusbar {
+    display: none;
+  }
+  .tui-chrome {
+    display: block;
+    height: auto;
+    overflow: visible;
+  }
+}
+
+/* ===== PHASE 2: TUI — BOX-DRAWING FRAMES ===== */
+
+/* Sidebar panel borders */
+.left-sidebar {
+  border-right: 1px solid #2a2520 !important;
+}
+.right-sidebar {
+  border-left: 1px solid #2a2520 !important;
+}
+
+/* Code block: bracket-style language label */
+.language-label::before {
+  content: '[ ';
+  color: rgba(255, 107, 53, 0.45);
+}
+.language-label::after {
+  content: ' ]';
+  color: rgba(255, 107, 53, 0.45);
+}
+
+/* Code header: dark terminal title bar look */
+.code-header {
+  background-color: #111009 !important;
+  border-bottom: 1px solid #2a2520 !important;
+}
+
+/* Post links: tree-view ├─ / └─ connectors */
+.left-sidebar-posts a::before {
+  content: '├─ ' !important;
+  color: rgba(255, 107, 53, 0.22) !important;
+  margin-right: 0 !important;
+}
+.left-sidebar-posts a:last-child::before {
+  content: '└─ ' !important;
+  color: rgba(255, 107, 53, 0.22) !important;
+}
+
+/* Category chevron: widen to fit [+]/[-] */
+.cat-chevron {
+  width: auto !important;
+  min-width: 24px !important;
+  font-size: 0.7rem !important;
+  letter-spacing: -0.03em;
+}
+
+/* ===== PHASE 1: TUI — SHARP EDGES ===== */
+/* Strip rounded corners from all rectangular UI elements */
+.toc-link,
+.mobile-toc-button,
+.desktop-toc-button,
+.toc-close-button,
+.run-button,
+.copy-button,
+.code-block-container,
+.runnable-code-block,
+.code-header,
+.post-content pre,
+.post-content code,
+.post-content pre[class*="language-"],
+.post-content table,
+.post-content img,
+.post-content video,
+.post-content details,
+.post-content .tooltip,
+.tooltip,
+.tweet-component .tweet-card,
+.tweet-component .loading-card,
+.tweet-component .tweet-image,
+.tweet-component .tweet-video,
+.media-modal-image,
+.media-modal-video,
+.media-modal-nav,
+.media-modal-counter,
+.quant-nav a,
+.music-link,
+.commit-tooltip-area,
+.github-activity-item,
+.mobile-right-sidebar-button,
+.desktop-right-sidebar-button,
+.sidebar-search-hint,
+.sidebar-search-hint kbd,
+.left-sidebar-post-link.active,
+.right-toc-link,
+.right-player-bar,
+.mobile-menu-btn,
+.post-list-item,
+.vinyl-plinth,
+.tui-viz,
+.cmd-modal,
+.cmd-item,
+.cmd-footer kbd,
+.cmd-input-row,
+.post-content blockquote {
+  border-radius: 0 !important;
+}
+
+/* ── Neofetch block — small font so 102-char lines fit in ~682px ── */
+.neofetch-block .neofetch {
+  font-size: 0.65rem;
+  line-height: 1.45;
+  background: #161310;
+  padding: 6px;
+  margin: 0;
+  overflow-x: auto;
+  color: #d4d4d4;
+  font-family: var(--font-jetbrains), 'JetBrains Mono', monospace;
+  white-space: pre;
 }

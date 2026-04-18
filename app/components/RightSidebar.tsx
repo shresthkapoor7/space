@@ -3,7 +3,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { usePathname } from 'next/navigation'
 import GitHubActivity from './GitHubActivity'
+import TuiAudioVisualizer from './TuiAudioVisualizer'
 import { sampleTracks, type Track } from '../../lib/tracks'
+import type { NowPlayingBarState } from '../../lib/nowPlayingBar'
 
 declare global {
   interface Window {
@@ -21,9 +23,14 @@ interface Heading {
 interface RightSidebarProps {
   tracks?: Track[]
   githubUsername?: string
+  onNowPlayingChange?: (state: NowPlayingBarState) => void
 }
 
-export default function RightSidebar({ tracks = sampleTracks, githubUsername = "shresthkapoor7" }: RightSidebarProps) {
+export default function RightSidebar({
+  tracks = sampleTracks,
+  githubUsername = 'shresthkapoor7',
+  onNowPlayingChange,
+}: RightSidebarProps) {
   const pathname = usePathname()
   const pathParts = pathname.split('/').filter(Boolean)
   const isPostPage = pathParts.length >= 2
@@ -197,6 +204,15 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
 
   useEffect(() => { playNextTrackRef.current = playNextTrack }, [currentlyPlaying, youtubePlayer])
 
+  useEffect(() => {
+    const track = tracks.find(t => t.id === currentlyPlaying)
+    onNowPlayingChange?.({
+      title: track?.title ?? '',
+      artist: track?.artist ?? '',
+      playing: Boolean(track && !isPaused),
+    })
+  }, [currentlyPlaying, isPaused, tracks, onNowPlayingChange])
+
   // Listen for command palette music control events
   useEffect(() => {
     const handler = (e: Event) => {
@@ -345,6 +361,11 @@ export default function RightSidebar({ tracks = sampleTracks, githubUsername = "
                 </svg>
               </div>
             </div>
+
+            <TuiAudioVisualizer
+              active={!isPaused && !!currentlyPlaying}
+              hasTrack={!!currentlyPlaying}
+            />
 
             <div className="vinyl-controls-row">
               <button onClick={playPreviousTrack} disabled={!currentlyPlaying} className="vinyl-btn">

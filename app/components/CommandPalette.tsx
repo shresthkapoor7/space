@@ -147,9 +147,9 @@ export default function CommandPalette({ allCategoryPosts }: CommandPaletteProps
     <div className="cmd-overlay" onClick={() => setOpen(false)}>
       <div className="cmd-modal" onClick={e => e.stopPropagation()} onKeyDown={handleKeyDown}>
         <div className="cmd-input-row">
-          <svg className="cmd-search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-            <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
-          </svg>
+          <span className="cmd-prompt" aria-hidden="true">
+            $
+          </span>
           <input
             ref={inputRef}
             className="cmd-input"

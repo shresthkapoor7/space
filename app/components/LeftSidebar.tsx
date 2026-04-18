@@ -103,10 +103,11 @@ export default function LeftSidebar({ allCategoryPosts }: LeftSidebarProps) {
             onClick={() => window.dispatchEvent(new CustomEvent('cmd-open'))}
             aria-label="Open search"
           >
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-              <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
-            </svg>
-            <span>search</span>
+            <span className="tui-dollar" aria-hidden="true">$</span>
+            <span className="sidebar-search-mid">
+              <span className="sidebar-search-placeholder">search</span>
+              <span className="tui-cursor" aria-hidden="true">_</span>
+            </span>
             <kbd>⌘K</kbd>
           </button>
         </div>
@@ -125,7 +126,7 @@ export default function LeftSidebar({ allCategoryPosts }: LeftSidebarProps) {
                   className={`left-sidebar-cat-header${isActive ? ' active' : ''}`}
                   onClick={() => toggleCategory(cat)}
                 >
-                  <span className="cat-chevron">{isExpanded ? '∨' : '>'}</span>
+                  <span className="cat-chevron">{isExpanded ? '[-]' : '[+]'}</span>
                   <Link
                     href={`/${cat}`}
                     className="cat-label"

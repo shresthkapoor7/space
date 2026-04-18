@@ -295,7 +295,7 @@ except:
             className="copy-button"
             title="Copy code"
           >
-            {copied ? '✓ copied' : '⧉'}
+            {copied ? '✓ copied' : '[⧉]'}
           </button>
         </div>
         <SyntaxHighlighter
@@ -303,7 +303,7 @@ except:
           style={vscDarkPlus}
           customStyle={{
             margin: 0,
-            borderRadius: '0 0 8px 8px',
+            borderRadius: 0,
             fontSize: '0.9rem'
           }}
         >
@@ -316,21 +316,21 @@ except:
   return (
     <div className="runnable-code-block">
       <div className="code-header">
-        <span className="language-label">Python</span>
+        <span className="language-label">python</span>
         <div className="button-group">
           <button
             onClick={copyToClipboard}
             className="copy-button"
             title="Copy code"
           >
-            {copied ? '✓ copied' : '⧉'}
+            {copied ? '✓ copied' : '[⧉]'}
           </button>
           <button
             onClick={runCode}
             disabled={!pyodideReady || isRunning}
             className="run-button"
           >
-            {isRunning ? 'Running...' : 'Run'}
+            {isRunning ? 'running...' : '[run]'}
           </button>
         </div>
       </div>
@@ -348,7 +348,7 @@ except:
       </SyntaxHighlighter>
       {(output || error) && (
         <div className="code-output">
-          <div className="output-header">Output:</div>
+          <div className="output-header">└─[ output ]</div>
           {(output && output.includes('<img')) ? (
             <div
               className={error ? 'error-output' : 'success-output'}

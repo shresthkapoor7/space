@@ -7,6 +7,27 @@ pinned: false
 
 ## Whoami
 
+<div class="code-block-container neofetch-block">
+<div class="code-header"><span class="language-label">neofetch</span></div>
+<pre class="neofetch">⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡯⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠋⠄⢈⣀⠤⠢⠂⠀⠀⠀⣠⡾⠟⢡⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿    Shresth Kapoor
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣇⢣⠃⠾⠷⣝⣿⣿⠟⠛⠥⠁⣁⣠⢶⡺⠃⠁⠀⠀⠀⠀⠀⠀⢠⣴⣿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿    -------
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⣻⣿⡄⣃⠸⠦⢹⡐⠀⣨⣠⠶⠺⠝⠊⠁⠀⠈⠅⠀⠀⠀⠀⠀⠀⠀⠀⢐⣺⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿    OS:      macOS
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢟⣯⣾⣿⣿⣷⣤⣴⣤⣬⡞⠍⠑⢈⡡⣲⠀⠀⡀⠀⢂⠀⠀⠀⠀⠀⠀⠐⠲⠙⡿⠿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿    Editor:  flint [nvim]
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣥⣙⣛⣛⣛⣋⣩⣭⣬⠉⠀⠐⣤⣄⣿⣾⣥⣾⡇⢁⢀⠀⢠⢃⡄⢦⡐⠦⢄⡀⠀⢐⣀⣁⡀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿    Shell:   zsh
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⢋⡴⢃⢠⣿⠿⣿⣿⠿⣷⣧⣾⠇⠐⠀⡿⠿⢊⠉⣂⣠⣤⣾⣿⣿⣶⡉⢳⣿⣽⣛⡻⢿⣿⣿⣿⣿⣿⣿⣿    Lang:    python · typescript
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣾⣿⣶⣷⣿⠇⣼⣭⣖⣻⣿⢿⣣⡤⠀⡌⢉⡀⢔⣒⣋⣁⣀⣉⣉⣛⠛⠛⠂⠙⣿⣿⣿⡷⣮⢻⣿⣿⣿⣿⣿    Cloud:   aws · fastapi
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢏⣼⣿⣿⣿⣾⣷⣿⠟⠁⢃⣤⣤⡬⣭⡉⢙⢿⣿⣿⣿⣿⣷⣶⣶⡄⠹⣿⣿⣿⡙⣷⡻⣿⣿⣿⣿    School:  nyu (cs)
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢋⣷⣾⣶⠄⢄⡲⠶⣬⡝⠛⢥⣿⣿⣿⣿⡿⠿⣋⡵⣢⣾⣿⣿⣟⣥⣶⣿⣷⢦⣻⣿⣿⣿⣿⣿⣿⣿⠆⠈⠛⢿⡇⣹⣇⢸⣟⢿⣿    Prev:    swe @ talenttitan
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⣱⣾⣥⠼⢂⡷⢸⣿⣷⣶⣾⣿⣷⣶⣬⣥⣴⣶⣿⡟⣼⣿⣿⣿⣿⣿⣿⡿⣿⣿⣷⡍⠻⣿⣿⣿⣿⡟⡇⠀⠀⠀⠈⠇⣿⡇⣘⢿⣷⣽    -------
+⣿⣿⣿⣿⣿⣿⣿⣿⠛⠛⣌⡋⠂⠔⣋⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢹⣿⡿⠟⠩⢩⢛⣥⡆⣿⣿⣿⡇⣾⡎⣿⣿⠿⣷⡇⠰⣄⠀⢠⠂⡿⢃⣮⡈⢻⣿    Sediment  ►  knowledge graphs · agents
+⣿⣿⣿⣿⣿⣿⡿⠁⢄⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢈⡔⢒⣚⢯⣈⣿⣿⣇⢿⣿⣿⢇⣿⡇⣾⣧⠀⠘⠜⢦⣈⣀⣀⡞⠀⢸⣿⣿⣦⣹    Hive      ►  multi-agent coord
+⣿⣿⣿⣿⣿⣿⠗⠀⠼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢫⣛⠉⢤⡅⢶⣲⡀⣿⣿⠈⡿⣫⠞⣡⡶⢟⢹⠂⠀⢤⡄⠉⠭⡅⢰⠀⣝⠪⣝⡿⢿    Dowsing   ►  web nav · no api costs
+⣿⣿⣿⣿⣿⣿⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⣱⡏⢱⣒⣄⣲⣷⡸⢱⣿⣿⡼⠋⠀⢘⣛⣋⡩⢟⣄⣠⣾⡇⠀⠀⠀⣿⡆⣿⣷⢆⡤⢠    Dia       ►  agentic research · rag
+⣿⣿⡃⣎⢿⣿⣆⠀⠀⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢱⡟⠩⢀⡉⣴⣿⡟⢡⡿⣻⢋⣴⣶⡲⢶⣶⣶⣾⣿⢿⡿⠟⡇⠀⠀⢸⣸⢡⠿⢋⣮⣐⢽    -------
+⣟⣿⣷⢹⣶⣻⣿⣷⣤⣀⡙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣇⣿⣦⣭⣛⣿⣿⠟⣰⣟⡼⣡⣾⣿⣿⣿⣶⣭⠿⢉⡴⠋⠀⠀⠱⠂⢰⢣⡏⣼⣋⣵⣫⣷⣿    building agents · being built by them
+</pre>
+</div>
+
 Hi, I'm Shresth - CS student at [@nyu](https://www.nyu.edu/), previously a Software Engineer at [@TalentTitan](https://talenttitan.com/), an EdTech startup in India. Currently, my focus is on building agentic AI systems. Welcome to Σpace where I document what I learn.
 
 ## What's here
