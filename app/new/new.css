@@ -3403,7 +3403,6 @@ footer {
         max-width: calc(100vw - 24px);
         justify-content: center;
     }
-    .hero-grid,
     .about-grid {
         grid-template-columns: 1fr;
     }
@@ -3452,6 +3451,15 @@ footer {
     }
 }
 
+@media (max-width: 900px) {
+    .hero-grid {
+        grid-template-columns: 1fr;
+    }
+    .hero-grid > *:last-child {
+        display: none;
+    }
+}
+
 @media (max-width: 768px) {
     .wrap {
         padding: 0 16px;
@@ -3468,10 +3476,6 @@ footer {
         margin-bottom: 32px;
     }
     .sec-head .right {
-        display: none;
-    }
-    /* hide collage/right hero column decoration on mobile */
-    .hero-grid > *:last-child {
         display: none;
     }
     /* about */
