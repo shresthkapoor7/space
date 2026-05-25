@@ -3704,17 +3704,12 @@ footer {
     overflow: hidden;
     border: 1px solid var(--line);
     margin-bottom: 36px;
-    height: 260px;
-    position: relative;
 }
 .tile-blog-preview-inner {
-    position: absolute;
-    inset: 0;
     pointer-events: none;
 }
 .tile-blog-preview-inner > * {
     width: 100% !important;
-    height: 100% !important;
     border-radius: 0 !important;
     border: none !important;
     grid-column: unset !important;
@@ -3744,8 +3739,5 @@ footer {
     }
     .tile-blog-title {
         font-size: 24px;
-    }
-    .tile-blog-preview {
-        height: 200px;
     }
 }

@@ -278,7 +278,7 @@ function Hero({ name }) {
               <span data-reveal="up" style={{ "--reveal-delay": "0.45s" }}>the </span><span className="it" data-reveal="up" style={{ "--reveal-delay": "0.55s" }}>frontier.</span>
             </h1>
             <p className="hero-sub notebook" data-reveal="up" style={{ "--reveal-delay": "0.55s" }}>
-              I’m a CS student at <b>NYU</b> who likes the seam between{" "}
+              I'm a CS student at <b>NYU</b> who likes the seam between{" "}
               <Highlight tone="acid">agentic AI</Highlight>,{" "}
               <Circled>infrastructure</Circled>{" "}
               and full-stack craft. Currently turning{" "}
@@ -287,7 +287,7 @@ function Hero({ name }) {
               <Asterisk />
             </p>
             <div className="hero-meta" data-reveal="up" style={{ "--reveal-delay": "0.7s" }}>
-              <div>STATUS<span>Open to SWE / AI Eng internships ’26</span></div>
+              <div>STATUS<span>Open to SWE / AI Eng internships '26</span></div>
               <div>BASED<span>New York, NY</span></div>
               <div>
                 LAST PUSH
@@ -973,14 +973,14 @@ function About() {
         <div className="about-grid">
           <div className="about-body">
             <p data-reveal="up">
-              I’m <b>Shresth</b>, a computer science student at <b>NYU</b>. Previously a software
+              I'm <b>Shresth</b>, a computer science student at <b>NYU</b>. Previously a software
               engineer at <span className="accent">TalentTitan</span>, an EdTech startup, where I
               shipped backend and frontend features in <b>Spring Boot, Angular, MySQL and AWS</b>.
             </p>
             <p data-reveal="up" style={{ "--reveal-delay": "0.1s" }}>
-              Lately I’ve been exploring <b>agentic workflows</b> and <b>retrieval-augmented systems</b>
+              Lately I've been exploring <b>agentic workflows</b> and <b>retrieval-augmented systems</b>
               with React, Next.js and Python — using Pydantic to structure backend logic and AWS to
-              deploy. I’m interested in the seam between AI systems, infrastructure and full-stack
+              deploy. I'm interested in the seam between AI systems, infrastructure and full-stack
               craft, and where they turn into <span className="accent">practical applications</span>.
             </p>
             <p className="serif-it" data-reveal="up" style={{ fontSize: 26, color: "var(--ink)", "--reveal-delay": "0.2s" }}>
@@ -1036,7 +1036,7 @@ function Experience() {
       role: "Mobile Developer Intern",
       org: "Decoders",
       kind: "Startup | Remote",
-      blurb: "Built Pixectra, a gallery-based mobile app from scratch in Flutter — iOS and Android. Led the migration of YourGrocer’s mobile codebase to the latest Flutter version. Integrated Facebook and Instagram SDKs for image import. Introduced Riverpod-based architecture, improving feature release speed by 30%.",
+      blurb: "Built Pixectra, a gallery-based mobile app from scratch in Flutter — iOS and Android. Led the migration of YourGrocer's mobile codebase to the latest Flutter version. Integrated Facebook and Instagram SDKs for image import. Introduced Riverpod-based architecture, improving feature release speed by 30%.",
       stack: ["Flutter", "Dart", "Riverpod", "iOS", "Android", "Facebook SDK"],
     },
   ];
@@ -1045,7 +1045,7 @@ function Experience() {
       <div className="wrap">
         <div className="sec-head" data-reveal="up">
           <span className="num">03</span>
-          <h2><span className="it">Where</span> I’ve shipped.</h2>
+          <h2><span className="it">Where</span> I've shipped.</h2>
           <span className="right">{rows.length} entries</span>
         </div>
         {(() => {
@@ -1106,8 +1106,8 @@ const NOW_PROJECTS = [
     name: "Dowsing",
     tagline: "LLM-free semantic web navigator in Rust",
     short: "Rust web agent that navigates entirely by cosine similarity — no per-hop LLM calls. ~7s vs ~60s for browser-use, at $0 per query.",
-    description: "Dowsing is a web navigation agent that embeds the query once via a local all-MiniLM-L6-v2 ONNX model, then navigates entirely by cosine similarity — no per-hop LLM calls.\n\nIt connects to the user’s live Chromium session via CDP for zero-config authenticated access. Navigation uses a parallel beam-search loop with nav-bar decay, peak detection, and dead-end backtracking.\n\nResults come back in ~7s vs ~60s for browser-use, and the per-query cost drops from ~$0.04 (GPT-4o) to $0.",
-    highlights: ["~7s vs ~60s for browser-use on the same queries.", "$0 per query vs ~$0.04 with GPT-4o — model runs fully offline via ONNX.", "Zero-config authenticated access via the user’s live Chromium session (CDP).", "Parallel beam-search with nav-bar decay, peak detection, and dead-end backtracking."],
+    description: "Dowsing is a web navigation agent that embeds the query once via a local all-MiniLM-L6-v2 ONNX model, then navigates entirely by cosine similarity — no per-hop LLM calls.\n\nIt connects to the user's live Chromium session via CDP for zero-config authenticated access. Navigation uses a parallel beam-search loop with nav-bar decay, peak detection, and dead-end backtracking.\n\nResults come back in ~7s vs ~60s for browser-use, and the per-query cost drops from ~$0.04 (GPT-4o) to $0.",
+    highlights: ["~7s vs ~60s for browser-use on the same queries.", "$0 per query vs ~$0.04 with GPT-4o — model runs fully offline via ONNX.", "Zero-config authenticated access via the user's live Chromium session (CDP).", "Parallel beam-search with nav-bar decay, peak detection, and dead-end backtracking."],
     stack: ["Rust", "ONNX Runtime", "CDP", "all-MiniLM-L6-v2", "Chromium"],
     timeline: "Apr 2026",
     role: "Solo · Systems / Rust",
@@ -1126,7 +1126,7 @@ const NOW_PROJECTS = [
     timeline: "Mar 2025",
     role: "Hackathon",
     live: null,
-    github: null,
+    github: "https://github.com/shresthkapoor7/aie-hackathon",
   },
 ];
 
@@ -1675,10 +1675,10 @@ function TileBlogOverlay({ id, tileContent, onClose }) {
   useEffect(() => {
     const onKey = (e) => { if (e.key === "Escape") handleClose(); };
     window.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
     return () => {
       window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     };
   }, []);
 
@@ -1787,13 +1787,16 @@ function TileManga() {
       <div className="panels">
         <div className="panel sun">
           <span className="pcap">CH. 1104</span>
+          <img src="/images/one_piece.jpeg" alt="" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.9 }} />
         </div>
         <div className="panel speed">
           <span className="pcap">— SFX —</span>
+          <img src="/images/future-sight.jpeg" alt="" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.9 }} />
         </div>
         <div className="panel bubble">
           <span className="pcap">DIALOGUE</span>
-          <div className="bubble-text">“set sail —”</div>
+          <img src="/images/mingo.jpeg" alt="" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.9 }} />
+          <div className="bubble-text">"Pirates are evil? The Marines are righteous?"</div>
         </div>
       </div>
     </div>
@@ -1897,7 +1900,7 @@ function TileShuffle() {
       <div className="name">Collage <span className="it">brain.</span></div>
       <div className="mood">
         <div className="m1"></div>
-        <div className="m2 txt">shuffle</div>
+        <div className="m2"></div>
         <div className="m3"></div>
         <div className="m4"></div>
         <div className="m5"></div>
@@ -1932,7 +1935,7 @@ function Contact() {
         <div className="pre" data-reveal="up">↓ lights out · say hi ↓</div>
         <StartLights />
         <h2 data-reveal="up" style={{ "--reveal-delay": "0.1s" }}>
-          let’s <span className="it">build</span><br/>
+          let's <span className="it">build</span><br/>
           something <span className="it">weird.</span>
         </h2>
 
