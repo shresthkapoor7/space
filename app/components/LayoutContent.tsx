@@ -31,7 +31,8 @@ export default function LayoutContent({ children, allCategoryPosts }: LayoutCont
   })
 
   // Derive state before any hooks so all hooks run unconditionally
-  const isLandingPage = pathname === '/' || pathname === '/game'
+  const isLandingPage = pathname === '/game'
+  const isStandalonePage = pathname === '/' || pathname === '/new'
   const pathParts     = pathname.split('/').filter(Boolean)
   const category      = pathParts[0] || ''
   const postIdStr     = pathParts[1]
@@ -50,7 +51,7 @@ export default function LayoutContent({ children, allCategoryPosts }: LayoutCont
   // ESC    — go up one level (post → category)
   // All hooks must be called before any conditional return.
   useEffect(() => {
-    if (isLandingPage) return
+    if (isLandingPage || isStandalonePage) return
 
     const handleKeyDown = (e: KeyboardEvent) => {
       // Never intercept when focus is inside a text field or editable element
@@ -79,10 +80,10 @@ export default function LayoutContent({ children, allCategoryPosts }: LayoutCont
 
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [isLandingPage, isPostPage, category, router])
+  }, [isLandingPage, isStandalonePage, isPostPage, category, router])
 
   // Landing page has its own layout — bail out after hooks
-  if (isLandingPage) {
+  if (isLandingPage || isStandalonePage) {
     return <main>{children}</main>
   }
 

@@ -6,13 +6,7 @@ import GitHubActivity from './GitHubActivity'
 import TuiAudioVisualizer from './TuiAudioVisualizer'
 import { sampleTracks, type Track } from '../../lib/tracks'
 import type { NowPlayingBarState } from '../../lib/nowPlayingBar'
-
-declare global {
-  interface Window {
-    YT: any
-    onYouTubeIframeAPIReady: () => void
-  }
-}
+import { useYouTubeMusicPlayer } from '../../lib/useYouTubeMusicPlayer'
 
 interface Heading {
   id: string
@@ -37,11 +31,6 @@ export default function RightSidebar({
 
   const [headings, setHeadings] = useState<Heading[]>([])
   const [activeHeading, setActiveHeading] = useState('')
-  const [currentlyPlaying, setCurrentlyPlaying] = useState<number | null>(null)
-  const [isPaused, setIsPaused] = useState(true)
-  const [youtubePlayer, setYoutubePlayer] = useState<any>(null)
-  const playNextTrackRef = useRef<() => void>()
-
   const vinylRef = useRef<HTMLButtonElement>(null)
   const rotationRef = useRef(0)
   const rafRef = useRef<number | null>(null)
@@ -49,6 +38,17 @@ export default function RightSidebar({
   const DEG_PER_MS = 360 / 4000
   const audioCtxRef = useRef<AudioContext | null>(null)
   const prevIsPausedRef = useRef(true)
+  const {
+    currentTrack,
+    currentVideoId,
+    currentlyPlaying,
+    isPaused,
+    playerElementId,
+    playNextTrack,
+    playPreviousTrack,
+    playTrack,
+    togglePlayPause,
+  } = useYouTubeMusicPlayer(tracks)
 
   const startSpinning = useCallback(() => {
     if (rafRef.current) return
@@ -167,66 +167,20 @@ export default function RightSidebar({
     return () => observer.disconnect()
   }, [headings])
 
-  // YouTube player setup
   useEffect(() => {
-    if (window.YT && window.YT.Player && !youtubePlayer) {
-      createYouTubePlayer()
-      return
-    }
-    if (!window.YT) {
-      const tag = document.createElement('script')
-      tag.src = 'https://www.youtube.com/iframe_api'
-      document.getElementsByTagName('script')[0].parentNode?.insertBefore(tag, document.getElementsByTagName('script')[0])
-      window.onYouTubeIframeAPIReady = () => createYouTubePlayer()
-    } else if (!youtubePlayer) {
-      createYouTubePlayer()
-    }
-  }, [youtubePlayer])
-
-  const createYouTubePlayer = useCallback(() => {
-    if (window.YT && window.YT.Player && !youtubePlayer) {
-      const playerElement = document.getElementById('youtube-player')
-      if (!playerElement) { setTimeout(createYouTubePlayer, 100); return }
-      new window.YT.Player('youtube-player', {
-        height: '1', width: '1',
-        playerVars: { controls: 0, modestbranding: 1, rel: 0, showinfo: 0, fs: 0, cc_load_policy: 0, iv_load_policy: 3, autohide: 1, disablekb: 1, playsinline: 1 },
-        events: {
-          onReady: (event: any) => setYoutubePlayer(event.target),
-          onStateChange: (event: any) => {
-            if (event.data === window.YT.PlayerState.PLAYING) setIsPaused(false)
-            else if (event.data === window.YT.PlayerState.PAUSED) setIsPaused(true)
-            else if (event.data === window.YT.PlayerState.ENDED) setTimeout(() => playNextTrackRef.current?.(), 100)
-          },
-        }
-      })
-    }
-  }, [youtubePlayer])
-
-  useEffect(() => { playNextTrackRef.current = playNextTrack }, [currentlyPlaying, youtubePlayer])
-
-  useEffect(() => {
-    const track = tracks.find(t => t.id === currentlyPlaying)
     onNowPlayingChange?.({
-      title: track?.title ?? '',
-      artist: track?.artist ?? '',
-      playing: Boolean(track && !isPaused),
+      title: currentTrack?.title ?? '',
+      artist: currentTrack?.artist ?? '',
+      playing: Boolean(currentTrack && !isPaused),
     })
-  }, [currentlyPlaying, isPaused, tracks, onNowPlayingChange])
+  }, [currentTrack, isPaused, onNowPlayingChange])
 
   // Listen for command palette music control events
   useEffect(() => {
     const handler = (e: Event) => {
       const { action } = (e as CustomEvent).detail
-      if (!youtubePlayer) return
       if (action === 'playpause') {
-        if (!currentlyPlaying) {
-          const first = tracks.find(t => t.youtubeUrl)
-          if (first?.youtubeUrl) {
-            const videoId = extractYouTubeId(first.youtubeUrl)
-            if (videoId) { youtubePlayer.loadVideoById(videoId); setCurrentlyPlaying(first.id); setIsPaused(false) }
-          }
-        } else if (isPaused) { youtubePlayer.playVideo(); setIsPaused(false) }
-        else { youtubePlayer.pauseVideo(); setIsPaused(true) }
+        togglePlayPause()
       } else if (action === 'next') {
         playNextTrack()
       } else if (action === 'prev') {
@@ -235,47 +189,7 @@ export default function RightSidebar({
     }
     window.addEventListener('cmd-music', handler)
     return () => window.removeEventListener('cmd-music', handler)
-  }, [youtubePlayer, currentlyPlaying, isPaused])
-
-  const extractYouTubeId = (url: string) => {
-    const match = url.match(/^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/)
-    return match && match[7].length === 11 ? match[7] : null
-  }
-
-  const handleTrackPlay = (track: Track) => {
-    if (!track.youtubeUrl || !youtubePlayer) return
-    if (currentlyPlaying === track.id) {
-      if (isPaused) { youtubePlayer.playVideo(); setIsPaused(false) }
-      else { youtubePlayer.pauseVideo(); setIsPaused(true) }
-    } else {
-      const videoId = extractYouTubeId(track.youtubeUrl)
-      if (videoId) { youtubePlayer.loadVideoById(videoId); setCurrentlyPlaying(track.id); setIsPaused(false) }
-    }
-  }
-
-  function playNextTrack() {
-    const player = youtubePlayer
-    if (!player) return
-    const currentIndex = tracks.findIndex(t => t.id === currentlyPlaying)
-    if (currentIndex === -1) return
-    const nextTrack = tracks[(currentIndex + 1) % tracks.length]
-    if (nextTrack?.youtubeUrl) {
-      const videoId = extractYouTubeId(nextTrack.youtubeUrl)
-      if (videoId) { player.loadVideoById(videoId); setCurrentlyPlaying(nextTrack.id); setIsPaused(false) }
-    }
-  }
-
-  const playPreviousTrack = () => {
-    if (!youtubePlayer) return
-    const currentIndex = tracks.findIndex(t => t.id === currentlyPlaying)
-    const prevTrack = tracks[currentIndex === 0 ? tracks.length - 1 : currentIndex - 1]
-    if (prevTrack?.youtubeUrl) {
-      const videoId = extractYouTubeId(prevTrack.youtubeUrl)
-      if (videoId) { youtubePlayer.loadVideoById(videoId); setCurrentlyPlaying(prevTrack.id); setIsPaused(false) }
-    }
-  }
-
-  const getCurrentTrack = () => tracks.find(t => t.id === currentlyPlaying)
+  }, [playNextTrack, playPreviousTrack, togglePlayPause])
 
   return (
     <aside className="right-sidebar">
@@ -317,29 +231,13 @@ export default function RightSidebar({
               <button
                 ref={vinylRef}
                 className="vinyl-disk"
-                onClick={() => {
-                  if (!youtubePlayer) return
-                  if (currentlyPlaying) {
-                    if (isPaused) { youtubePlayer.playVideo(); setIsPaused(false) }
-                    else { youtubePlayer.pauseVideo(); setIsPaused(true) }
-                  } else {
-                    const first = tracks.find(t => t.youtubeUrl)
-                    if (first?.youtubeUrl) {
-                      const videoId = extractYouTubeId(first.youtubeUrl)
-                      if (videoId) { youtubePlayer.loadVideoById(videoId); setCurrentlyPlaying(first.id); setIsPaused(false) }
-                    }
-                  }
-                }}
+                onClick={togglePlayPause}
               >
                 <div className={`vinyl-glow-ring${!isPaused && currentlyPlaying ? ' active' : ''}`} />
                 <div className="vinyl-art-wrap">
-                  {(() => {
-                    const track = getCurrentTrack()
-                    const videoId = track?.youtubeUrl ? extractYouTubeId(track.youtubeUrl) : null
-                    return videoId
-                      ? <img src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`} alt={track?.title} className="vinyl-art" />
-                      : null
-                  })()}
+                  {currentVideoId
+                    ? <img src={`https://img.youtube.com/vi/${currentVideoId}/hqdefault.jpg`} alt={currentTrack?.title} className="vinyl-art" />
+                    : null}
                 </div>
                 <div className="vinyl-hole" />
               </button>
@@ -377,8 +275,8 @@ export default function RightSidebar({
             </div>
 
             <div className="vinyl-track-info">
-              <div className="vinyl-track-title">{getCurrentTrack()?.title || 'Tap to play'}</div>
-              <div className="vinyl-track-artist">{getCurrentTrack()?.artist || ''}</div>
+              <div className="vinyl-track-title">{currentTrack?.title || 'Tap to play'}</div>
+              <div className="vinyl-track-artist">{currentTrack?.artist || ''}</div>
             </div>
           </div>
 
@@ -392,7 +290,7 @@ export default function RightSidebar({
       </div>
 
       <div
-        id="youtube-player"
+        id={playerElementId}
         style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', overflow: 'hidden' }}
       />
     </aside>

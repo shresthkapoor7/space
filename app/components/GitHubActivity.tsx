@@ -1,145 +1,15 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-
-interface GitHubCommitDay {
-  date: string
-  count: number
-  level: number
-}
+import { useState } from 'react'
+import { type GitHubCommitDay, useGitHubContributions } from '../../lib/useGitHubContributions'
 
 interface GitHubActivityProps {
   username: string
 }
 
-interface CachedData {
-  data: GitHubCommitDay[]
-  timestamp: number
-  username: string
-}
-
 export default function GitHubActivity({ username }: GitHubActivityProps) {
-  const [commitData, setCommitData] = useState<GitHubCommitDay[]>([])
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
   const [hoveredDay, setHoveredDay] = useState<GitHubCommitDay | null>(null)
-
-  const CACHE_DURATION = 60 * 60 * 1000
-
-  useEffect(() => {
-    fetchCommitData()
-  }, [username])
-
-  const getCacheKey = (username: string) => `github-contributions-${username}`
-
-  const getCachedData = (username: string): GitHubCommitDay[] | null => {
-    try {
-      const cached = localStorage.getItem(getCacheKey(username))
-      if (!cached) return null
-
-      const cachedData: CachedData = JSON.parse(cached)
-      const now = Date.now()
-
-      if (
-        cachedData.timestamp &&
-        cachedData.username === username &&
-        (now - cachedData.timestamp) < CACHE_DURATION
-      ) {
-        return cachedData.data
-      }
-
-      localStorage.removeItem(getCacheKey(username))
-      return null
-    } catch (error) {
-      console.error('Error reading GitHub cache:', error)
-      return null
-    }
-  }
-
-  const setCachedData = (username: string, data: GitHubCommitDay[]) => {
-    try {
-      const cacheData: CachedData = {
-        data,
-        timestamp: Date.now(),
-        username
-      }
-      localStorage.setItem(getCacheKey(username), JSON.stringify(cacheData))
-    } catch (error) {
-      console.error('Error caching GitHub data:', error)
-    }
-  }
-
-  const fetchCommitData = async () => {
-    setIsLoading(true)
-    setError(null)
-
-    const cachedData = getCachedData(username)
-    if (cachedData) {
-      setCommitData(cachedData)
-      setIsLoading(false)
-      return
-    }
-
-    try {
-      const commitMap = await fetchGitHubContributions(username)
-
-      setCachedData(username, commitMap)
-      setCommitData(commitMap)
-    } catch (err) {
-      console.error('GitHub contributions fetch failed:', err)
-      setError(err instanceof Error ? err.message : 'Failed to load contributions')
-
-      const oldCachedData = getExpiredCachedData(username)
-      if (oldCachedData) {
-        setCommitData(oldCachedData)
-        setError(null)
-      } else {
-        setCommitData([])
-      }
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const getExpiredCachedData = (username: string): GitHubCommitDay[] | null => {
-    try {
-      const cached = localStorage.getItem(getCacheKey(username))
-      if (!cached) return null
-
-      const cachedData: CachedData = JSON.parse(cached)
-      if (cachedData.username === username && cachedData.data) {
-        return cachedData.data
-      }
-      return null
-    } catch (error) {
-      return null
-    }
-  }
-
-  const fetchGitHubContributions = async (username: string): Promise<GitHubCommitDay[]> => {
-    try {
-      const apiUrl = `https://github-contributions-api.jogruber.de/v4/${username}?y=last`
-      const response = await fetch(apiUrl)
-
-      if (!response.ok) {
-        throw new Error(`GitHub API error: ${response.status}`)
-      }
-
-      const data = await response.json()
-      const ninetyDaysAgo = new Date()
-      ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90)
-      const ninetyDaysAgoStr = ninetyDaysAgo.toISOString().split('T')[0]
-
-      const filteredContributions = data.contributions.filter((day: GitHubCommitDay) =>
-        day.date >= ninetyDaysAgoStr
-      )
-
-      return filteredContributions
-    } catch (err) {
-      console.error('GitHub API failed:', err)
-      throw new Error('Could not fetch GitHub contributions')
-    }
-  }
+  const { commitData, isLoading, error } = useGitHubContributions(username)
 
   const getCommitMapData = () => {
     if (commitData.length === 0) return []
@@ -384,24 +254,18 @@ export default function GitHubActivity({ username }: GitHubActivityProps) {
               <span style={{ fontSize: '0.7rem', color: '#666' }}>More</span>
             </div>
 
-            <div className="commit-tooltip-area">
-              <div className="tooltip-info">
-                {hoveredDay ? (
-                  <>
-                    <div className="tooltip-contributions">
-                      {formatCommitText(hoveredDay.count)}
-                    </div>
-                    <div className="tooltip-date">
-                      {formatTooltipDate(hoveredDay.date)}
-                    </div>
-                  </>
-                ) : (
-                  <div className="tooltip-placeholder">
-                    Hover over to see details
+            {hoveredDay ? (
+              <div className="commit-tooltip-area">
+                <div className="tooltip-info">
+                  <div className="tooltip-contributions">
+                    {formatCommitText(hoveredDay.count)}
                   </div>
-                )}
+                  <div className="tooltip-date">
+                    {formatTooltipDate(hoveredDay.date)}
+                  </div>
+                </div>
               </div>
-            </div>
+            ) : null}
           </>
         )}
       </div>
