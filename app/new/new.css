@@ -1348,7 +1348,7 @@ section {
     right: 6px;
     top: 6px;
     display: flex;
-    align-items: end;
+    align-items: flex-end;
     gap: 2px;
     height: 12px;
 }
@@ -1488,7 +1488,7 @@ section {
 }
 .player-vol .vol-bars {
     display: flex;
-    align-items: end;
+    align-items: flex-end;
     gap: 2px;
     height: 10px;
 }
@@ -2211,6 +2211,8 @@ section {
 .fcard.is-active .ppx > span[data-v="1"] { background: var(--card-color); opacity: 0.45; }
 .fcard:hover .ppx > span[data-v="2"],
 .fcard.is-active .ppx > span[data-v="2"] { background: var(--card-color); }
+.fcard:hover .ppx-logo,
+.fcard.is-active .ppx-logo { opacity: 1; }
 .ppx-glyph {
     position: absolute;
     inset: 0;
@@ -2221,6 +2223,21 @@ section {
     letter-spacing: 0.06em;
     text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
     pointer-events: none;
+}
+.ppx-logo {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 38%;
+    height: 38%;
+    object-fit: contain;
+    pointer-events: none;
+    image-rendering: auto;
+    filter: brightness(0) invert(1);
+}
+:root[data-theme="pitlane"] .ppx-logo {
+    filter: brightness(0);
+    opacity: 0.8;
 }
 
 /* fighter detail panel */
@@ -2279,6 +2296,7 @@ section {
 }
 .fpanel-name .ppx { width: 72px; height: 72px; }
 .fpanel-name .ppx-glyph { font-size: 22px; }
+.fpanel-name .ppx-logo { width: 42%; height: 42%; }
 .fpanel-display {
     font-family: "Bricolage Grotesque", sans-serif;
     font-weight: 700;
@@ -2298,6 +2316,12 @@ section {
     position: relative;
     z-index: 1;
     padding: 8px 24px 4px;
+}
+.fpanel-fighter-gif {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    image-rendering: pixelated;
 }
 
 /* stat bars */
@@ -2546,7 +2570,7 @@ section {
 /* Music tile */
 .waveform {
     display: flex;
-    align-items: end;
+    align-items: flex-end;
     gap: 2px;
     height: 60px;
     margin-top: auto;

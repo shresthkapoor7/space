@@ -1343,13 +1343,42 @@ function Now() {
 }
 
 // ---------- STACK (fighter select) ----------
+const SI = "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons";
+const SI16 = "https://cdn.jsdelivr.net/npm/simple-icons@16.22.0/icons";
+const TECH_LOGOS: Record<string, string> = {
+  my: `${SI}/mysql.svg`,
+  py: `${SI}/python.svg`,
+  ts: `${SI}/typescript.svg`,
+  js: `${SI}/javascript.svg`,
+  ja: `${SI}/java.svg`,
+  sh: `${SI}/gnubash.svg`,
+  re: `${SI}/react.svg`,
+  nx: `${SI}/nextdotjs.svg`,
+  ng: `${SI}/angular.svg`,
+  fa: `${SI}/fastapi.svg`,
+  sb: `${SI}/spring.svg`,
+  lc: `${SI16}/langchain.svg`,
+  pd: `${SI16}/pydantic.svg`,
+  ag: `${SI16}/langgraph.svg`,
+  vc: `${SI16}/qdrant.svg`,
+  rs: `${SI}/postman.svg`,
+  ra: `${SI16}/haystack.svg`,
+  ll: `${SI16}/anthropic.svg`,
+  pt: `${SI}/pytorch.svg`,
+  cv: `${SI}/opencv.svg`,
+  aw: `${SI}/amazonaws.svg`,
+  dk: `${SI}/docker.svg`,
+  rd: `${SI}/redis.svg`,
+  gt: `${SI}/git.svg`,
+};
+
 const FIGHTERS = [
   // STRIKER — core languages
   { id: "py", name: "Python",            glyph: "PY", cls: "STRIKER",  color: "accent", years: 4, projects: 18, sig: "fast.iter()" },
   { id: "ts", name: "TypeScript",        glyph: "TS", cls: "STRIKER",  color: "accent", years: 3, projects: 14, sig: "type.guard" },
   { id: "js", name: "JavaScript",        glyph: "JS", cls: "STRIKER",  color: "accent", years: 4, projects: 16, sig: "event.loop" },
   { id: "ja", name: "Java",              glyph: "JA", cls: "STRIKER",  color: "accent", years: 3, projects: 8,  sig: "old.faithful" },
-  { id: "sq", name: "SQL",               glyph: "SQ", cls: "STRIKER",  color: "accent", years: 4, projects: 22, sig: "JOIN.combo" },
+  { id: "my", name: "MySQL",             glyph: "MY", cls: "STRIKER",  color: "accent", years: 4, projects: 22, sig: "JOIN.combo" },
   { id: "sh", name: "Bash",              glyph: "SH", cls: "STRIKER",  color: "accent", years: 5, projects: 30, sig: "one.liner" },
   // MAGE — frontend / web
   { id: "re", name: "React",             glyph: "RE", cls: "MAGE",     color: "lilac",  years: 3, projects: 12, sig: "useReality" },
@@ -1377,7 +1406,9 @@ const FIGHTERS = [
 
 function powerOf(f) { return Math.min(99, 40 + f.years * 8 + Math.min(40, f.projects * 1.4)); }
 
-function FighterPortrait({ glyph, colorVar }) {
+function FighterPortrait({ glyph, colorVar, id = "" }) {
+  const [imgFailed, setImgFailed] = useState(false);
+  const logo = TECH_LOGOS[id];
   const seed = (glyph.charCodeAt(0) * 31 + glyph.charCodeAt(1)) >>> 0;
   let s = seed;
   const rand = () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 0xffffffff; };
@@ -1395,7 +1426,16 @@ function FighterPortrait({ glyph, colorVar }) {
       {cells.flatMap((row, y) => row.map((v, x) => (
         <span key={`${x}-${y}`} data-v={v} />
       )))}
-      <span className="ppx-glyph mono" style={{ color: `var(${colorVar})` }}>{glyph}</span>
+      {logo && !imgFailed ? (
+        <img
+          src={logo}
+          alt={glyph}
+          className="ppx-logo"
+          onError={() => setImgFailed(true)}
+        />
+      ) : (
+        <span className="ppx-glyph mono" style={{ color: `var(${colorVar})` }}>{glyph}</span>
+      )}
     </div>
   );
 }
@@ -1476,7 +1516,7 @@ function FighterPanel({ f }) {
         <span className="fpanel-id mono">#{String(FIGHTERS.indexOf(f) + 1).padStart(2, "0")}/{FIGHTERS.length}</span>
       </div>
       <div className="fpanel-name">
-        <FighterPortrait glyph={f.glyph} colorVar={colorVar} />
+        <FighterPortrait glyph={f.glyph} colorVar={colorVar} id={f.id} />
         <div>
           <div className="fpanel-display">{f.name}</div>
           <div className="mono fpanel-sub">SIG · <span style={{ color: `var(${colorVar})` }}>{f.sig}</span></div>
@@ -1501,7 +1541,11 @@ function FighterPanel({ f }) {
         <span className="fpanel-ready">READY ▶</span>
       </div>
       <div className="fpanel-fighter-wrap">
-        <PixelFighter glyph={f.glyph} colorVar={colorVar} />
+        <img
+          src={f.color === "lilac" ? "/fighter_animation_1.gif" : f.color === "acid" ? "/fighter_animation_2.gif" : "/fighter_animation.gif"}
+          alt={f.name}
+          className="fpanel-fighter-gif"
+        />
       </div>
     </div>
   );
@@ -1573,7 +1617,7 @@ function Stack() {
                       style={{ "--card-i": i }}
                       aria-label={f.name}
                     >
-                      <FighterPortrait glyph={f.glyph} colorVar={colorVar} />
+                      <FighterPortrait glyph={f.glyph} colorVar={colorVar} id={f.id} />
                       <span className="fcard-name mono">{f.name}</span>
                       {isSelected && <span className="fcard-p1 mono">P1</span>}
                     </button>
