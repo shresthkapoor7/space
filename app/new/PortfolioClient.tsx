@@ -1675,10 +1675,13 @@ function TileBlogOverlay({ id, tileContent, onClose }) {
   useEffect(() => {
     const onKey = (e) => { if (e.key === "Escape") handleClose(); };
     window.addEventListener("keydown", onKey);
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
     document.documentElement.style.overflow = "hidden";
+    document.documentElement.style.paddingRight = `${scrollbarWidth}px`;
     return () => {
       window.removeEventListener("keydown", onKey);
       document.documentElement.style.overflow = "";
+      document.documentElement.style.paddingRight = "";
     };
   }, []);
 
