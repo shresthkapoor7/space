@@ -1757,6 +1757,55 @@ function TileBlogOverlay({ id, tileContent, onClose }) {
 function OffTheClock({ motion }) {
   const [openTile, setOpenTile] = useState(null);
 
+  const playTileOpen = () => {
+    try {
+      const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const now = ctx.currentTime;
+
+      // long whoosh — noise swept through filter over 0.6s
+      const bufSize = Math.floor(ctx.sampleRate * 0.7);
+      const buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+      const swish = ctx.createBufferSource();
+      swish.buffer = buf;
+      const bpf = ctx.createBiquadFilter();
+      bpf.type = "bandpass";
+      bpf.frequency.setValueAtTime(4000, now);
+      bpf.frequency.exponentialRampToValueAtTime(300, now + 0.55);
+      bpf.Q.value = 0.8;
+      const swishGain = ctx.createGain();
+      swishGain.gain.setValueAtTime(0, now);
+      swishGain.gain.linearRampToValueAtTime(0.08, now + 0.05);
+      swishGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.65);
+      swish.connect(bpf); bpf.connect(swishGain); swishGain.connect(ctx.destination);
+      swish.start(now); swish.stop(now + 0.7);
+
+      // punchy thud at the start
+      const thud = ctx.createOscillator();
+      const thudGain = ctx.createGain();
+      thud.connect(thudGain); thudGain.connect(ctx.destination);
+      thud.type = "sine";
+      thud.frequency.setValueAtTime(160, now);
+      thud.frequency.exponentialRampToValueAtTime(35, now + 0.18);
+      thudGain.gain.setValueAtTime(0.12, now);
+      thudGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
+      thud.start(now); thud.stop(now + 0.22);
+
+      // airy resonant tail — sine that lingers
+      const ring = ctx.createOscillator();
+      const ringGain = ctx.createGain();
+      ring.connect(ringGain); ringGain.connect(ctx.destination);
+      ring.type = "sine";
+      ring.frequency.setValueAtTime(680, now + 0.04);
+      ring.frequency.exponentialRampToValueAtTime(420, now + 0.6);
+      ringGain.gain.setValueAtTime(0, now + 0.04);
+      ringGain.gain.linearRampToValueAtTime(0.04, now + 0.1);
+      ringGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.7);
+      ring.start(now + 0.04); ring.stop(now + 0.7);
+    } catch {}
+  };
+
   const tiles = [
     { id: "racing",   el: <TileRacing /> },
     { id: "manga",    el: <TileManga /> },
@@ -1780,10 +1829,10 @@ function OffTheClock({ motion }) {
             <div
               key={t.id}
               className="tile-clickable-wrap"
-              onClick={() => setOpenTile(t.id)}
+              onClick={() => { playTileOpen(); setOpenTile(t.id); }}
               role="button"
               tabIndex={0}
-              onKeyDown={(e) => e.key === "Enter" && setOpenTile(t.id)}
+              onKeyDown={(e) => e.key === "Enter" && (playTileOpen(), setOpenTile(t.id))}
             >
               {t.el}
             </div>
