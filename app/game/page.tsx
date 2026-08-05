@@ -313,8 +313,8 @@ export default function GamePage() {
         ctx.shadowColor = '#FF0000'
         ctx.shadowBlur = 20
       } else {
-        ctx.fillStyle = '#FF8C55'
-        ctx.shadowColor = '#FF6B35'
+        ctx.fillStyle = '#FF6A6A'
+        ctx.shadowColor = '#F5333F'
         ctx.shadowBlur = 12
       }
 
@@ -334,7 +334,7 @@ export default function GamePage() {
         let symbol: string, color: string, glow: number
         switch (enemy.type) {
           case 0: symbol = '∑'; color = '#FFAA66'; glow = 18; break
-          case 1: symbol = '∫'; color = '#FF7A42'; glow = 14; break
+          case 1: symbol = '∫'; color = '#F5424C'; glow = 14; break
           default: symbol = '∂'; color = '#C05520'; glow = 10; break
         }
         ctx.shadowBlur = glow; ctx.shadowColor = color; ctx.fillStyle = color
@@ -416,7 +416,7 @@ export default function GamePage() {
     const updateBullets = () => {
       ctx.fillStyle = '#FFAA66'
       ctx.shadowBlur = 8
-      ctx.shadowColor = '#FF6B35'
+      ctx.shadowColor = '#F5333F'
 
       for (let i = bullets.length - 1; i >= 0; i--) {
         const bullet = bullets[i]
@@ -430,7 +430,7 @@ export default function GamePage() {
           const enemy = enemies[j]
           if (!enemy.alive) continue
           if (Math.abs(bullet.x - enemy.x) < 20 && Math.abs(bullet.y - enemy.y) < 20) {
-            const burstColor = enemy.type === 0 ? '#FFAA66' : enemy.type === 1 ? '#FF7A42' : '#C05520'
+            const burstColor = enemy.type === 0 ? '#FFAA66' : enemy.type === 1 ? '#F5424C' : '#C05520'
             spawnBurst(enemy.x, enemy.y, burstColor)
             enemy.alive = false
             bullets.splice(i, 1)
@@ -457,7 +457,7 @@ export default function GamePage() {
       const padding = canvas.width <= 480 ? 10 : 20
       ctx.textBaseline = 'top'
       ctx.shadowBlur = 6
-      ctx.shadowColor = 'rgba(255, 107, 53, 0.6)'
+      ctx.shadowColor = 'rgba(245, 51, 63, 0.6)'
 
       // Score
       ctx.font = `${fontSize}px 'Courier New', monospace`
@@ -465,7 +465,7 @@ export default function GamePage() {
       ctx.fillStyle = 'rgba(255, 130, 60, 0.45)'
       ctx.fillText('killed', padding, padding)
       ctx.font = `bold ${fontSize}px 'Courier New', monospace`
-      ctx.fillStyle = '#FF8C55'
+      ctx.fillStyle = '#FF6A6A'
       ctx.fillText(String(defeated).padStart(2, '0'), padding, padding + fontSize + 4)
 
       // Level / difficulty indicator
@@ -475,7 +475,7 @@ export default function GamePage() {
       ctx.fillStyle = 'rgba(255, 130, 60, 0.45)'
       ctx.fillText('level', canvas.width / 2, padding)
       ctx.font = `bold ${fontSize}px 'Courier New', monospace`
-      ctx.fillStyle = '#FF8C55'
+      ctx.fillStyle = '#FF6A6A'
       ctx.fillText(String(level).padStart(2, '0'), canvas.width / 2, padding + fontSize + 4)
 
       // Lives
@@ -483,9 +483,9 @@ export default function GamePage() {
       ctx.textAlign = 'right'
       const livesX = canvas.width - padding
       for (let i = 0; i < 3; i++) {
-        ctx.fillStyle = i < lives ? '#FF8C55' : 'rgba(255, 107, 53, 0.15)'
+        ctx.fillStyle = i < lives ? '#FF6A6A' : 'rgba(245, 51, 63, 0.15)'
         ctx.shadowBlur = i < lives ? 8 : 0
-        ctx.shadowColor = '#FF6B35'
+        ctx.shadowColor = '#F5333F'
         ctx.fillText('^', livesX - i * 22, padding + 6)
       }
       ctx.shadowBlur = 0
@@ -611,12 +611,12 @@ export default function GamePage() {
           text-align: center;
           padding: 40px;
           background: rgba(10, 8, 6, 0.95);
-          border: 1px solid #FF6B35;
-          box-shadow: 0 0 40px rgba(255, 107, 53, 0.15);
+          border: 1px solid #F5333F;
+          box-shadow: 0 0 40px rgba(245, 51, 63, 0.15);
         }
 
         .overlay-box h2 {
-          color: #FF6B35;
+          color: #F5333F;
           font-size: 1.2rem;
           margin: 0; padding: 0;
           line-height: 1.3;
@@ -639,10 +639,10 @@ export default function GamePage() {
         .key {
           display: inline-block;
           padding: 5px 12px;
-          background: rgba(255, 107, 53, 0.08);
-          border: 1px solid rgba(255, 107, 53, 0.4);
+          background: rgba(245, 51, 63, 0.08);
+          border: 1px solid rgba(245, 51, 63, 0.4);
           border-radius: 3px;
-          color: #FF9966;
+          color: #F5333F;
           font-weight: bold;
           margin: 0 5px;
         }
@@ -655,7 +655,7 @@ export default function GamePage() {
         }
 
         .score-value {
-          color: #FF8C55;
+          color: #FF6A6A;
           font-size: 3rem !important;
           font-weight: bold;
           margin: 0 0 24px !important;
@@ -663,9 +663,9 @@ export default function GamePage() {
         }
 
         .play-again-btn {
-          background: rgba(255, 107, 53, 0.1);
-          border: 1px solid #FF6B35;
-          color: #FF8C55;
+          background: rgba(245, 51, 63, 0.1);
+          border: 1px solid #F5333F;
+          color: #FF6A6A;
           font-family: 'Courier New', monospace;
           font-size: 1rem;
           font-weight: bold;
@@ -677,8 +677,8 @@ export default function GamePage() {
         }
 
         .play-again-btn:hover {
-          background: rgba(255, 107, 53, 0.22);
-          box-shadow: 0 0 16px rgba(255, 107, 53, 0.3);
+          background: rgba(245, 51, 63, 0.22);
+          box-shadow: 0 0 16px rgba(245, 51, 63, 0.3);
         }
 
         .hint {
@@ -693,7 +693,7 @@ export default function GamePage() {
           text-decoration: none;
           transition: color 0.2s;
         }
-        .back-link:hover { color: #FF6B35; }
+        .back-link:hover { color: #F5333F; }
 
         @keyframes blink {
           0%, 50%, 100% { opacity: 1; }
@@ -733,7 +733,7 @@ export default function GamePage() {
           text-decoration: none;
           transition: color 0.2s;
         }
-        .footer-links a:hover { color: #FF6B35; }
+        .footer-links a:hover { color: #F5333F; }
         .footer-links span { color: #444; }
 
         .mobile-controls {
@@ -749,9 +749,9 @@ export default function GamePage() {
         }
 
         .control-btn {
-          background: rgba(255, 107, 53, 0.12);
-          border: 1px solid #FF6B35;
-          color: #FF6B35;
+          background: rgba(245, 51, 63, 0.12);
+          border: 1px solid #F5333F;
+          color: #F5333F;
           font-family: monospace;
           font-size: 1.2rem;
           font-weight: bold;
@@ -765,7 +765,7 @@ export default function GamePage() {
         }
 
         .control-btn:active {
-          background: rgba(255, 107, 53, 0.25);
+          background: rgba(245, 51, 63, 0.25);
           transform: scale(0.95);
         }
 

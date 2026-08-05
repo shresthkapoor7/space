@@ -20,7 +20,7 @@ import GitHubActivity from '../components/GitHubActivity'
 // ---------- TWEAKS ----------
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "theme": "nightdrive",
-  "accent": "#ff7a3d",
+  "accent": "#f5333f",
   "motion": "on",
   "displayName": "Shresth"
 }/*EDITMODE-END*/;
@@ -99,7 +99,7 @@ function App() {
   }, [t.theme]);
 
   useEffect(() => {
-    // override accent (orange) via inline CSS var
+    // override accent (red) via inline CSS var
     document.documentElement.style.setProperty("--accent-override", t.accent);
     // also write to --accent if user picked a custom one
     document.documentElement.style.setProperty("--accent", t.accent);
@@ -139,7 +139,7 @@ function App() {
           <TweakColor
             value={t.accent}
             onChange={(v) => setTweak("accent", v)}
-            options={["#ff7a3d", "#c0ff00", "#b794f4", "#ff4d6d", "#3ddc97"]}
+            options={["#f5333f", "#c0ff00", "#b794f4", "#ff4d6d", "#3ddc97"]}
           />
         </TweakSection>
         <TweakSection label="Motion">
