@@ -600,7 +600,7 @@ section {
 /* ============== Hero ============== */
 .hero {
     padding-top: 160px;
-    padding-bottom: 80px;
+    padding-bottom: 40px;
     min-height: 100vh;
     position: relative;
     z-index: 50;
@@ -834,7 +834,7 @@ section {
 /* collage */
 .collage {
     position: relative;
-    height: 1100px;
+    height: 900px;
 }
 .collage-editable {
     position: absolute;
