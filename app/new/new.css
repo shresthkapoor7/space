@@ -255,6 +255,10 @@ html {
     body.site-bounty-bounce {
         animation: none;
     }
+    .bounty-wave {
+        animation: none;
+        filter: none;
+    }
 }
 
 body {
@@ -269,6 +273,35 @@ body {
 body.site-bounty-bounce {
     animation: site-bounty-bounce 3s cubic-bezier(0.2, 0.9, 0.2, 1);
     transform-origin: center center;
+}
+
+.bounty-wave {
+    transform-origin: 15% center;
+    backface-visibility: hidden;
+    will-change: transform, filter;
+    filter: url(#bountyFlagRipple) drop-shadow(0 0 10px rgba(255, 196, 84, 0))
+        drop-shadow(0 0 22px rgba(255, 150, 40, 0));
+    transition: filter 0.35s ease;
+    animation: bounty-flag-wave 3.6s ease-in-out infinite;
+}
+.bounty-wave:hover {
+    filter: url(#bountyFlagRipple) drop-shadow(0 0 10px rgba(255, 196, 84, 0.65))
+        drop-shadow(0 0 22px rgba(255, 150, 40, 0.4));
+}
+@keyframes bounty-flag-wave {
+    0%,
+    100% {
+        transform: perspective(700px) rotateY(0deg) skewY(0deg) scaleX(1);
+    }
+    25% {
+        transform: perspective(700px) rotateY(5deg) skewY(-1deg) scaleX(0.99);
+    }
+    50% {
+        transform: perspective(700px) rotateY(0deg) skewY(0.5deg) scaleX(1);
+    }
+    75% {
+        transform: perspective(700px) rotateY(-5deg) skewY(1deg) scaleX(0.99);
+    }
 }
 
 .bounty-streaks-overlay {

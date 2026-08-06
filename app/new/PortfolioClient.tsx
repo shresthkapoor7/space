@@ -396,6 +396,15 @@ function Collage() {
 
   return (
     <>
+      {/* displacement filter — makes the bounty poster ripple/bend at the corners like cloth */}
+      <svg width="0" height="0" style={{ position: "absolute" }} aria-hidden="true">
+        <filter id="bountyFlagRipple" x="-20%" y="-20%" width="140%" height="140%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.012 0.024" numOctaves="2" seed="7" result="noise">
+            <animate attributeName="baseFrequency" dur="7s" values="0.012 0.024; 0.016 0.03; 0.01 0.02; 0.012 0.024" repeatCount="indefinite" />
+          </feTurbulence>
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="12" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+      </svg>
       {bountyFxActive ? (
         <svg
           className="bounty-streaks-overlay"
@@ -550,6 +559,7 @@ function Collage() {
         style={s(6)}
       >
       <img
+        className="bounty-wave"
         src="/images/bounty.jpg"
         alt="Bounty"
         data-reveal="fade"
