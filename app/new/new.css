@@ -11,7 +11,7 @@
     --line: oklch(0.26 0.01 290);
     --line-soft: oklch(0.18 0.01 290);
     --card: oklch(0.11 0.01 290);
-    --accent: oklch(0.63 0.23 25); /* racing red */
+    --accent: oklch(0.5 0.17 24); /* rustic crimson */
     --acid: oklch(0.86 0.22 130); /* acid green */
     --lilac: oklch(0.78 0.1 300); /* soft lilac */
 }
@@ -24,7 +24,7 @@
     --line: oklch(0.84 0.02 80);
     --line-soft: oklch(0.88 0.015 80);
     --card: oklch(0.99 0.01 80);
-    --accent: oklch(0.58 0.24 25);
+    --accent: oklch(0.47 0.17 24);
     --acid: oklch(0.7 0.2 145);
     --lilac: oklch(0.55 0.14 295);
 }
@@ -2105,7 +2105,7 @@ section {
     font-size: 11px;
     letter-spacing: 0.22em;
     color: var(--accent);
-    text-shadow: 0 0 8px oklch(0.63 0.23 25 / 0.5);
+    text-shadow: 0 0 8px oklch(0.5 0.17 24 / 0.5);
     animation: marquee-scroll 28s linear infinite;
 }
 @keyframes marquee-scroll { to { transform: translateX(-100%); } }
@@ -2155,7 +2155,7 @@ section {
 .fcard:hover, .fcard.is-active {
     background: oklch(0.16 0.03 285);
     border-color: var(--card-color, var(--accent));
-    box-shadow: 0 0 0 1px var(--card-color, var(--accent)), 0 0 18px var(--card-glow, oklch(0.63 0.23 25 / 0.4));
+    box-shadow: 0 0 0 1px var(--card-color, var(--accent)), 0 0 18px var(--card-glow, oklch(0.5 0.17 24 / 0.4));
     transform: translateY(-2px);
 }
 .fcard.is-selected {
@@ -2167,7 +2167,7 @@ section {
     0%, 100% { box-shadow: 0 0 0 1px var(--card-color), 0 0 22px var(--card-glow); }
     50%      { box-shadow: 0 0 0 2px var(--card-color), 0 0 32px var(--card-glow); }
 }
-.fcard.color-accent { --card-color: var(--accent); --card-glow: oklch(0.63 0.23 25 / 0.5); }
+.fcard.color-accent { --card-color: var(--accent); --card-glow: oklch(0.5 0.17 24 / 0.5); }
 .fcard.color-lilac  { --card-color: var(--lilac);  --card-glow: oklch(0.78 0.10 300 / 0.5); }
 .fcard.color-acid   { --card-color: var(--acid);   --card-glow: oklch(0.86 0.22 130 / 0.5); }
 .fcard-name {
@@ -2752,7 +2752,7 @@ section {
     background: oklch(0.78 0.16 320);
 }
 .bullet.bF {
-    background: oklch(0.66 0.23 25);
+    background: oklch(0.54 0.17 24);
 }
 .bullet.bR {
     background: oklch(0.78 0.18 90);

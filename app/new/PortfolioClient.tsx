@@ -20,7 +20,7 @@ import GitHubActivity from '../components/GitHubActivity'
 // ---------- TWEAKS ----------
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "theme": "nightdrive",
-  "accent": "#f5333f",
+  "accent": "#a5262c",
   "motion": "on",
   "displayName": "Shresth"
 }/*EDITMODE-END*/;
@@ -139,7 +139,7 @@ function App() {
           <TweakColor
             value={t.accent}
             onChange={(v) => setTweak("accent", v)}
-            options={["#f5333f", "#c0ff00", "#b794f4", "#ff4d6d", "#3ddc97"]}
+            options={["#a5262c", "#c0ff00", "#b794f4", "#ff4d6d", "#3ddc97"]}
           />
         </TweakSection>
         <TweakSection label="Motion">
@@ -250,15 +250,24 @@ const Underlined = ({ children }) => (
   </span>
 );
 
-const Asterisk = () => (
-  <svg className="scribble-asterisk" viewBox="0 0 44 64" aria-hidden="true">
-    <path
-      d="M 22 8 L 22 56 M 6 16 L 38 48 M 6 48 L 38 16 M 2 32 L 42 32"
-      stroke="var(--accent)" strokeWidth="1.8" strokeLinecap="round" fill="none"
-    />
-    <text x="48" y="38" fontFamily="Caveat, cursive" fontSize="16" fill="var(--ink-mute)">← this part</text>
-  </svg>
-);
+const Clover = () => {
+  // one spade-leaf, tip at the center (0,0). The base PINCHES to a narrow neck
+  // (control points hug the axis) so background shows between leaves, then flares
+  // into a round bilobe with a cleft at the far edge. Widest shoulders sit at
+  // ~32° — inside each 72° slice — so neighbours never fuse. No stem.
+  const leaf = "M 0 0 C 4 -10 11 -22 16 -26 C 17 -34 9 -40 0 -32 C -9 -40 -17 -34 -16 -26 C -11 -22 -4 -10 0 0 Z";
+  return (
+    <svg className="scribble-asterisk" viewBox="0 0 175 96" aria-hidden="true">
+      {/* five-leaf clover — Black Clover grimoire emblem */}
+      <g transform="translate(44 50)">
+        {[0, 72, 144, 216, 288].map((deg) => (
+          <path key={deg} transform={`rotate(${deg})`} d={leaf} fill="var(--accent)" />
+        ))}
+      </g>
+      <text x="88" y="52" fontFamily="Caveat, cursive" fontSize="18" fill="var(--ink-mute)">← black clover</text>
+    </svg>
+  );
+};
 
 function Hero({ name }) {
   const { summary } = useGitHubContributions('shresthkapoor7')
@@ -284,7 +293,7 @@ function Hero({ name }) {
               and full-stack craft. Currently turning{" "}
               <Highlight tone="lilac">RAG pipelines</Highlight> and Pydantic-typed
               backends into <Underlined><b>practical applications</b></Underlined>.
-              <Asterisk />
+              <Clover />
             </p>
             <div className="hero-meta" data-reveal="up" style={{ "--reveal-delay": "0.7s" }}>
               <div>STATUS<span>Open to SWE / AI Eng internships '26</span></div>

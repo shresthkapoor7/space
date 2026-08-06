@@ -3,7 +3,7 @@ import './new/new.css'
 import PortfolioClient from './new/PortfolioClient'
 
 export const metadata: Metadata = {
-  title: 'Shresth — CS @ NYU · NYC',
+  title: 'shresth',
 }
 
 export default function RootPage() {
