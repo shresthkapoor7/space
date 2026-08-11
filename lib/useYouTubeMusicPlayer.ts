@@ -24,6 +24,9 @@ export function useYouTubeMusicPlayer(tracks: Track[] = sampleTracks) {
 
   const playerElementId = useId().replace(/:/g, '')
   const playNextTrackRef = useRef<() => void>(() => {})
+  const youtubePlayerRef = useRef<any>(null)
+  const playerScriptRequestedRef = useRef(false)
+  const autoplayOnReadyRef = useRef(false)
 
   const currentTrack = useMemo(
     () => tracks.find((track) => track.id === currentlyPlaying) ?? null,
@@ -33,13 +36,10 @@ export function useYouTubeMusicPlayer(tracks: Track[] = sampleTracks) {
   const currentVideoId = currentTrack?.youtubeUrl ? extractYouTubeId(currentTrack.youtubeUrl) : null
 
   const createYouTubePlayer = useCallback(() => {
-    if (!window.YT || !window.YT.Player || youtubePlayer) return
+    if (!window.YT || !window.YT.Player || youtubePlayerRef.current) return
 
     const playerElement = document.getElementById(playerElementId)
-    if (!playerElement) {
-      window.setTimeout(createYouTubePlayer, 100)
-      return
-    }
+    if (!playerElement) return
 
     new window.YT.Player(playerElementId, {
       height: '1',
@@ -57,7 +57,21 @@ export function useYouTubeMusicPlayer(tracks: Track[] = sampleTracks) {
         playsinline: 1,
       },
       events: {
-        onReady: (event: any) => setYoutubePlayer(event.target),
+        onReady: (event: any) => {
+          youtubePlayerRef.current = event.target
+          setYoutubePlayer(event.target)
+
+          if (autoplayOnReadyRef.current) {
+            autoplayOnReadyRef.current = false
+            const firstTrack = tracks.find((track) => track.youtubeUrl)
+            const videoId = firstTrack?.youtubeUrl ? extractYouTubeId(firstTrack.youtubeUrl) : null
+            if (firstTrack && videoId) {
+              event.target.loadVideoById(videoId)
+              setCurrentlyPlaying(firstTrack.id)
+              setIsPaused(false)
+            }
+          }
+        },
         onStateChange: (event: any) => {
           if (event.data === window.YT.PlayerState.PLAYING) {
             setIsPaused(false)
@@ -69,24 +83,30 @@ export function useYouTubeMusicPlayer(tracks: Track[] = sampleTracks) {
         },
       },
     })
-  }, [playerElementId, youtubePlayer])
+  }, [playerElementId, tracks])
 
-  useEffect(() => {
-    if (window.YT && window.YT.Player && !youtubePlayer) {
+  const ensureYouTubePlayer = useCallback(() => {
+    if (youtubePlayerRef.current) return
+
+    if (window.YT && window.YT.Player) {
       createYouTubePlayer()
       return
     }
 
-    if (!window.YT) {
+    if (!playerScriptRequestedRef.current) {
+      playerScriptRequestedRef.current = true
       const tag = document.createElement('script')
       tag.src = 'https://www.youtube.com/iframe_api'
       const firstScript = document.getElementsByTagName('script')[0]
       firstScript.parentNode?.insertBefore(tag, firstScript)
       window.onYouTubeIframeAPIReady = () => createYouTubePlayer()
-    } else if (!youtubePlayer) {
-      createYouTubePlayer()
     }
-  }, [createYouTubePlayer, youtubePlayer])
+  }, [createYouTubePlayer])
+
+  useEffect(() => () => {
+    youtubePlayerRef.current?.destroy?.()
+    youtubePlayerRef.current = null
+  }, [])
 
   const playTrack = useCallback((track: Track) => {
     if (!track.youtubeUrl || !youtubePlayer) return
@@ -111,7 +131,11 @@ export function useYouTubeMusicPlayer(tracks: Track[] = sampleTracks) {
   }, [currentlyPlaying, isPaused, youtubePlayer])
 
   const togglePlayPause = useCallback(() => {
-    if (!youtubePlayer) return
+    if (!youtubePlayer) {
+      autoplayOnReadyRef.current = true
+      ensureYouTubePlayer()
+      return
+    }
 
     if (!currentTrack) {
       const firstTrack = tracks.find((track) => track.youtubeUrl)
@@ -126,7 +150,7 @@ export function useYouTubeMusicPlayer(tracks: Track[] = sampleTracks) {
       youtubePlayer.pauseVideo()
       setIsPaused(true)
     }
-  }, [currentTrack, isPaused, playTrack, tracks, youtubePlayer])
+  }, [currentTrack, ensureYouTubePlayer, isPaused, playTrack, tracks, youtubePlayer])
 
   const playNextTrack = useCallback(() => {
     if (!youtubePlayer || !tracks.length) return

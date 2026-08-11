@@ -13,8 +13,6 @@ export default function BodyWrapper({ children }: BodyWrapperProps) {
     setMounted(true);
   }, []);
 
-  // Only render children after mounting to avoid hydration mismatches
-  // caused by browser extensions adding attributes
   if (!mounted) {
     return <div style={{ display: 'none' }} />;
   }

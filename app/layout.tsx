@@ -2,8 +2,6 @@ import type { Metadata } from 'next'
 import { Space_Grotesk, Inter, JetBrains_Mono } from 'next/font/google'
 import GlobalConsoleLog from './components/GlobalConsoleLog'
 import BodyWrapper from './components/BodyWrapper'
-import LayoutContent from './components/LayoutContent'
-import { getAllCategoryPosts } from '../lib/markdown'
 import './globals.css'
 
 const spaceGrotesk = Space_Grotesk({
@@ -25,12 +23,20 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-    title: 'Shresth Kapoor',
-    description: 'notes dump',
-    alternates: {
-        types: {
-            'application/rss+xml': 'https://shresth.space/rss.xml',
-        },
+    metadataBase: new URL('https://shresth.space'),
+    title: 'shresth',
+    description: 'personal website',
+    openGraph: {
+        title: 'shresth',
+        description: 'personal website',
+        url: 'https://shresth.space',
+        siteName: 'shresth.space',
+        type: 'website',
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'shresth',
+        description: 'personal website',
     },
 }
 
@@ -39,15 +45,12 @@ export default function RootLayout({
 }: {
     children: React.ReactNode
 }) {
-    const allCategoryPosts = getAllCategoryPosts()
     return (
         <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
             <body>
                 <GlobalConsoleLog />
                 <BodyWrapper>
-                    <LayoutContent allCategoryPosts={allCategoryPosts}>
-                        {children}
-                    </LayoutContent>
+                    {children}
                 </BodyWrapper>
             </body>
         </html>
