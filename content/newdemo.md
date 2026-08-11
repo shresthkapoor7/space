@@ -11,7 +11,7 @@ location: "new york"
 stickers: "nyu arc robotics lab | airpods | one piece | iphone | minesweeper | graduation | ferrari | monster energy | black clover | tennis"
 sticker_media: "nyu arc robotics lab=/homebase.MP4 | airpods=/headphones.png | one piece=/straw-hat.png | iphone=/camera.png | minesweeper=/minesweeper.png | graduation=/homebase.jpeg | ferrari=/car.png | monster energy=/white-monster.png | black clover=/clover.png | tennis=/tennis.png"
 sticker_captions: "nyu arc robotics lab=nyu arc robotics lab | graduation=graduation"
-sticker_previews: "nyu arc robotics lab=its actually the game lab, nyu arc robotics was given access to the game lab for their meetings and keeping equipment | airpods=airpods | one piece=Kaizoku-ō ni, ore wa naru!| iphone=should have bought the black one | minesweeper=minesweeper | graduation= had gemini to bring the train closer | ferrari=forza ferrari | monster energy=fuel to battle claude and codex at 3am | black clover=the fifth leaf of a clover represents the devil | tennis=was a roger federer fan, now support alcarz"
+sticker_previews: "nyu arc robotics lab=its actually the game lab, nyu arc robotics was given access to the game lab for their meetings and keeping equipment | airpods=airpods | one piece=Kaizoku-ō ni, ore wa naru!| iphone=should have bought the black one | minesweeper=minesweeper | graduation= had gemini to bring the train closer | ferrari=forza ferrari | monster energy=fuel to battle claude and codex at 3am | black clover=the fifth leaf of a clover represents the devil | tennis=was a roger federer fan, now support alcaraz"
 ---
 
 ## toolkit

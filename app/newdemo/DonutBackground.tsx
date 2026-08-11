@@ -11,6 +11,13 @@ const CHARACTERS = '.,-~:;=!*#$@'
 
 export default function DonutBackground({ dark }: DonutBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const darkRef = useRef(dark)
+  const redrawRef = useRef<(() => void) | null>(null)
+
+  useEffect(() => {
+    darkRef.current = dark
+    redrawRef.current?.()
+  }, [dark])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -22,14 +29,21 @@ export default function DonutBackground({ dark }: DonutBackgroundProps) {
     let frameId = 0
     let width = 0
     let height = 0
+    let columns = 0
+    let rows = 0
     let rotationA = 0
     let rotationB = 0
     let previousTime = 0
     let lastRenderTime = 0
+    let zBuffer = new Float32Array(0)
+    let frame: string[] = []
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
 
     const resize = () => {
       const ratio = Math.min(window.devicePixelRatio || 1, 2)
+      const glyphWidth = 8
+      const glyphHeight = 14
+      const verticalPadding = 10
       width = window.innerWidth
       height = window.innerHeight
       canvas.width = Math.floor(width * ratio)
@@ -39,9 +53,16 @@ export default function DonutBackground({ dark }: DonutBackgroundProps) {
       context.setTransform(ratio, 0, 0, ratio, 0, 0)
       context.font = '13px "Geist Mono", ui-monospace, monospace'
       context.textBaseline = 'top'
+
+      columns = Math.ceil(width / glyphWidth)
+      rows = Math.floor(Math.max(glyphHeight, height - verticalPadding * 2) / glyphHeight)
+      const cellCount = columns * rows
+      zBuffer = new Float32Array(cellCount)
+      frame = new Array<string>(cellCount).fill(' ')
     }
 
     const draw = (time: number) => {
+      frameId = 0
       if (!reducedMotion.matches && time - lastRenderTime < 1000 / 30) {
         frameId = window.requestAnimationFrame(draw)
         return
@@ -55,16 +76,13 @@ export default function DonutBackground({ dark }: DonutBackgroundProps) {
         rotationB += elapsed * .36
       }
 
+      zBuffer.fill(0)
+      frame.fill(' ')
       context.clearRect(0, 0, width, height)
-      context.fillStyle = dark ? '#f2f2f2' : '#0f0f0f'
+      context.fillStyle = darkRef.current ? '#f2f2f2' : '#0f0f0f'
 
       const glyphWidth = 8
       const glyphHeight = 14
-      const verticalPadding = 10
-      const columns = Math.ceil(width / glyphWidth)
-      const rows = Math.floor(Math.max(glyphHeight, height - verticalPadding * 2) / glyphHeight)
-      const zBuffer = new Float32Array(columns * rows)
-      const frame = new Array<string>(columns * rows).fill(' ')
       const cosA = Math.cos(rotationA)
       const sinA = Math.sin(rotationA)
       const cosB = Math.cos(rotationB)
@@ -72,8 +90,6 @@ export default function DonutBackground({ dark }: DonutBackgroundProps) {
       const scaleX = columns * .42
       const scaleY = rows * .74
 
-      // Keep the original two-axis projection, but size its character grid to
-      // the viewport so the large torus is never cropped by an undersized buffer.
       for (let theta = 0; theta < TAU; theta += .07) {
         const cosTheta = Math.cos(theta)
         const sinTheta = Math.sin(theta)
@@ -104,22 +120,32 @@ export default function DonutBackground({ dark }: DonutBackgroundProps) {
       const offsetX = Math.round((width - columns * glyphWidth) / 2)
       const offsetY = Math.round((height - rows * glyphHeight) / 2)
       for (let row = 0; row < rows; row += 1) {
-        const line = frame.slice(row * columns, (row + 1) * columns).join('')
-        context.fillText(line, offsetX, offsetY + row * glyphHeight)
+        context.fillText(frame.slice(row * columns, (row + 1) * columns).join(''), offsetX, offsetY + row * glyphHeight)
       }
 
       if (!reducedMotion.matches) frameId = window.requestAnimationFrame(draw)
     }
 
+    const handleReducedMotionChange = () => {
+      if (!reducedMotion.matches && !frameId) frameId = window.requestAnimationFrame(draw)
+    }
+
+    redrawRef.current = () => {
+      if (!frameId) frameId = window.requestAnimationFrame(draw)
+    }
+
     resize()
     window.addEventListener('resize', resize)
+    reducedMotion.addEventListener('change', handleReducedMotionChange)
     frameId = window.requestAnimationFrame(draw)
 
     return () => {
       window.cancelAnimationFrame(frameId)
       window.removeEventListener('resize', resize)
+      reducedMotion.removeEventListener('change', handleReducedMotionChange)
+      redrawRef.current = null
     }
-  }, [dark])
+  }, [])
 
   return <canvas ref={canvasRef} className="newdemo-donut" aria-hidden="true" />
 }

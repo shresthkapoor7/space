@@ -6,8 +6,43 @@ import { sampleTracks, type Track } from './tracks'
 declare global {
   interface Window {
     YT: any
-    onYouTubeIframeAPIReady: () => void
+    onYouTubeIframeAPIReady?: () => void
   }
+}
+
+type YouTubeReadyListener = () => void
+
+let youtubeApiRequested = false
+const youtubeApiListeners = new Set<YouTubeReadyListener>()
+
+function subscribeToYouTubeApi(listener: YouTubeReadyListener) {
+  if (window.YT?.Player) {
+    listener()
+    return () => {}
+  }
+
+  youtubeApiListeners.add(listener)
+  if (!youtubeApiRequested) {
+    youtubeApiRequested = true
+    const previousReadyCallback = window.onYouTubeIframeAPIReady
+    window.onYouTubeIframeAPIReady = () => {
+      try {
+        previousReadyCallback?.()
+      } finally {
+        const listeners = Array.from(youtubeApiListeners)
+        youtubeApiListeners.clear()
+        listeners.forEach(callback => callback())
+      }
+    }
+
+    if (!document.querySelector('script[src="https://www.youtube.com/iframe_api"]')) {
+      const script = document.createElement('script')
+      script.src = 'https://www.youtube.com/iframe_api'
+      document.head.appendChild(script)
+    }
+  }
+
+  return () => youtubeApiListeners.delete(listener)
 }
 
 export function extractYouTubeId(url: string) {
@@ -25,7 +60,8 @@ export function useYouTubeMusicPlayer(tracks: Track[] = sampleTracks) {
   const playerElementId = useId().replace(/:/g, '')
   const playNextTrackRef = useRef<() => void>(() => {})
   const youtubePlayerRef = useRef<any>(null)
-  const playerScriptRequestedRef = useRef(false)
+  const playerCreationInProgressRef = useRef(false)
+  const apiListenerCleanupRef = useRef<(() => void) | null>(null)
   const autoplayOnReadyRef = useRef(false)
 
   const currentTrack = useMemo(
@@ -36,76 +72,91 @@ export function useYouTubeMusicPlayer(tracks: Track[] = sampleTracks) {
   const currentVideoId = currentTrack?.youtubeUrl ? extractYouTubeId(currentTrack.youtubeUrl) : null
 
   const createYouTubePlayer = useCallback(() => {
-    if (!window.YT || !window.YT.Player || youtubePlayerRef.current) return
+    if (!window.YT || !window.YT.Player || youtubePlayerRef.current || playerCreationInProgressRef.current) return
 
     const playerElement = document.getElementById(playerElementId)
     if (!playerElement) return
 
-    new window.YT.Player(playerElementId, {
-      height: '1',
-      width: '1',
-      playerVars: {
-        controls: 0,
-        modestbranding: 1,
-        rel: 0,
-        showinfo: 0,
-        fs: 0,
-        cc_load_policy: 0,
-        iv_load_policy: 3,
-        autohide: 1,
-        disablekb: 1,
-        playsinline: 1,
-      },
-      events: {
-        onReady: (event: any) => {
-          youtubePlayerRef.current = event.target
-          setYoutubePlayer(event.target)
+    playerCreationInProgressRef.current = true
+    try {
+      new window.YT.Player(playerElementId, {
+        height: '1',
+        width: '1',
+        playerVars: {
+          controls: 0,
+          modestbranding: 1,
+          rel: 0,
+          showinfo: 0,
+          fs: 0,
+          cc_load_policy: 0,
+          iv_load_policy: 3,
+          autohide: 1,
+          disablekb: 1,
+          playsinline: 1,
+        },
+        events: {
+          onReady: (event: any) => {
+            playerCreationInProgressRef.current = false
+            youtubePlayerRef.current = event.target
+            setYoutubePlayer(event.target)
 
-          if (autoplayOnReadyRef.current) {
-            autoplayOnReadyRef.current = false
-            const firstTrack = tracks.find((track) => track.youtubeUrl)
-            const videoId = firstTrack?.youtubeUrl ? extractYouTubeId(firstTrack.youtubeUrl) : null
-            if (firstTrack && videoId) {
-              event.target.loadVideoById(videoId)
-              setCurrentlyPlaying(firstTrack.id)
-              setIsPaused(false)
+            if (autoplayOnReadyRef.current) {
+              autoplayOnReadyRef.current = false
+              const firstTrack = tracks.find((track) => track.youtubeUrl)
+              const videoId = firstTrack?.youtubeUrl ? extractYouTubeId(firstTrack.youtubeUrl) : null
+              if (firstTrack && videoId) {
+                event.target.loadVideoById(videoId)
+                setCurrentlyPlaying(firstTrack.id)
+              }
             }
-          }
-        },
-        onStateChange: (event: any) => {
-          if (event.data === window.YT.PlayerState.PLAYING) {
-            setIsPaused(false)
-          } else if (event.data === window.YT.PlayerState.PAUSED) {
+          },
+          onStateChange: (event: any) => {
+            if (event.data === window.YT.PlayerState.PLAYING) {
+              setIsPaused(false)
+            } else if (event.data === window.YT.PlayerState.PAUSED) {
+              setIsPaused(true)
+            } else if (event.data === window.YT.PlayerState.ENDED) {
+              window.setTimeout(() => playNextTrackRef.current?.(), 100)
+            }
+          },
+          onError: () => {
+            playerCreationInProgressRef.current = false
+            autoplayOnReadyRef.current = false
             setIsPaused(true)
-          } else if (event.data === window.YT.PlayerState.ENDED) {
-            window.setTimeout(() => playNextTrackRef.current?.(), 100)
-          }
+          },
         },
-      },
-    })
+      })
+    } catch {
+      playerCreationInProgressRef.current = false
+      autoplayOnReadyRef.current = false
+      setIsPaused(true)
+    }
   }, [playerElementId, tracks])
 
   const ensureYouTubePlayer = useCallback(() => {
-    if (youtubePlayerRef.current) return
+    if (youtubePlayerRef.current || playerCreationInProgressRef.current) return
 
     if (window.YT && window.YT.Player) {
       createYouTubePlayer()
       return
     }
 
-    if (!playerScriptRequestedRef.current) {
-      playerScriptRequestedRef.current = true
-      const tag = document.createElement('script')
-      tag.src = 'https://www.youtube.com/iframe_api'
-      const firstScript = document.getElementsByTagName('script')[0]
-      firstScript.parentNode?.insertBefore(tag, firstScript)
-      window.onYouTubeIframeAPIReady = () => createYouTubePlayer()
+    if (!apiListenerCleanupRef.current) {
+      apiListenerCleanupRef.current = subscribeToYouTubeApi(() => {
+        apiListenerCleanupRef.current = null
+        createYouTubePlayer()
+      })
     }
   }, [createYouTubePlayer])
 
   useEffect(() => () => {
+    apiListenerCleanupRef.current?.()
+    apiListenerCleanupRef.current = null
+    playerCreationInProgressRef.current = false
+    autoplayOnReadyRef.current = false
     youtubePlayerRef.current?.destroy?.()
     youtubePlayerRef.current = null
+    setYoutubePlayer(null)
   }, [])
 
   const playTrack = useCallback((track: Track) => {

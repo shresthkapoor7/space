@@ -85,18 +85,59 @@ export default function NewDemoClient({ content, children }: { content: NewDemoC
   } = useYouTubeMusicPlayer()
   const stickerOffsetsRef = useRef<Record<string, { x: number; y: number }>>({})
   const stickerDragRef = useRef<{ id: string; startX: number; startY: number; offsetX: number; offsetY: number } | null>(null)
+  const overlayRef = useRef<HTMLDivElement>(null)
+  const pageContentRef = useRef<HTMLDivElement>(null)
+  const postTriggerRef = useRef<HTMLElement | null>(null)
   const postIndex = Number(pathname.split('/')[1]) - 1
   const post = Number.isInteger(postIndex) && postIndex >= 0 ? content.writing[postIndex] || null : null
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
+      if (!post) return
+
       if (event.key === 'Escape') {
-        if (post) router.push('/')
+        router.push('/')
+        return
+      }
+
+      if (event.key === 'Tab') {
+        const overlay = overlayRef.current
+        if (!overlay) return
+        const focusable = Array.from(overlay.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'))
+        if (!focusable.length) {
+          event.preventDefault()
+          overlay.focus()
+          return
+        }
+
+        const currentIndex = focusable.indexOf(document.activeElement as HTMLElement)
+        const nextIndex = event.shiftKey
+          ? currentIndex <= 0 ? focusable.length - 1 : currentIndex - 1
+          : currentIndex === focusable.length - 1 ? 0 : currentIndex + 1
+        event.preventDefault()
+        focusable[nextIndex].focus()
       }
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [post, router])
+
+  useEffect(() => {
+    if (!post) return
+
+    const previouslyFocused = postTriggerRef.current || document.activeElement as HTMLElement | null
+    const pageContent = pageContentRef.current
+    pageContent?.setAttribute('inert', '')
+    pageContent?.setAttribute('aria-hidden', 'true')
+    const focusFrame = window.requestAnimationFrame(() => overlayRef.current?.querySelector<HTMLElement>('button, a[href], [tabindex]:not([tabindex="-1"])')?.focus())
+
+    return () => {
+      window.cancelAnimationFrame(focusFrame)
+      pageContent?.removeAttribute('inert')
+      pageContent?.removeAttribute('aria-hidden')
+      if (previouslyFocused?.isConnected) previouslyFocused.focus()
+    }
+  }, [post])
 
   useEffect(() => {
     document.body.style.overflow = post ? 'hidden' : ''
@@ -160,11 +201,13 @@ export default function NewDemoClient({ content, children }: { content: NewDemoC
     window.addEventListener('pointermove', moveSticker, { passive: true })
     window.addEventListener('pointerdown', beginStickerDrag)
     window.addEventListener('pointerup', endStickerDrag)
+    window.addEventListener('pointercancel', endStickerDrag)
     window.addEventListener('blur', clearPreview)
     return () => {
       window.removeEventListener('pointermove', moveSticker)
       window.removeEventListener('pointerdown', beginStickerDrag)
       window.removeEventListener('pointerup', endStickerDrag)
+      window.removeEventListener('pointercancel', endStickerDrag)
       window.removeEventListener('blur', clearPreview)
       document.body.style.cursor = ''
     }
@@ -202,6 +245,7 @@ export default function NewDemoClient({ content, children }: { content: NewDemoC
         })}
       </div>}
 
+      <div ref={pageContentRef}>
       <header className="newdemo-hero">
         <div className="newdemo-content">
           <h1><span>{content.greeting}</span>{content.headline}</h1>
@@ -250,7 +294,7 @@ export default function NewDemoClient({ content, children }: { content: NewDemoC
             <h2 className="newdemo-project-title">{content.building.title}</h2>
             {showSedimentPreview && <div className="newdemo-sediment-preview">
               <div className="newdemo-sediment-preview-bar"><span>sediment-ai.com</span><a href="https://www.sediment-ai.com/" target="_blank" rel="noreferrer">live preview ↗</a></div>
-              <iframe src="https://www.sediment-ai.com/" title="Sediment live preview" loading="eager" />
+              <iframe src="https://www.sediment-ai.com/" title="Sediment live preview" loading="eager" sandbox="allow-scripts allow-same-origin" referrerPolicy="no-referrer" />
             </div>}
           </div>
           <p className="newdemo-copy">{content.building.description}</p>
@@ -266,7 +310,7 @@ export default function NewDemoClient({ content, children }: { content: NewDemoC
               <a href={entry.href} target="_blank" rel="noreferrer"><h2>{entry.title} ↗</h2></a>
               {hoveredResearch === entry.title && <div className="newdemo-research-preview">
                 <div className="newdemo-research-preview-bar"><span><PreviewDomain href={entry.href} /></span><a href={entry.href} target="_blank" rel="noreferrer">live preview ↗</a></div>
-                <iframe src={entry.href} title={`${entry.title} live preview`} loading="eager" />
+                <iframe src={entry.href} title={`${entry.title} live preview`} loading="eager" sandbox="allow-scripts allow-same-origin" referrerPolicy="no-referrer" />
               </div>}
             </div><time>{entry.year}</time></div><p>{entry.description}</p><small>{entry.metadata}</small>
           </article>)}
@@ -277,7 +321,7 @@ export default function NewDemoClient({ content, children }: { content: NewDemoC
         <section>
           <SectionLabel>writing</SectionLabel>
           {content.writing.map((entry, index) => (
-            <button className={`newdemo-post ${index < content.writing.length - 1 ? 'newdemo-post--divided' : ''}`} onClick={() => router.push(`/${index + 1}`)} key={entry.title}>
+            <button className={`newdemo-post ${index < content.writing.length - 1 ? 'newdemo-post--divided' : ''}`} onClick={(event) => { postTriggerRef.current = event.currentTarget; router.push(`/${index + 1}`) }} key={entry.title}>
               <div><h3>{entry.title}</h3><time>{entry.date}</time></div>
               <p>{entry.description}</p>
               <small>{entry.meta} &nbsp;·&nbsp; {entry.read}</small>
@@ -294,8 +338,9 @@ export default function NewDemoClient({ content, children }: { content: NewDemoC
 
         <footer className="newdemo-footer"><span>{content.copyright}</span><span>{content.location}</span></footer>
       </main>
+      </div>
 
-      {post && <div className="newdemo-overlay" role="dialog" aria-modal="true" aria-label={post.title}>
+      {post && <div ref={overlayRef} className="newdemo-overlay" role="dialog" aria-modal="true" aria-label={post.title} tabIndex={-1}>
         <CloseButton onClick={() => router.push('/')} />
         {post.coverImage && <img className="newdemo-overlay-cover" src={post.coverImage} alt="Research desk illustration" />}
         <article className={`newdemo-overlay-content${post.coverImage ? ' newdemo-overlay-content--with-cover' : ''}`}>
