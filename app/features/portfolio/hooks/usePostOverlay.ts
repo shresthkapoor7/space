@@ -2,17 +2,17 @@
 
 import { useEffect, useRef } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
-import type { NewDemoContent, NewDemoPost } from '../../../lib/newdemo'
+import type { PortfolioContent, PortfolioPost } from '../../../../lib/portfolio/content'
 
 interface PostOverlayState {
-  post: NewDemoPost | null
+  post: PortfolioPost | null
   pageContentRef: React.RefObject<HTMLDivElement>
   overlayRef: React.RefObject<HTMLDivElement>
   openPost: (index: number, trigger: HTMLElement) => void
   closePost: () => void
 }
 
-function getPost(pathname: string, writing: NewDemoPost[]) {
+function getPost(pathname: string, writing: PortfolioPost[]) {
   const routeSegment = pathname.slice(1)
   const postIndex = Number(routeSegment) - 1
 
@@ -21,7 +21,7 @@ function getPost(pathname: string, writing: NewDemoPost[]) {
     : null
 }
 
-export function usePostOverlay(content: NewDemoContent): PostOverlayState {
+export function usePostOverlay(content: PortfolioContent): PostOverlayState {
   const pathname = usePathname()
   const router = useRouter()
   const post = getPost(pathname, content.writing)

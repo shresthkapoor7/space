@@ -147,5 +147,5 @@ export default function DonutBackground({ dark }: DonutBackgroundProps) {
     }
   }, [])
 
-  return <canvas ref={canvasRef} className="newdemo-donut" aria-hidden="true" />
+  return <canvas ref={canvasRef} className="portfolio-donut" aria-hidden="true" />
 }

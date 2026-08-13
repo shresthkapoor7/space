@@ -1,6 +1,7 @@
-import NewDemoClient from '../newdemo/NewDemoClient'
-import { getNewDemoContent } from '../../lib/newdemo'
+import '../features/portfolio/portfolio.css'
+import PortfolioClient from '../features/portfolio/components/PortfolioClient'
+import { getPortfolioContent } from '../../lib/portfolio/content'
 
 export default function PortfolioLayout({ children }: { children: React.ReactNode }) {
-  return <NewDemoClient content={getNewDemoContent()}>{children}</NewDemoClient>
+  return <PortfolioClient content={getPortfolioContent()}>{children}</PortfolioClient>
 }

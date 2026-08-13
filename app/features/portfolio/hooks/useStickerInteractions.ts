@@ -6,7 +6,7 @@ type Offset = { x: number; y: number }
 type DragState = { id: string; startX: number; startY: number; offsetX: number; offsetY: number }
 
 function findSticker(event: PointerEvent) {
-  return Array.from(document.querySelectorAll<HTMLElement>('.newdemo-sticker')).find((element) => {
+  return Array.from(document.querySelectorAll<HTMLElement>('.portfolio-sticker')).find((element) => {
     const bounds = element.getBoundingClientRect()
     return event.clientX >= bounds.left && event.clientX <= bounds.right
       && event.clientY >= bounds.top && event.clientY <= bounds.bottom
