@@ -1,12 +1,12 @@
 import fs from 'fs'
 import path from 'path'
 
-export interface NewDemoLink {
+export interface PortfolioLink {
   label: string
   href: string
 }
 
-export interface NewDemoResearch {
+export interface PortfolioResearch {
   title: string
   href: string
   year: string
@@ -14,7 +14,7 @@ export interface NewDemoResearch {
   metadata: string
 }
 
-export interface NewDemoPost {
+export interface PortfolioPost {
   title: string
   meta: string
   date: string
@@ -24,15 +24,15 @@ export interface NewDemoPost {
   body: string[]
 }
 
-export interface NewDemoContent {
+export interface PortfolioContent {
   greeting: string
   headline: string
   bio: string
-  links: NewDemoLink[]
+  links: PortfolioLink[]
   toolkit: { icons: string[]; description: string }
-  research: NewDemoResearch[]
+  research: PortfolioResearch[]
   building: { title: string; description: string; href: string; linkLabel: string }
-  writing: NewDemoPost[]
+  writing: PortfolioPost[]
   offTheClock: string
   track: string
   copyright: string
@@ -44,7 +44,7 @@ type Metadata = Record<string, string>
 
 function parseDocument(source: string) {
   const match = source.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/)
-  if (!match) throw new Error('content/newdemo.md needs front matter enclosed by ---')
+  if (!match) throw new Error('content/portfolio.md needs front matter enclosed by ---')
 
   const metadata: Metadata = {}
   for (const line of match[1].split('\n')) {
@@ -61,7 +61,7 @@ function parseDocument(source: string) {
 function getSection(document: string, title: string) {
   const escapedTitle = title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
   const heading = new RegExp(`^## ${escapedTitle}\\n`, 'm').exec(document)
-  if (!heading || heading.index === undefined) throw new Error(`content/newdemo.md is missing its "## ${title}" section`)
+  if (!heading || heading.index === undefined) throw new Error(`content/portfolio.md is missing its "## ${title}" section`)
 
   const sectionStart = heading.index + heading[0].length
   const remainder = document.slice(sectionStart)
@@ -89,8 +89,8 @@ function removeInlineMarkdown(value: string) {
   return value.replace(/^_(.*)_$/, '$1').replace(/\*\*(.+?)\*\*/g, '$1')
 }
 
-export function getNewDemoContent(): NewDemoContent {
-  const rawMarkdown = getNewDemoMarkdown()
+export function getPortfolioContent(): PortfolioContent {
+  const rawMarkdown = getPortfolioMarkdown()
   const { metadata, body } = parseDocument(rawMarkdown)
   const toolkitParts = paragraphs(getSection(body, 'toolkit'))
   const research = headingBlocks(getSection(body, 'selected research')).map(({ heading, content }) => {
@@ -99,7 +99,7 @@ export function getNewDemoContent(): NewDemoContent {
     return { title: link.title, href: link.href, year: removeInlineMarkdown(parts[0] || ''), description: parts[1] || '', metadata: parts[2] || '' }
   })
   const buildingBlock = headingBlocks(getSection(body, 'currently building'))[0]
-  if (!buildingBlock) throw new Error('content/newdemo.md needs a "###" entry under currently building')
+  if (!buildingBlock) throw new Error('content/portfolio.md needs a "###" entry under currently building')
   const buildingParts = paragraphs(buildingBlock.content)
   const buildingLink = buildingParts[1]?.match(/^\[(.+)]\((.+)\)$/)
   const writing = headingBlocks(getSection(body, 'writing')).map(({ heading, content }) => {
@@ -141,6 +141,6 @@ export function getNewDemoContent(): NewDemoContent {
   }
 }
 
-export function getNewDemoMarkdown() {
-  return fs.readFileSync(path.join(process.cwd(), 'content', 'newdemo.md'), 'utf8')
+export function getPortfolioMarkdown() {
+  return fs.readFileSync(path.join(process.cwd(), 'content', 'portfolio.md'), 'utf8')
 }

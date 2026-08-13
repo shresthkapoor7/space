@@ -1,18 +1,18 @@
-import { getNewDemoMarkdown } from '../../../lib/newdemo'
+import { getPortfolioMarkdown } from '../../../lib/portfolio/content'
 
 function escapeHtml(value: string) {
   return value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
 
 export function GET() {
-  const markdown = getNewDemoMarkdown()
+  const markdown = getPortfolioMarkdown()
   const document = `<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />
-    <title>newdemo.md</title>
+    <title>portfolio.md</title>
     <style>
       :root { color-scheme: dark; --bg: #0d0d0d; --fg: #f2f2f2; --muted: #767676; --line: #2b2b2b; }
       :root[data-theme="light"] { color-scheme: light; --bg: #fafafa; --fg: #0f0f0f; --muted: #777777; --line: #e2e2e2; }
@@ -31,14 +31,14 @@ export function GET() {
   </head>
   <body>
     <main>
-      <header><div class="file-id"><img src="/icon.svg" alt="" /><span>newdemo.md</span></div><nav><a href="/">back to site</a><button id="theme-toggle" type="button">light</button><button type="button" onclick="navigator.clipboard.writeText(document.querySelector('pre').innerText); this.textContent='copied'">copy</button></nav></header>
+      <header><div class="file-id"><img src="/icon.svg" alt="" /><span>portfolio.md</span></div><nav><a href="/">back to site</a><button id="theme-toggle" type="button">light</button><button type="button" onclick="navigator.clipboard.writeText(document.querySelector('pre').innerText); this.textContent='copied'">copy</button></nav></header>
       <pre>${escapeHtml(markdown)}</pre>
     </main>
     <script>
       const root = document.documentElement
       const themeToggle = document.getElementById('theme-toggle')
-      const setTheme = (theme) => { root.dataset.theme = theme; themeToggle.textContent = theme === 'dark' ? 'light' : 'dark'; localStorage.setItem('newdemo-markdown-theme', theme) }
-      setTheme(localStorage.getItem('newdemo-markdown-theme') || 'dark')
+      const setTheme = (theme) => { root.dataset.theme = theme; themeToggle.textContent = theme === 'dark' ? 'light' : 'dark'; localStorage.setItem('portfolio-markdown-theme', theme) }
+      setTheme(localStorage.getItem('portfolio-markdown-theme') || 'dark')
       themeToggle.addEventListener('click', () => setTheme(root.dataset.theme === 'dark' ? 'light' : 'dark'))
     </script>
   </body>
