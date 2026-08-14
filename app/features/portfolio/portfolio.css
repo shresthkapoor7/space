@@ -81,3 +81,4 @@ body {
 @media (prefers-reduced-motion: reduce) { .portfolio *, .portfolio *::before { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
 .portfolio-overlay-content h1 { margin-bottom: clamp(24px, 4vh, 32px); font-size: clamp(26px, 3.4vw, 36px); }
 .portfolio-overlay-cover { display: block; width: 100%; height: clamp(180px, 24vw, 320px); object-fit: cover; }.portfolio-overlay-content--with-cover { padding-top: clamp(32px, 5vh, 56px); }
+.portfolio-footer { text-transform: none; }
