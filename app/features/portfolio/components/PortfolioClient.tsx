@@ -65,7 +65,7 @@ function PreviewDomain({ href }: { href: string }) {
 export default function PortfolioClient({ content, children }: { content: PortfolioContent; children?: React.ReactNode }) {
   const [dark, setDark] = useState(true)
   const [showStickers, setShowStickers] = useState(false)
-  const [showSedimentPreview, setShowSedimentPreview] = useState(false)
+  const [hoveredBuilding, setHoveredBuilding] = useState<string | null>(null)
   const [hoveredResearch, setHoveredResearch] = useState<string | null>(null)
   const [emailCopied, setEmailCopied] = useState(false)
   const { hoveredSticker, stickerOffsets } = useStickerInteractions(showStickers)
@@ -164,15 +164,17 @@ export default function PortfolioClient({ content, children }: { content: Portfo
 
           <section>
             <SectionLabel>currently building</SectionLabel>
-            <div className="portfolio-sediment-trigger" onPointerEnter={() => setShowSedimentPreview(true)} onPointerLeave={() => setShowSedimentPreview(false)} onFocus={() => setShowSedimentPreview(true)} onBlur={() => setShowSedimentPreview(false)} tabIndex={0}>
-              <h2 className="portfolio-project-title">{content.building.title}</h2>
-              {showSedimentPreview && <div className="portfolio-sediment-preview">
-                <div className="portfolio-sediment-preview-bar"><span>sediment-ai.com</span><a href="https://www.sediment-ai.com/" target="_blank" rel="noreferrer">live preview ↗</a></div>
-                <iframe src="https://www.sediment-ai.com/" title="Sediment live preview" loading="eager" sandbox="allow-scripts allow-same-origin" referrerPolicy="no-referrer" />
-              </div>}
-            </div>
-            <p className="portfolio-copy">{content.building.description}</p>
-            <a className="portfolio-underline-link" href={content.building.href}>{content.building.linkLabel}</a>
+            {content.building.map((project, index) => <article className={`portfolio-building${index < content.building.length - 1 ? ' portfolio-building--divided' : ''}`} key={project.title}>
+              <div className="portfolio-building-trigger" onPointerEnter={() => setHoveredBuilding(project.title)} onPointerLeave={() => setHoveredBuilding(null)} onFocus={() => setHoveredBuilding(project.title)} onBlur={() => setHoveredBuilding(null)} tabIndex={0}>
+                <h2 className="portfolio-project-title">{project.title}</h2>
+                {hoveredBuilding === project.title && <div className="portfolio-building-preview">
+                  <div className="portfolio-building-preview-bar"><span><PreviewDomain href={project.href} /></span><a href={project.href} target="_blank" rel="noreferrer">live preview ↗</a></div>
+                  <iframe src={project.href} title={`${project.title} live preview`} loading="eager" sandbox="allow-scripts allow-same-origin" referrerPolicy="no-referrer" />
+                </div>}
+              </div>
+              <p className="portfolio-copy">{project.description}</p>
+              <a className="portfolio-underline-link" href={project.href} target={project.href.startsWith('http') ? '_blank' : undefined} rel={project.href.startsWith('http') ? 'noreferrer' : undefined}>{project.linkLabel}</a>
+            </article>)}
           </section>
 
           <Divider />

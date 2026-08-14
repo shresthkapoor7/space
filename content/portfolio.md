@@ -28,6 +28,12 @@ python · pytorch · opencv · yolo · tensorflow · typescript · next.js · gi
 
 [follow the build ↗](https://www.sediment-ai.com/)
 
+### agentsession
+
+read your local codex and claude sessions. no upload. just the run.
+
+[open agentsession ↗](https://agentsession.vercel.app/)
+
 ## selected research
 
 ### [rulesweeper](https://rulesweeper.vercel.app/)

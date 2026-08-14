@@ -31,7 +31,7 @@ export interface PortfolioContent {
   links: PortfolioLink[]
   toolkit: { icons: string[]; description: string }
   research: PortfolioResearch[]
-  building: { title: string; description: string; href: string; linkLabel: string }
+  building: Array<{ title: string; description: string; href: string; linkLabel: string }>
   writing: PortfolioPost[]
   offTheClock: string
   track: string
@@ -98,10 +98,12 @@ export function getPortfolioContent(): PortfolioContent {
     const link = parseLinkHeading(heading)
     return { title: link.title, href: link.href, year: removeInlineMarkdown(parts[0] || ''), description: parts[1] || '', metadata: parts[2] || '' }
   })
-  const buildingBlock = headingBlocks(getSection(body, 'currently building'))[0]
-  if (!buildingBlock) throw new Error('content/portfolio.md needs a "###" entry under currently building')
-  const buildingParts = paragraphs(buildingBlock.content)
-  const buildingLink = buildingParts[1]?.match(/^\[(.+)]\((.+)\)$/)
+  const building = headingBlocks(getSection(body, 'currently building')).map(({ heading, content }) => {
+    const parts = paragraphs(content)
+    const link = parts[1]?.match(/^\[(.+)]\((.+)\)$/)
+    return { title: heading, description: parts[0] || '', href: link?.[2] || '#', linkLabel: link?.[1] || '' }
+  })
+  if (!building.length) throw new Error('content/portfolio.md needs a "###" entry under currently building')
   const writing = headingBlocks(getSection(body, 'writing')).map(({ heading, content }) => {
     const parts = paragraphs(content)
     const [meta = '', date = '', read = ''] = removeInlineMarkdown(parts[0] || '').split(' · ').map(value => value.trim())
@@ -133,7 +135,7 @@ export function getPortfolioContent(): PortfolioContent {
       description: toolkitParts[1] || '',
     },
     research,
-    building: { title: buildingBlock.heading, description: buildingParts[0] || '', href: buildingLink?.[2] || '#', linkLabel: buildingLink?.[1] || '' },
+    building,
     writing,
     offTheClock: getSection(body, 'off the clock'),
     track: metadata.track || '', copyright: metadata.copyright || '', location: metadata.location || '',
