@@ -128,7 +128,7 @@ export function getPortfolioContent(): PortfolioContent {
     greeting: metadata.greeting || '', headline: metadata.headline || '', bio: metadata.bio || '',
     links: [
       { label: 'email', href: metadata.email || '#' }, { label: 'github', href: metadata.github || '#' },
-      { label: 'linkedin', href: metadata.linkedin || '#' },
+      { label: 'linkedin', href: metadata.linkedin || '#' }, { label: 'twitter', href: metadata.twitter || '#' }
     ],
     toolkit: {
       icons: ((toolkitParts[0] || '').match(/`([^`]+)`/g) || []).map(match => match.slice(1, -1)),

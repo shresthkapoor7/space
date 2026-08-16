@@ -5,6 +5,7 @@ bio: "cs grad from @nyu, building systems and tools that make ai smarter, with a
 email: "mailto:shresthkapoor7@gmail.com"
 github: "https://github.com/shresthkapoor7"
 linkedin: "https://www.linkedin.com/in/shresth-kapoor-7skp"
+twitter: "https://x.com/rested_7"
 track: "music"
 copyright: "© 2026 shresth"
 location: "new york"
