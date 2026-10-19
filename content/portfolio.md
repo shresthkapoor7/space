@@ -29,6 +29,12 @@ python · pytorch · opencv · yolo · tensorflow · typescript · next.js · gi
 
 [follow the build ↗](https://www.sediment-ai.com/)
 
+### muzzle
+
+a native macos menu-bar website blocker. timed or untimed sessions enforced by a privileged background service, with the unlock key sent to **[poke](https://poke.com/)** so you can't talk yourself out of it.
+
+[view muzzle ↗](https://github.com/shresthkapoor7/muzzle)
+
 ### agentsession
 
 read your local codex and claude sessions. no upload. just the run.

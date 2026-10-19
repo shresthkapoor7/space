@@ -30,7 +30,11 @@ function CloseButton({ onClick }: { onClick: () => void }) {
 }
 
 function InlineMarkdown({ value }: { value: string }) {
-  return <>{value.split(/(\*\*.+?\*\*)/g).map((part, index) => part.startsWith('**') && part.endsWith('**') ? <strong key={index}>{part.slice(2, -2)}</strong> : part)}</>
+  return <>{value.split(/(\*\*.+?\*\*|\[[^\]]+]\([^)]+\))/g).map((part, index) => {
+    const link = part.match(/^\[([^\]]+)]\(([^)]+)\)$/)
+    if (link) return <a href={link[2]} target="_blank" rel="noreferrer" key={index}>{link[1]}</a>
+    return part.startsWith('**') && part.endsWith('**') && part.length > 4 ? <strong key={index}><InlineMarkdown value={part.slice(2, -2)} /></strong> : part
+  })}</>
 }
 
 function StickerVideo({ src }: { src: string }) {
@@ -172,7 +176,7 @@ export default function PortfolioClient({ content, children }: { content: Portfo
                   <iframe src={project.href} title={`${project.title} live preview`} loading="eager" sandbox="allow-scripts allow-same-origin" referrerPolicy="no-referrer" />
                 </div>}
               </div>
-              <p className="portfolio-copy">{project.description}</p>
+              <p className="portfolio-copy"><InlineMarkdown value={project.description} /></p>
               <a className="portfolio-underline-link" href={project.href} target={project.href.startsWith('http') ? '_blank' : undefined} rel={project.href.startsWith('http') ? 'noreferrer' : undefined}>{project.linkLabel}</a>
             </article>)}
           </section>
