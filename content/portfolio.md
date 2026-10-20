@@ -33,7 +33,7 @@ python · pytorch · opencv · yolo · tensorflow · typescript · next.js · gi
 
 a native macos menu-bar website blocker. timed or untimed sessions enforced by a privileged background service, with the unlock key sent to **[poke](https://poke.com/)** so you can't talk yourself out of it.
 
-[view muzzle ↗](https://github.com/shresthkapoor7/muzzle)
+[view muzzle ↗](https://getmuzzle.vercel.app/)
 
 ### agentsession
 
